@@ -76,8 +76,8 @@ window.WSL_CONFIG = {
       // and is protected by RLS (tables are locked; only the two RPCs are
       // exec-grantable to anon). NEVER put the service_role key or DB password
       // here — those live in .env / .dev.vars, which .gitignore excludes.
-      supabaseUrl:     'TODO',     // https://<project-ref>.supabase.co   (Project Settings → API)
-      supabaseAnonKey: 'TODO',     // the "anon public" key                (Project Settings → API)
+      supabaseUrl:     'https://doavobhtmetfmugpjgrt.supabase.co',  // Project URL           (Project Settings → API)
+      supabaseAnonKey: 'sb_publishable_bzn1Lmjxalxac0J9AAOtgA_0v-QoLya',  // publishable/anon key  (Project Settings → API)
       model: 'single-select',      // one vote per browser total; casting again MOVES the vote
       // Option ids MUST match vote_options.id in the migration + the
       // data-option-id attributes in shell.html. Order here is the fallback
