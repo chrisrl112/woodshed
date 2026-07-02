@@ -1,0 +1,13 @@
+# Git LFS — track original runtime audio recordings as large objects,
+# so the git history stays lightweight as the drum library grows.
+# One-time setup on each clone: `git lfs install`
+assets/drums/trim/*.mp3 filter=lfs diff=lfs merge=lfs -text
+
+# Normalize line endings for text sources.
+*.js   text eol=lf
+*.html text eol=lf
+*.css  text eol=lf
+*.json text eol=lf
+*.md   text eol=lf
+*.py   text eol=lf
+*.sh   text eol=lf

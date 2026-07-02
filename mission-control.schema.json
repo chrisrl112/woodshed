@@ -1,0 +1,250 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://woodshed.local/mission-control.schema.json",
+  "title": "Woodshed Mission Control",
+  "description": "The backend brain for the Woodshed trumpet-practice loop. This file is the canonical, file-on-disk promotion of the app's browser state (localStorage 'woodshed_v1', the in-app object S). A morning agent reads this to know what is being served (tunes, rungs, objectives, PR targets) and can steer it before rebuilding the app for the day. Every field here is derived from real code in index.html; provenance is noted per-field. Fields marked [confirm:] are SPEC CONCEPTS not yet stored as first-class state in S — they are computed/inferred here and Chris should confirm the intended source of truth.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "generatedAt",
+    "week",
+    "primaryTune",
+    "rotation",
+    "tunes",
+    "weeklyObjectives",
+    "prTargets"
+  ],
+  "properties": {
+    "__comment__": {
+      "type": "string",
+      "description": "Optional free-text banner (e.g. to flag illustrative vs. live data). Ignored by consumers."
+    },
+    "schemaVersion": {
+      "type": "string",
+      "description": "Version of THIS contract (not the app). Bump when fields change. e.g. '1.0'.",
+      "default": "1.0"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 timestamp the app produced this export. Source: new Date().toISOString() at buildMissionControl() time."
+    },
+    "appStateKey": {
+      "type": "string",
+      "description": "The localStorage key the live state lives under, for the morning agent's reference. Source: index.html saveState() uses 'woodshed_v1'.",
+      "default": "woodshed_v1"
+    },
+    "streak": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Current consecutive-day practice streak. Source: S.streak (incremented in logMinutes() when a day reaches >=20 min)."
+    },
+    "lastDay": {
+      "type": ["string", "null"],
+      "description": "ISO date (YYYY-MM-DD) of the last day that counted toward the streak, or null. Source: S.lastDay."
+    },
+    "week": {
+      "type": "object",
+      "description": "The current training week. Source: dayInfo() computes weekIdx from EPOCH (2026-01-05, a Monday); weekIdx = floor(dayIdx/7).",
+      "additionalProperties": false,
+      "required": ["index", "isoStart"],
+      "properties": {
+        "index": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Zero-based week number since EPOCH. Source: dayInfo().weekIdx."
+        },
+        "displayNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Human-facing week number (index + 1), matching the app's 'week N' labels. Source: P.di.weekIdx + 1 (dayLogMarkdown)."
+        },
+        "isoStart": {
+          "type": "string",
+          "format": "date",
+          "description": "ISO date (YYYY-MM-DD) of this week's Monday. Source: EPOCH (2026-01-05) + weekIdx*7 days."
+        },
+        "dow": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 6,
+          "description": "Day-of-week index for the export day, 0=Monday..6=Sunday. Source: dayInfo().dow."
+        },
+        "focus": {
+          "type": "string",
+          "description": "The day's curriculum focus theme. Source: CURRICULUM[dow].focus (e.g. 'Time & Subdivision')."
+        }
+      }
+    },
+    "primaryTune": {
+      "type": "string",
+      "description": "Tune id of this week's primary (the one being actively built). Source: pickTunes(di).primary.id, which is locked at week start via the S.week['w2-'+weekIdx] snapshot, overridden by S.pin if set. One of the TUNES ids.",
+      "examples": ["recordame", "autumn", "blues"]
+    },
+    "pinnedTune": {
+      "type": ["string", "null"],
+      "description": "Tune id Chris manually pinned as primary, overriding rotation, or null. Source: S.pin."
+    },
+    "rotation": {
+      "type": "array",
+      "description": "Ordered list of every tune id in the rotation pool, in TUNES order. The weekly primary advances through this list (rot = TUNES[weekIdx % TUNES.length]). Source: TUNES[].id.",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "reviewTunes": {
+      "type": "array",
+      "description": "Tune ids surfaced for review this week alongside the primary. Source: pickTunes(di) returns .secondary and .review; Saturday's jam-set is [primary, secondary, review]. [confirm: review pairing is computed from rotation position, not stored — ok as derived?]",
+      "items": { "type": "string" }
+    },
+    "tunes": {
+      "type": "object",
+      "description": "Per-tune progress map, keyed by tune id. Mirrors S.tuneStatus but flattened to the fields a steering agent needs. Only tunes with progress (or the primary) need be included, matching how dayLogMarkdown() filters (rc>0 || primary).",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "rungStatus", "memorized"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Display title. Source: TUNES.find(id).title."
+          },
+          "rungStatus": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 5,
+            "description": "Count of memorization rungs cleared, 0–5. Source: rungCount(id) = tuneSt(id).r.filter(Boolean).length. The 5 rungs (MEMO_STEPS): sing melody / play melody from memory / roots in time / guide tones / solo 3 choruses from memory."
+          },
+          "rungDates": {
+            "type": "array",
+            "description": "The raw 5-element rung array: ISO date the rung was cleared, or null. Source: tuneSt(id).r. Length is always 5.",
+            "items": { "type": ["string", "null"] },
+            "minItems": 5,
+            "maxItems": 5
+          },
+          "verifiedDate": {
+            "type": ["string", "null"],
+            "description": "Date the final solo rung was verified (the 'v' flag). Source: tuneSt(id).v. Memorized requires r[4] AND v."
+          },
+          "memorized": {
+            "type": "boolean",
+            "description": "True when the tune is fully owned. Source: isMemorized(id) = !!(r[4] && v)."
+          },
+          "pinned": {
+            "type": "boolean",
+            "description": "True if this tune is the pinned primary. Source: S.pin === id."
+          }
+        }
+      }
+    },
+    "weeklyObjectives": {
+      "type": "array",
+      "description": "This week's contract — the measurable goals shown on the Today page. Source: PAGES.today() 'week-goals' block (~line 2226), built against the S.week['w2-'+weekIdx] snapshot.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["label", "current", "target"],
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "Human description, e.g. 'Primary tune: Recorda Me → rung 4' or 'Vocabulary: +8 lick-keys mastered'."
+          },
+          "current": {
+            "type": "number",
+            "description": "Progress so far this week. Source: live value minus the week-start snapshot (e.g. rungCount(primary)-wk.rungStart)."
+          },
+          "target": {
+            "type": "number",
+            "description": "The goal value for this week. Source: the curriculum's per-objective target (rung+2 => 2, lick-keys => 8, beat-any-PR => 1, transcription logs => 3)."
+          },
+          "met": {
+            "type": "boolean",
+            "description": "True when current >= target. Source: pct>=100 in the goals render."
+          }
+        }
+      }
+    },
+    "monthlyObjectives": {
+      "type": "array",
+      "description": "Longer-horizon objectives. [confirm: NOT stored as first-class state in S today — the app has no monthly-objective array. These are SPEC CONCEPTS. The app exports an empty array (or curriculum-derived hints from LORE month-cadence lines like 'Transcribe the FIRST 8 bars this month'); Chris/the morning agent should own and rewrite this list. Marked here so a steering agent can populate it.]",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["label"],
+        "properties": {
+          "label": { "type": "string", "description": "Objective text." },
+          "current": { "type": "number", "description": "Optional progress value." },
+          "target": { "type": "number", "description": "Optional goal value." },
+          "met": { "type": "boolean" }
+        }
+      }
+    },
+    "reviewSchedule": {
+      "type": "object",
+      "description": "What spaced review is due. [confirm: the app has NO explicit review-schedule store. This is a SPEC CONCEPT derived from real mechanics: (a) review-lick spacing — CURRICULUM Wednesday uses 'three days ago's lick' and reviewLick = LICKS[(dayIdx-3) mod len]; (b) review tunes — pickTunes secondary/review; (c) Saturday jam-sim is the weekly exam. The export fills these from those derivations; confirm whether you want a richer SR schedule stored in S.]",
+      "additionalProperties": false,
+      "properties": {
+        "reviewLickId": {
+          "type": ["string", "null"],
+          "description": "Lick id due for spaced review today. Source: P.reviewLick.id = LICKS[(dayIdx-3) mod LICKS.length]."
+        },
+        "reviewTuneIds": {
+          "type": "array",
+          "description": "Tune ids due for review. Source: [pickTunes.secondary.id, pickTunes.review.id].",
+          "items": { "type": "string" }
+        },
+        "weeklyExam": {
+          "type": "string",
+          "description": "The recurring weekly assessment. Source: Saturday CURRICULUM 'jamset' — 'THE SET: 3 tunes, no stopping'.",
+          "default": "Saturday jam-simulation: primary + 2 review tunes, head-in / choruses / head-out, no restarts."
+        }
+      }
+    },
+    "prTargets": {
+      "type": "object",
+      "description": "Personal-record ladders: current best vs goal for each speed/technique metric. Source: bestPR(id) for current (returns 0 if never logged) and the goals hard-coded throughout index.html (lines 1807-1824, 2278, 2655, 2691).",
+      "additionalProperties": false,
+      "required": ["ladder", "clarke2", "single-tongue", "16th-triplet"],
+      "properties": {
+        "ladder": {
+          "$ref": "#/definitions/prTarget",
+          "description": "Subdivision ladder, 5 choruses over F blues. Goal 176 bpm (verified index.html line 2275 'best ... / 176', line 2655)."
+        },
+        "clarke2": {
+          "$ref": "#/definitions/prTarget",
+          "description": "Clarke Study II in 16ths. Goal 144 bpm (verified index.html line 1807 'goal 144', lines 2278/2655/2691)."
+        },
+        "single-tongue": {
+          "$ref": "#/definitions/prTarget",
+          "description": "Single-tongue 16ths. Goal 132 bpm (verified index.html line 1808 'goal 132', lines 2278/2579/2655/2691)."
+        },
+        "16th-triplet": {
+          "$ref": "#/definitions/prTarget",
+          "description": "16th-triplet line. Goal 120 bpm (verified index.html line 1824 'goal 120', lines 2655/2691)."
+        }
+      }
+    }
+  },
+  "definitions": {
+    "prTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["best", "goal"],
+      "properties": {
+        "best": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Current best bpm logged. Source: bestPR(id) = max over (S.prs[id] || []).bpm; 0 when never logged."
+        },
+        "goal": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Target bpm for this metric (hard-coded in app)."
+        },
+        "lastLogged": {
+          "type": ["string", "null"],
+          "description": "ISO date of the most recent PR entry, or null. Source: last element of S.prs[id]."
+        }
+      }
+    }
+  }
+}

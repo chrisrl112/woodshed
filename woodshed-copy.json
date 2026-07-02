@@ -1,0 +1,389 @@
+{
+  "schemaVersion": 1,
+  "_meta": {
+    "task": "wood-33 (M1) — centralize coaching copy keyed by block/exercise (extraction slice)",
+    "generated": "2026-06-26",
+    "source": "index.html (read-only extraction; no edits made)",
+    "totals": {
+      "why_backbone": 39,
+      "section_coaching": 32,
+      "all": 71
+    },
+    "keyScheme": "day.<weekday>.<module>.<preset>.why for the daily-plan backbone; <section>.<exercise/tool>.<role> for static section coaching. Keys are stable & hierarchical, derived from each block's module+preset fields.",
+    "deferred": [
+      {
+        "what": "Dynamic override-builder why (index.html ~L2635) — `why:nb.why||''`",
+        "reason": "runtime value, not static copy; it CONSUMES copy rather than defining it"
+      },
+      {
+        "what": "Interpolated class=\"sub\" strings containing ${...} (e.g. ~L2039 interval side-tool, ~L2882 Saturday/pinned-tune line, ~L3319 session-log empty state)",
+        "reason": "templated strings that splice variables; extract during wiring with a tokenized format, not as flat text"
+      },
+      {
+        "what": "Empty-state / status placeholders (e.g. ~L2553, ~L2563, ~L3080)",
+        "reason": "borderline UI microcopy; include in a later pass once the COPY() loader exists"
+      },
+      {
+        "what": "Section <h3> headers & button labels",
+        "reason": "out of scope for this slice (coaching copy first); catalogue later if desired"
+      }
+    ]
+  },
+  "copy": {
+    "day.monday.gym.warmup.why": {
+      "text": "Cichowicz first: wind before fingers. Tone is the product; everything else is packaging.",
+      "source": "index.html ~L967",
+      "context": "CURRICULUM / Monday / gym.warmup block — one-line 'why' coaching rationale"
+    },
+    "day.monday.gym.ladder.why": {
+      "text": "Five choruses, quarters to 16th-note triplets, over a band that won't lie to you. This is how a subdivision ceiling gets raised.",
+      "source": "index.html ~L968",
+      "context": "CURRICULUM / Monday / gym.ladder block — one-line 'why' coaching rationale"
+    },
+    "day.monday.vocab.lickday.why": {
+      "text": "Vocabulary enters through the ear. Hear it, find it, THEN read it. Three keys minimum.",
+      "source": "index.html ~L969",
+      "context": "CURRICULUM / Monday / vocab.lickday block — one-line 'why' coaching rationale"
+    },
+    "day.monday.tunes.tuneweek.why": {
+      "text": "Melody from the embedded page, roots from memory with the band. Foundation pass.",
+      "source": "index.html ~L970",
+      "context": "CURRICULUM / Monday / tunes.tuneweek block — one-line 'why' coaching rationale"
+    },
+    "day.monday.ears.transcribe.why": {
+      "text": "Five minutes inside the week's solo. Loop one phrase at 0.5×, sing it cold, find it on the horn. This is the rep that actually builds the ear.",
+      "source": "index.html ~L971",
+      "context": "CURRICULUM / Monday / ears.transcribe block — one-line 'why' coaching rationale"
+    },
+    "day.monday.today.lore.why": {
+      "text": "One card, one listening assignment, three sentences about what felt hard.",
+      "source": "index.html ~L972",
+      "context": "CURRICULUM / Monday / today.lore block — one-line 'why' coaching rationale"
+    },
+    "day.tuesday.gym.warmup.why": {
+      "text": "Slurs are the trumpet's legato gym — full arc plus flexibility 8ths today.",
+      "source": "index.html ~L974",
+      "context": "CURRICULUM / Tuesday / gym.warmup block — one-line 'why' coaching rationale"
+    },
+    "day.tuesday.gym.clarke.why": {
+      "text": "Clarke II at PR-10, PR-5, PR, PR+2. Log it. Speed is built 2 bpm at a time, sotto voce.",
+      "source": "index.html ~L975",
+      "context": "CURRICULUM / Tuesday / gym.clarke block — one-line 'why' coaching rationale"
+    },
+    "day.tuesday.vocab.cycle.why": {
+      "text": "Circle of fourths with the band behind you. A lick in 12 keys is language, not a trick.",
+      "source": "index.html ~L976",
+      "context": "CURRICULUM / Tuesday / vocab.cycle block — one-line 'why' coaching rationale"
+    },
+    "day.tuesday.tunes.guides.why": {
+      "text": "3rds & 7ths are the tune's skeleton — solos that \"make the changes\" are built on these two notes.",
+      "source": "index.html ~L977",
+      "context": "CURRICULUM / Tuesday / tunes.guides block — one-line 'why' coaching rationale"
+    },
+    "day.tuesday.ears.transcribe.why": {
+      "text": "Steal one phrase from the week's solo, then sing it back against the tuner. Voice first, valves second — if you can't sing it, you don't own it.",
+      "source": "index.html ~L978",
+      "context": "CURRICULUM / Tuesday / ears.transcribe block — one-line 'why' coaching rationale"
+    },
+    "day.tuesday.today.lore.why": {
+      "text": "Read. Queue the commute listening. One sentence.",
+      "source": "index.html ~L979",
+      "context": "CURRICULUM / Tuesday / today.lore block — one-line 'why' coaching rationale"
+    },
+    "day.wednesday.gym.warmup.why": {
+      "text": "Same ritual, deeper breath. Watch the tuner needle on your long tones today.",
+      "source": "index.html ~L981",
+      "context": "CURRICULUM / Wednesday / gym.warmup block — one-line 'why' coaching rationale"
+    },
+    "day.wednesday.gym.bootcamp.why": {
+      "text": "16th bursts, sextuplet pyramid, double-tongue leaps — double-time fluency, built directly.",
+      "source": "index.html ~L982",
+      "context": "CURRICULUM / Wednesday / gym.bootcamp block — one-line 'why' coaching rationale"
+    },
+    "day.wednesday.vocab.review.why": {
+      "text": "Three days ago's lick, four keys, from memory. Spaced repetition beats cramming.",
+      "source": "index.html ~L983",
+      "context": "CURRICULUM / Wednesday / vocab.review block — one-line 'why' coaching rationale"
+    },
+    "day.wednesday.tunes.memorize.why": {
+      "text": "Sing → melody from memory → roots → guide tones → solo eyes-closed. Climb one rung.",
+      "source": "index.html ~L984",
+      "context": "CURRICULUM / Wednesday / tunes.memorize block — one-line 'why' coaching rationale"
+    },
+    "day.wednesday.ears.transcribe.why": {
+      "text": "Five minutes inside the week's assigned solo. Even one phrase sung accurately counts.",
+      "source": "index.html ~L985",
+      "context": "CURRICULUM / Wednesday / ears.transcribe block — one-line 'why' coaching rationale"
+    },
+    "day.wednesday.today.lore.why": {
+      "text": "One card. One listen. One sentence.",
+      "source": "index.html ~L986",
+      "context": "CURRICULUM / Wednesday / today.lore block — one-line 'why' coaching rationale"
+    },
+    "day.thursday.gym.warmup.why": {
+      "text": "Slur sets expand a semitone past comfort today. Gently.",
+      "source": "index.html ~L988",
+      "context": "CURRICULUM / Thursday / gym.warmup block — one-line 'why' coaching rationale"
+    },
+    "day.thursday.gym.clarke.why": {
+      "text": "Moving-line single-tongue test, then double-tongue leaps, then Clarke III. New PR or no dessert.",
+      "source": "index.html ~L989",
+      "context": "CURRICULUM / Thursday / gym.clarke block — one-line 'why' coaching rationale"
+    },
+    "day.thursday.vocab.sprint.why": {
+      "text": "Today's lick at target bpm in its 4 hardest keys. Sloppy = drop 10; clean ×3 = up 5.",
+      "source": "index.html ~L990",
+      "context": "CURRICULUM / Thursday / vocab.sprint block — one-line 'why' coaching rationale"
+    },
+    "day.thursday.tunes.solo.why": {
+      "text": "Three choruses, no chart if possible. Record one. You're building the Saturday muscle.",
+      "source": "index.html ~L991",
+      "context": "CURRICULUM / Thursday / tunes.solo block — one-line 'why' coaching rationale"
+    },
+    "day.thursday.ears.transcribe.why": {
+      "text": "One phrase from the week's solo, by ear. Descending lines are where real transcription gets hard — chase those today.",
+      "source": "index.html ~L992",
+      "context": "CURRICULUM / Thursday / ears.transcribe block — one-line 'why' coaching rationale"
+    },
+    "day.thursday.today.lore.why": {
+      "text": "Log your numbers.",
+      "source": "index.html ~L993",
+      "context": "CURRICULUM / Thursday / today.lore block — one-line 'why' coaching rationale"
+    },
+    "day.friday.gym.warmup.why": {
+      "text": "Friday rule: warm up like it's a gig night, because someday it will be.",
+      "source": "index.html ~L995",
+      "context": "CURRICULUM / Friday / gym.warmup block — one-line 'why' coaching rationale"
+    },
+    "day.friday.gym.pyramid.why": {
+      "text": "Quarters to sextuplets on one note, one breath line. Time-feel maintenance.",
+      "source": "index.html ~L996",
+      "context": "CURRICULUM / Friday / gym.pyramid block — one-line 'why' coaching rationale"
+    },
+    "day.friday.vocab.cycle.why": {
+      "text": "Drop the lick into a moving ii-V cycle — vocabulary only counts when it survives traffic.",
+      "source": "index.html ~L997",
+      "context": "CURRICULUM / Friday / vocab.cycle block — one-line 'why' coaching rationale"
+    },
+    "day.friday.tunes.solo.why": {
+      "text": "Book closed. Band on. Train wheels-off on Friday and Saturday's jam-sim feels like a rerun.",
+      "source": "index.html ~L998",
+      "context": "CURRICULUM / Friday / tunes.solo block — one-line 'why' coaching rationale"
+    },
+    "day.friday.ears.transcribe.why": {
+      "text": "End the work week by stealing one more phrase from the week's solo. Five minutes, one phrase you can sing back clean.",
+      "source": "index.html ~L999",
+      "context": "CURRICULUM / Friday / ears.transcribe block — one-line 'why' coaching rationale"
+    },
+    "day.friday.today.lore.why": {
+      "text": "One card. One listen. Done.",
+      "source": "index.html ~L1000",
+      "context": "CURRICULUM / Friday / today.lore block — one-line 'why' coaching rationale"
+    },
+    "day.saturday.gym.warmup.why": {
+      "text": "Short and honest — the pre-jam routine you'll use in the wild.",
+      "source": "index.html ~L1002",
+      "context": "CURRICULUM / Saturday / gym.warmup block — one-line 'why' coaching rationale"
+    },
+    "day.saturday.tunes.jamset.why": {
+      "text": "Tune of the week + 2 review tunes. Head in, choruses, head out. No restarts — recovering live IS the skill.",
+      "source": "index.html ~L1003",
+      "context": "CURRICULUM / Saturday / tunes.jamset block — one-line 'why' coaching rationale"
+    },
+    "day.saturday.ears.transcribe.why": {
+      "text": "While the adrenaline's up: grab one phrase from the week's solo by ear.",
+      "source": "index.html ~L1004",
+      "context": "CURRICULUM / Saturday / ears.transcribe block — one-line 'why' coaching rationale"
+    },
+    "day.saturday.today.lore.why": {
+      "text": "What broke down? That's Monday's assignment. Write it while it stings.",
+      "source": "index.html ~L1005",
+      "context": "CURRICULUM / Saturday / today.lore block — one-line 'why' coaching rationale"
+    },
+    "day.sunday.gym.drone.why": {
+      "text": "Light day — chops rebuild on rest. Long tones INTO the drone until beats disappear.",
+      "source": "index.html ~L1007",
+      "context": "CURRICULUM / Sunday / gym.drone block — one-line 'why' coaching rationale"
+    },
+    "day.sunday.ears.intervals.why": {
+      "text": "Voice first, horn second. Singing the week's licks files them in long-term storage.",
+      "source": "index.html ~L1008",
+      "context": "CURRICULUM / Sunday / ears.intervals block — one-line 'why' coaching rationale"
+    },
+    "day.sunday.ears.transcribe.why": {
+      "text": "The week's big ear session: 2-4 bars you OWN beat twenty you visited. Half speed, full attention.",
+      "source": "index.html ~L1009",
+      "context": "CURRICULUM / Sunday / ears.transcribe block — one-line 'why' coaching rationale"
+    },
+    "day.sunday.tunes.tuneweek.why": {
+      "text": "Last week's tune, melody and one easy chorus. Keep the shelf stocked.",
+      "source": "index.html ~L1010",
+      "context": "CURRICULUM / Sunday / tunes.tuneweek block — one-line 'why' coaching rationale"
+    },
+    "day.sunday.today.lore.why": {
+      "text": "Glance at Progress. Pick one number to move by Friday.",
+      "source": "index.html ~L1011",
+      "context": "CURRICULUM / Sunday / today.lore block — one-line 'why' coaching rationale"
+    },
+    "gym.cichowicz.range.coach": {
+      "text": "Crescendo INTO the top note; don't grab it. Three arcs max, full rest between, stop on the first thin one.",
+      "source": "index.html ~L1918",
+      "context": "Full Workout / Cichowicz flow / range-arc card"
+    },
+    "gym.cichowicz.rest.coach": {
+      "text": "Rest = play. Bell on knee between reps. Tone first, range second, ego never.",
+      "source": "index.html ~L1920",
+      "context": "Full Workout / Cichowicz flow / rest reminder"
+    },
+    "gym.ladder.coach": {
+      "text": "Rhythm is the instrument; notes are incidental. If a chorus feels easy you're not subdividing honestly. Survive chorus 5 clean and log it.",
+      "source": "index.html ~L1944",
+      "context": "Full Workout / Subdivision Ladder card"
+    },
+    "gym.clarke.coach": {
+      "text": "Play straight from the book — no on-screen approximation. Fingers ride the air column; the rep that smears doesn't count — clean only, then +2 bpm.",
+      "source": "index.html ~L1958",
+      "context": "Full Workout / Clarke card — play from the book"
+    },
+    "gym.bootcamp.fromBook.coach": {
+      "text": "Run it from the book — no on-screen approximation. Start at the bottom of the metronome ramp.",
+      "source": "index.html ~L1975",
+      "context": "Full Workout / Double-Time Bootcamp — run from the book"
+    },
+    "gym.bootcamp.math.coach": {
+      "text": "Remember the math: 16th triplets at 100 = 8th triplets at 200. Slow is fast.",
+      "source": "index.html ~L1977",
+      "context": "Full Workout / Double-Time Bootcamp — subdivision math"
+    },
+    "tunes.jamset.noStop.coach": {
+      "text": "No stopping, no restarts. Get lost? Guide tones + simple rhythm until the form comes back — that IS the skill. Debrief in the journal after.",
+      "source": "index.html ~L2011",
+      "context": "Tunes / THE SET (jam-set) — no stopping rule"
+    },
+    "ears.intervals.sing.coach": {
+      "text": "Tuner on (toolbar). Sing today's lick and last review lick — needle honest, no horn. If you can't sing it, you're typing.",
+      "source": "index.html ~L2026",
+      "context": "Ears / interval trainer — sing, tuner honest"
+    },
+    "ears.transcribe.steal.coach": {
+      "text": "The 5-minute steal: ONE phrase. (1) Loop it til you can sing it cold. (2) Find it on the horn — no paper. (3) Play WITH the record til your articulation matches. Player ⚙ → 0.5×. Log it when you land it.",
+      "source": "index.html ~L2036",
+      "context": "Ears / transcription — the 5-minute steal protocol"
+    },
+    "gym.dropTime.coach": {
+      "text": "Per-block notes now live inside each block. Auto-save to your folder arrives with the morning-rebuild loop.",
+      "source": "index.html ~L2054",
+      "context": "Full Workout / per-block notes footnote"
+    },
+    "vocab.lickday.howto.coach": {
+      "text": "Ear first. Then notation. Then all 12 keys. Then over a moving band. That's how a lick becomes YOURS.",
+      "source": "index.html ~L2928",
+      "context": "Vocab / Lick of the Day — ear→notation→keys→band"
+    },
+    "gym.home.coach": {
+      "text": "Your gym blocks live here — practice any of them freely, no timer needed. The timed Session is just a guided walk through these same blocks. The toolkit below stays open.",
+      "source": "index.html ~L3153",
+      "context": "Gym home / blocks-live-here intro"
+    },
+    "gym.tool.metronomeRamp.coach": {
+      "text": "Auto-raises the metronome every N bars. Set it and chase it.",
+      "source": "index.html ~L3160",
+      "context": "Gym toolkit / metronome auto-ramp"
+    },
+    "gym.tool.clickDropout.coach": {
+      "text": "Click vanishes for N bars, then returns to judge you. Internal clock court.",
+      "source": "index.html ~L3170",
+      "context": "Gym toolkit / click drop-out (internal clock)"
+    },
+    "gym.tool.doubleTime.coach": {
+      "text": "Moving-scale 16ths (fingers and tongue must sync). Raise until articulation smears, back off 4 — that's today's number. Then the double-tongue leap cell below. Most players' double-time ceiling is the tongue.",
+      "source": "index.html ~L3179",
+      "context": "Gym toolkit / double-time scale trainer"
+    },
+    "gym.tool.clarkePR.coach": {
+      "text": "PR protocol: PR−10 once, PR−5 once, PR once, PR+2 attempt. Log only CLEAN.",
+      "source": "index.html ~L3185",
+      "context": "Gym toolkit / Clarke PR protocol"
+    },
+    "ears.home.coach": {
+      "text": "This is your ears home — today's ear block leads, both trainers stay open, then the canon, the lore deck, and the Day Review. The timed Session walks you through these same tools.",
+      "source": "index.html ~L3220",
+      "context": "Ears home / intro"
+    },
+    "ears.canon.coach": {
+      "text": "One column of history, one thing to steal from each. Work through these on commutes. 2:1 rule: listen twice as much as you shed.",
+      "source": "index.html ~L3225",
+      "context": "Ears / listening canon — 2:1 rule"
+    },
+    "vocab.matrix.coach": {
+      "text": "Columns = circle of fourths from C. Fill a row and that lick is LANGUAGE.",
+      "source": "index.html ~L3303",
+      "context": "Vocab / 12-key matrix — circle of fourths"
+    },
+    "lore.principle1.timeBeatsNotes": {
+      "text": "The band forgives a wrong note in 50 milliseconds and never forgives rushing. Most double-time problems are TIME-FEEL problems, not finger-speed problems — hence the daily Subdivision Ladder and the 2&4 click. When the pocket is yours, doubled-up lines are just subdivision you already own, with pitches attached.",
+      "source": "index.html ~L3333",
+      "context": "Lore deck / principle 1 — Time beats notes"
+    },
+    "lore.principle2.vocabNotTheory": {
+      "text": "Clark Terry: imitate → assimilate → innovate. Nobody speaks by spelling grammar rules; they steal phrases and wear them until they fit. 5 licks × 12 keys, ear-first, over a moving band = a phrasebook that becomes reflex. The theory is the receipt, not the engine.",
+      "source": "index.html ~L3334",
+      "context": "Lore deck / principle 2 — Vocabulary, not theory"
+    },
+    "lore.principle3.tunesCurrency": {
+      "text": "Jam sessions don't ask what you know — they call tunes. A memorized tune frees 100% of your attention for LISTENING, which is where the music actually happens. Five rungs per tune, one tune a week. In 12 weeks you own the dozen that gets called everywhere on Earth.",
+      "source": "index.html ~L3335",
+      "context": "Lore deck / principle 3 — Tunes are the currency"
+    },
+    "lore.principle4.soundFirst": {
+      "text": "Your tone is your handshake. Ten minutes of flow studies and drone long-tones daily compounds into the sound people turn around for. Wind before fingers, always.",
+      "source": "index.html ~L3339",
+      "context": "Lore deck / principle 4 — Sound first (Cichowicz)"
+    },
+    "lore.principle5.softBuildsFast": {
+      "text": "Clarke's studies — from YOUR book, deep-linked here — played sotto voce build the efficiency that makes speed cheap. PR protocol: −10, −5, PR, +2. Two bpm a day is 60 a month.",
+      "source": "index.html ~L3340",
+      "context": "Lore deck / principle 5 — Soft builds fast (Clarke)"
+    },
+    "lore.principle6.restIsRep": {
+      "text": "The embouchure is the only part of jazz that punishes overtime. Rest as much as you play inside every block. Sunday is deliberately light. Tired chops learn lies.",
+      "source": "index.html ~L3341",
+      "context": "Lore deck / principle 6 — Rest is a rep"
+    },
+    "lore.arc12week.coach": {
+      "text": "Weeks 1–4: subdivision ceiling to 16ths-at-120, three tunes owned, six licks in 12 keys. Weeks 5–8: double-time bursts in real solos, six tunes, twelve licks. Weeks 9–12: full dozen, Saturday jam-sets feel easy, and any session is a room you walk into like you've been there — because in here, you have. Every day this portal already knows what to do. Trust the rotation; spend your willpower on the horn.",
+      "source": "index.html ~L3345",
+      "context": "Lore deck / 12-week arc summary"
+    },
+    "lore.jam.before.coach": {
+      "text": "Warm up BEFORE you arrive (the Saturday 8-min routine). Bring the horn warm. Know 3 tunes cold at 3 tempos — better than 20 tunes at 70%. Scout the session once before playing it.",
+      "source": "index.html ~L3351",
+      "context": "Lore deck / jam craft — Before"
+    },
+    "lore.jam.callingTune.coach": {
+      "text": "Call YOUR tune (this week's), in the standard key, at a tempo you own. Count it off with confidence: snap on 2 & 4, \"one… two… one-two-three-four.\" A confident count-in buys you the band's respect before you play a note.",
+      "source": "index.html ~L3352",
+      "context": "Lore deck / jam craft — Calling a tune"
+    },
+    "lore.jam.onStand.coach": {
+      "text": "Melody is yours if you called it. 2–3 choruses max — leave them wanting. Can't hear the form? Play guide tones and SIMPLE rhythm until it locks; nobody hears \"lost,\" they hear \"patient.\" End phrases ON chord tones, beats 1 or 3.",
+      "source": "index.html ~L3353",
+      "context": "Lore deck / jam craft — On the stand"
+    },
+    "lore.jam.etiquette.coach": {
+      "text": "Listen twice as much as you play. Acknowledge solos (a nod beats a \"woo\"). Don't noodle between tunes. Thank the house band and the host BY NAME. Stay for the set after yours.",
+      "source": "index.html ~L3356",
+      "context": "Lore deck / jam craft — Etiquette physics"
+    },
+    "lore.jam.sideways.coach": {
+      "text": "It will — that's tuition, not a verdict. Note WHAT specifically broke (tempo? form? vocabulary? nerves?) in the journal that night. It becomes Monday's block. The players who sound untouchable are a stack of practice weeks ahead, nothing more.",
+      "source": "index.html ~L3357",
+      "context": "Lore deck / jam craft — When a set goes sideways"
+    },
+    "lore.jam.quietWeapon.coach": {
+      "text": "Almost nobody at a jam plays with great TIME and great SOUND. Solos that are 80% rhythm with a beautiful tone beat note-storms every single week. You're a strategist — exploit the inefficiency.",
+      "source": "index.html ~L3358",
+      "context": "Lore deck / jam craft — The quiet weapon"
+    }
+  }
+}

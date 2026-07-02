@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  com.woodshed.heartbeat.plist  ->  copy to  ~/Library/LaunchAgents/
+  Then:  launchctl load ~/Library/LaunchAgents/com.woodshed.heartbeat.plist
+
+  Push-only Woodshed heartbeat emitter (wood-47). Runs woodshed_heartbeat.py on
+  a 5-minute cadence so the Woodshed card on chrisliquin.com keeps a fresh
+  reporting dot. Heartbeats move on minutes-to-hours; 300s is plenty and avoids
+  hammering the Supabase free tier. With no creds present the script just prints
+  the payload and exits 0 (no external POST), so loading this before creds exist
+  is harmless.
+
+  >>> FIX THE TWO PLACEHOLDER PATHS BELOW to Chris's real host paths <<<
+  Both must be ABSOLUTE. Use the directory where you dropped woodshed_heartbeat.py
+  (the Woodshed public-assets folder on the host).
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.woodshed.heartbeat</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/bin/python3</string>
+    <!-- PLACEHOLDER: set to the real absolute path of woodshed_heartbeat.py on the host -->
+    <string>/Users/chris/REPLACE-ME/public-assets/woodshed_heartbeat.py</string>
+    <string>--once</string>
+  </array>
+
+  <key>StartInterval</key>
+  <integer>300</integer>
+
+  <key>RunAtLoad</key>
+  <true/>
+
+  <!-- PLACEHOLDER: set to the real absolute path for the log on the host -->
+  <key>StandardErrorPath</key>
+  <string>/Users/chris/REPLACE-ME/public-assets/heartbeat.log</string>
+
+  <key>StandardOutPath</key>
+  <string>/Users/chris/REPLACE-ME/public-assets/heartbeat.log</string>
+</dict>
+</plist>

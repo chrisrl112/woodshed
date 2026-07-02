@@ -1,0 +1,483 @@
+[
+  {
+    "id": "blues",
+    "title": "Straight No Chaser",
+    "source": "Real Book.pdf",
+    "printedPage": 386,
+    "pdfPage": 385,
+    "image": "pages/realbook-p386-straight-no-chaser.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "blues-page2",
+    "title": "Straight No Chaser - Au Privave (Bird head)",
+    "source": "Real Book.pdf",
+    "printedPage": 37,
+    "pdfPage": 36,
+    "image": "pages/realbook-p37-au-privave-bird-head.png",
+    "note": "secondary page2 reference for this tune"
+  },
+  {
+    "id": "autumn",
+    "title": "Autumn Leaves",
+    "source": "Real Book.pdf",
+    "printedPage": 39,
+    "pdfPage": 38,
+    "image": "pages/realbook-p39-autumn-leaves.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "bossa",
+    "title": "Blue Bossa",
+    "source": "Real Book.pdf",
+    "printedPage": 50,
+    "pdfPage": 49,
+    "image": "pages/realbook-p50-blue-bossa.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "atrain",
+    "title": "Take the \"A\" Train",
+    "source": "Real Book.pdf",
+    "printedPage": 398,
+    "pdfPage": 397,
+    "image": "pages/realbook-p398-take-the-a-train.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "attya",
+    "title": "All The Things You Are",
+    "source": "Real Book.pdf",
+    "printedPage": 22,
+    "pdfPage": 21,
+    "image": "pages/realbook-p22-all-the-things-you-are.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "four",
+    "title": "Four",
+    "source": "Real Book.pdf",
+    "printedPage": 149,
+    "pdfPage": 148,
+    "image": "pages/realbook-p149-four.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "beautiful",
+    "title": "Beautiful Love",
+    "source": "Real Book.pdf",
+    "printedPage": 40,
+    "pdfPage": 39,
+    "image": "pages/realbook-p40-beautiful-love.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "solar",
+    "title": "Solar",
+    "source": "Real Book.pdf",
+    "printedPage": 363,
+    "pdfPage": 362,
+    "image": "pages/realbook-p363-solar.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "twnbay",
+    "title": "There Will Never Be Another You",
+    "source": "Real Book.pdf",
+    "printedPage": 407,
+    "pdfPage": 406,
+    "image": "pages/realbook-p407-there-will-never-be-another-you.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "oleo",
+    "title": "Oleo (Rhythm Changes)",
+    "source": "Real Book.pdf",
+    "printedPage": 309,
+    "pdfPage": 308,
+    "image": "pages/realbook-p309-oleo-rhythm-changes.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "father",
+    "title": "Song for My Father",
+    "source": "Real Book.pdf",
+    "printedPage": 373,
+    "pdfPage": 372,
+    "image": "pages/realbook-p373-song-for-my-father.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "footprints",
+    "title": "Footprints",
+    "source": "Real Book.pdf",
+    "printedPage": 144,
+    "pdfPage": 143,
+    "image": "pages/realbook-p144-footprints.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "cherokee",
+    "title": "Cherokee",
+    "source": "Real Book.pdf",
+    "printedPage": 77,
+    "pdfPage": 76,
+    "image": "pages/realbook-p77-cherokee.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "confirmation",
+    "title": "Confirmation",
+    "source": "Real Book.pdf",
+    "printedPage": 87,
+    "pdfPage": 86,
+    "image": "pages/realbook-p87-confirmation.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "misty",
+    "title": "Misty",
+    "source": "Real Book.pdf",
+    "printedPage": 277,
+    "pdfPage": 276,
+    "image": "pages/realbook-p277-misty.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "stella",
+    "title": "Stella by Starlight",
+    "source": "Real Book.pdf",
+    "printedPage": 382,
+    "pdfPage": 381,
+    "image": "pages/realbook-p382-stella-by-starlight.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "tingl",
+    "title": "There Is No Greater Love",
+    "source": "Real Book.pdf",
+    "printedPage": 406,
+    "pdfPage": 405,
+    "image": "pages/realbook-p406-there-is-no-greater-love.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "tunisia",
+    "title": "A Night in Tunisia",
+    "source": "Real Book.pdf",
+    "printedPage": 302,
+    "pdfPage": 301,
+    "image": "pages/realbook-p302-a-night-in-tunisia.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "ornithology",
+    "title": "Ornithology",
+    "source": "Real Book.pdf",
+    "printedPage": 317,
+    "pdfPage": 316,
+    "image": "pages/realbook-p317-ornithology.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "missjones",
+    "title": "Have You Met Miss Jones?",
+    "source": "Real Book.pdf",
+    "printedPage": 172,
+    "pdfPage": 171,
+    "image": "pages/realbook-p172-have-you-met-miss-jones.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "nowhere",
+    "title": "Out of Nowhere",
+    "source": "Real Book.pdf",
+    "printedPage": 318,
+    "pdfPage": 317,
+    "image": "pages/realbook-p318-out-of-nowhere.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "valentine",
+    "title": "My Funny Valentine",
+    "source": "Real Book.pdf",
+    "printedPage": 287,
+    "pdfPage": 286,
+    "image": "pages/realbook-p287-my-funny-valentine.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "recordame",
+    "title": "Recorda Me",
+    "source": "Real Book.pdf",
+    "printedPage": 337,
+    "pdfPage": 336,
+    "image": "pages/realbook-p337-recorda-me.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "bessies",
+    "title": "Bessie's Blues (Eb blues)",
+    "source": "Real Book.pdf",
+    "printedPage": 42,
+    "pdfPage": 41,
+    "image": "pages/realbook-p42-bessie-s-blues-eb-blues.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "allblues",
+    "title": "All Blues",
+    "source": "Real Book.pdf",
+    "printedPage": 18,
+    "pdfPage": 17,
+    "image": "pages/realbook-p18-all-blues.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "allofme",
+    "title": "All of Me",
+    "source": "Real Book.pdf",
+    "printedPage": 20,
+    "pdfPage": 19,
+    "image": "pages/realbook-p20-all-of-me.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "blacknile",
+    "title": "Black Nile",
+    "source": "Real Book.pdf",
+    "printedPage": 48,
+    "pdfPage": 47,
+    "image": "pages/realbook-p48-black-nile.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "bluemonk",
+    "title": "Blue Monk",
+    "source": "Real Book.pdf",
+    "printedPage": 52,
+    "pdfPage": 51,
+    "image": "pages/realbook-p52-blue-monk.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "bfalice",
+    "title": "Blues for Alice",
+    "source": "Real Book.pdf",
+    "printedPage": 55,
+    "pdfPage": 54,
+    "image": "pages/realbook-p55-blues-for-alice.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "cottontail",
+    "title": "Cotton Tail",
+    "source": "Real Book.pdf",
+    "printedPage": 90,
+    "pdfPage": 89,
+    "image": "pages/realbook-p90-cotton-tail.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "daahoud",
+    "title": "Daahoud",
+    "source": "Real Book.pdf",
+    "printedPage": 96,
+    "pdfPage": 95,
+    "image": "pages/realbook-p96-daahoud.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "donnalee",
+    "title": "Donna Lee",
+    "source": "Real Book.pdf",
+    "printedPage": 123,
+    "pdfPage": 122,
+    "image": "pages/realbook-p123-donna-lee.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "freddie",
+    "title": "Freddie Freeloader",
+    "source": "Real Book.pdf",
+    "printedPage": 151,
+    "pdfPage": 150,
+    "image": "pages/realbook-p151-freddie-freeloader.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "ipanema",
+    "title": "The Girl from Ipanema",
+    "source": "Real Book.pdf",
+    "printedPage": 158,
+    "pdfPage": 157,
+    "image": "pages/realbook-p158-the-girl-from-ipanema.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "joyspring",
+    "title": "Joy Spring",
+    "source": "Real Book.pdf",
+    "printedPage": 229,
+    "pdfPage": 228,
+    "image": "pages/realbook-p229-joy-spring.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "ladybird",
+    "title": "Lady Bird",
+    "source": "Real Book.pdf",
+    "printedPage": 235,
+    "pdfPage": 234,
+    "image": "pages/realbook-p235-lady-bird.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "sowhat",
+    "title": "So What",
+    "source": "Real Book.pdf",
+    "printedPage": 364,
+    "pdfPage": 363,
+    "image": "pages/realbook-p364-so-what.png",
+    "note": "pdfPage = printedPage - 1 (RB_OFFSET)"
+  },
+  {
+    "id": "clarke-first-study-sotto-voce",
+    "title": "Clarke - First Study (sotto voce!)",
+    "source": "Technical Studies.pdf",
+    "printedPage": null,
+    "pdfPage": 3,
+    "image": "pages/clarke-pdf3-first-study-sotto-voce.png",
+    "note": "Clarke pdf: index is the PDF page directly"
+  },
+  {
+    "id": "clarke-etude-i",
+    "title": "Clarke - Etude I",
+    "source": "Technical Studies.pdf",
+    "printedPage": null,
+    "pdfPage": 5,
+    "image": "pages/clarke-pdf5-etude-i.png",
+    "note": "Clarke pdf: index is the PDF page directly"
+  },
+  {
+    "id": "clarke-second-study",
+    "title": "Clarke - Second Study",
+    "source": "Technical Studies.pdf",
+    "printedPage": null,
+    "pdfPage": 6,
+    "image": "pages/clarke-pdf6-second-study.png",
+    "note": "Clarke pdf: index is the PDF page directly"
+  },
+  {
+    "id": "clarke-second-study",
+    "title": "Clarke - Second Study",
+    "source": "Technical Studies.pdf",
+    "printedPage": null,
+    "pdfPage": 7,
+    "image": "pages/clarke-pdf7-second-study.png",
+    "note": "Clarke pdf: index is the PDF page directly"
+  },
+  {
+    "id": "clarke-third-study",
+    "title": "Clarke - Third Study",
+    "source": "Technical Studies.pdf",
+    "printedPage": null,
+    "pdfPage": 8,
+    "image": "pages/clarke-pdf8-third-study.png",
+    "note": "Clarke pdf: index is the PDF page directly"
+  },
+  {
+    "id": "clarke-fourth-study",
+    "title": "Clarke - Fourth Study",
+    "source": "Technical Studies.pdf",
+    "printedPage": null,
+    "pdfPage": 12,
+    "image": "pages/clarke-pdf12-fourth-study.png",
+    "note": "Clarke pdf: index is the PDF page directly",
+    "confirm": "source marks this section page as approx:true"
+  },
+  {
+    "id": "clarke-fifth-study",
+    "title": "Clarke - Fifth Study",
+    "source": "Technical Studies.pdf",
+    "printedPage": null,
+    "pdfPage": 17,
+    "image": "pages/clarke-pdf17-fifth-study.png",
+    "note": "Clarke pdf: index is the PDF page directly",
+    "confirm": "source marks this section page as approx:true"
+  },
+  {
+    "id": "cichowicz-long-tones-group-a",
+    "title": "Cichowicz - Long Tones - Group A",
+    "source": "Cichowicz.pdf",
+    "printedPage": null,
+    "pdfPage": 11,
+    "image": "pages/cichowicz-pdf11-long-tones-group-a.png",
+    "note": "Cichowicz pdf: index is the PDF page directly"
+  },
+  {
+    "id": "cichowicz-group-b",
+    "title": "Cichowicz - Group B",
+    "source": "Cichowicz.pdf",
+    "printedPage": null,
+    "pdfPage": 12,
+    "image": "pages/cichowicz-pdf12-group-b.png",
+    "note": "Cichowicz pdf: index is the PDF page directly"
+  },
+  {
+    "id": "cichowicz-group-c",
+    "title": "Cichowicz - Group C",
+    "source": "Cichowicz.pdf",
+    "printedPage": null,
+    "pdfPage": 13,
+    "image": "pages/cichowicz-pdf13-group-c.png",
+    "note": "Cichowicz pdf: index is the PDF page directly"
+  },
+  {
+    "id": "cichowicz-group-d",
+    "title": "Cichowicz - Group D",
+    "source": "Cichowicz.pdf",
+    "printedPage": null,
+    "pdfPage": 14,
+    "image": "pages/cichowicz-pdf14-group-d.png",
+    "note": "Cichowicz pdf: index is the PDF page directly; warm-up default = Group D",
+    "default": true
+  },
+  {
+    "id": "cichowicz-group-e",
+    "title": "Cichowicz - Group E",
+    "source": "Cichowicz.pdf",
+    "printedPage": null,
+    "pdfPage": 15,
+    "image": "pages/cichowicz-pdf15-group-e.png",
+    "note": "Cichowicz pdf: index is the PDF page directly"
+  },
+  {
+    "id": "cichowicz-group-f",
+    "title": "Cichowicz - Group F",
+    "source": "Cichowicz.pdf",
+    "printedPage": null,
+    "pdfPage": 16,
+    "image": "pages/cichowicz-pdf16-group-f.png",
+    "note": "Cichowicz pdf: index is the PDF page directly"
+  },
+  {
+    "id": "cichowicz-group-g",
+    "title": "Cichowicz - Group G",
+    "source": "Cichowicz.pdf",
+    "printedPage": null,
+    "pdfPage": 17,
+    "image": "pages/cichowicz-pdf17-group-g.png",
+    "note": "Cichowicz pdf: index is the PDF page directly"
+  },
+  {
+    "id": "cichowicz-set-2-groups-a-g",
+    "title": "Cichowicz - Set 2 - Groups A-G",
+    "source": "Cichowicz.pdf",
+    "printedPage": null,
+    "pdfPage": 21,
+    "image": "pages/cichowicz-pdf21-set-2-groups-a-g.png",
+    "note": "Cichowicz pdf: index is the PDF page directly",
+    "confirm": "Set 2 appears in config picker but is NOT reachable in the warm-up inline pager (capped at pdf 17); rendered for completeness"
+  }
+]

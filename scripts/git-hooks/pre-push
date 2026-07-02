@@ -1,0 +1,52 @@
+#!/bin/sh
+# git-hooks/pre-push — wood-69 / milestone M4 (the hub publish pipeline)
+#
+# SAMPLE git pre-push hook for the Woodshed spoke. It runs the publish gate
+# (public-assets/ci_check.py, via ./publish.sh) and BLOCKS the push (exit 1) if
+# the gate fails, so a drifted manifest or an unsafe bundle can't reach a remote
+# that might trigger a deploy.
+#
+# THIS IS A SAMPLE — YOU OPT IN.
+#   Hooks under .git/hooks are NOT version-controlled, so this file does nothing
+#   until you install it. Install it with the opt-in helper:
+#       ./git-hooks/install.sh
+#   (which symlinks/copies this into .git/hooks/pre-push). Nothing here installs
+#   itself. To bypass on a one-off push: `git push --no-verify`.
+#
+# Git invokes a pre-push hook with the cwd at the repo root, and passes the
+# remote name + URL as $1/$2 (unused here — the gate is remote-independent).
+#
+# POSIX sh. No network calls of its own; it only runs the local gate.
+
+set -eu
+
+REMOTE_NAME="${1:-?}"
+
+# Find the repo top-level so we can locate ./publish.sh regardless of where the
+# hook physically lives. Fall back to the hook's own dir resolution if git is
+# somehow unavailable.
+if REPO_ROOT=$(git rev-parse --show-toplevel 2>/dev/null); then
+    :
+else
+    # .git/hooks/pre-push -> repo root is two levels up from the hook file.
+    HOOK_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+    REPO_ROOT=$(CDPATH= cd -- "$HOOK_DIR/../.." && pwd)
+fi
+
+RUNNER="$REPO_ROOT/publish.sh"
+
+if [ ! -x "$RUNNER" ] && [ ! -f "$RUNNER" ]; then
+    echo "pre-push: publish gate runner not found at $RUNNER — blocking push." >&2
+    exit 1
+fi
+
+echo "pre-push: running Woodshed publish gate before pushing to '$REMOTE_NAME'..."
+
+if sh "$RUNNER"; then
+    echo "pre-push: gate passed — allowing push."
+    exit 0
+else
+    echo "pre-push: PUBLISH BLOCKED — gate failed, refusing to push." >&2
+    echo "          (bypass for a one-off with: git push --no-verify)" >&2
+    exit 1
+fi

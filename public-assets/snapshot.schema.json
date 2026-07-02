@@ -1,0 +1,223 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://woodshed.local/public-assets/snapshot.schema.json",
+  "title": "Woodshed Public Progress Snapshot",
+  "description": "The PUBLIC, READ-ONLY projection of Chris's running practice state (the in-app object S / mission-control.json). This is the data sibling of the page-image bundle: render_snapshot.py serializes the private 'brain' into this clean, stable contract, dropping everything private. The public Woodshed site (and the future hub embed, wood-46/47/48) loads ONLY this file to show real progress (streak, week, tunes, PRs). NOTHING here may carry private free-text, identifiers, file paths, or raw logs — see the 'omitted' note below and the per-field privacy descriptions. This file is generated; never hand-edit. Validate output against this schema with render_snapshot.py's built-in stdlib check (no jsonschema dependency).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "generatedAt",
+    "source",
+    "streak",
+    "week",
+    "primaryTune",
+    "rotation",
+    "tunes",
+    "weeklyObjectives",
+    "prTargets"
+  ],
+  "properties": {
+    "__comment__": {
+      "type": "string",
+      "description": "Free-text banner carried forward from the source (e.g. the illustrative-vs-live flag). Consumers MUST ignore it; it never contains progress data. Present so the example snapshot stays clearly labeled as illustrative."
+    },
+    "schemaVersion": {
+      "type": "string",
+      "description": "Version of THIS public contract (independent of the app and of the upstream mission-control contract). Bump when the public shape changes so the hub embed (wood-46/47/48) can guard against it. e.g. '1.0'.",
+      "default": "1.0"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 timestamp this snapshot was generated. Source: render_snapshot.py at projection time (not the upstream generatedAt, which is preserved under source.exportedAt)."
+    },
+    "source": {
+      "type": "object",
+      "description": "Provenance of this snapshot, for transparency. Records WHICH input was projected and WHEN the upstream brain was exported. Carries no private content.",
+      "additionalProperties": false,
+      "required": ["input", "illustrative"],
+      "properties": {
+        "input": {
+          "type": "string",
+          "description": "Which input the generator projected: 'mission-control.json' (live export) or 'mission-control.example.json' (illustrative fallback when no live export is on disk).",
+          "enum": ["mission-control.json", "mission-control.example.json"]
+        },
+        "exportedAt": {
+          "type": ["string", "null"],
+          "description": "The upstream generatedAt timestamp (when the brain was exported), preserved for traceability. Null if the input lacked one."
+        },
+        "illustrative": {
+          "type": "boolean",
+          "description": "True when this snapshot was projected from the example fallback (representative shape, NOT Chris's live numbers). The public site should label it accordingly. False only when projected from a real live export."
+        }
+      }
+    },
+    "streak": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Current consecutive-day practice streak. Source: S.streak. PUBLIC: a single non-identifying count."
+    },
+    "lastDay": {
+      "type": ["string", "null"],
+      "description": "ISO date (YYYY-MM-DD) of the last day that counted toward the streak, or null. Source: S.lastDay. PUBLIC: a date only, no log content."
+    },
+    "week": {
+      "type": "object",
+      "description": "The current training week (public framing). Source: dayInfo() / week math. Carries the week number and the day's curriculum focus theme only — no per-block plan text.",
+      "additionalProperties": false,
+      "required": ["index", "displayNumber"],
+      "properties": {
+        "index": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Zero-based week number since EPOCH (2026-01-05). Source: week.index."
+        },
+        "displayNumber": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Human-facing week number (index + 1). Source: week.displayNumber."
+        },
+        "focus": {
+          "type": ["string", "null"],
+          "description": "The day's curriculum focus theme, e.g. 'Jam Simulation'. Source: week.focus. PUBLIC: a short theme label, not a plan."
+        }
+      }
+    },
+    "primaryTune": {
+      "type": "string",
+      "description": "Tune id of this week's primary tune (the one being actively built). Source: primaryTune. Cross-references a key in 'tunes' and an id in 'rotation'."
+    },
+    "rotation": {
+      "type": "array",
+      "description": "Ordered list of every tune id in the rotation pool, in TUNES order. PUBLIC: ids only (titles live under 'tunes'). Source: rotation.",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "tunes": {
+      "type": "object",
+      "description": "Per-tune PUBLIC progress map, keyed by tune id. Projected from S.tuneStatus / the upstream 'tunes' map. Includes ONLY the shareable progress fields below. DELIBERATELY OMITS any private journal/lore/notes free-text, per-block log free-text, and feedback content — none of which exist on this object by construction.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "rungStatus", "memorized", "verified"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Display title, e.g. 'Recorda Me'. Source: tunes[id].title. PUBLIC: a song title only."
+          },
+          "rungStatus": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 5,
+            "description": "Count of memorization rungs cleared, 0-5. Source: tunes[id].rungStatus. PUBLIC: a progress count. The raw rungDates array (which carries specific calendar dates) is intentionally reduced to this count + 'verified' boolean; see 'omitted'."
+          },
+          "memorized": {
+            "type": "boolean",
+            "description": "True when the tune is fully owned (all 5 rungs + verified). Source: tunes[id].memorized."
+          },
+          "verified": {
+            "type": "boolean",
+            "description": "True when the final solo rung was verified. Source: derived from tunes[id].verifiedDate (boolean-ized — the specific verification DATE is intentionally dropped to avoid leaking a precise activity calendar). PUBLIC: a yes/no badge."
+          },
+          "isPrimary": {
+            "type": "boolean",
+            "description": "True if this tune is the current week's primary. Source: id === primaryTune. Convenience flag for the embed."
+          }
+        }
+      }
+    },
+    "weeklyObjectives": {
+      "type": "array",
+      "description": "This week's contract progress (the measurable goals shown on the Today page), projected to a public progress summary. Source: weeklyObjectives. Labels are short objective descriptions written by the curriculum, not personal notes.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["label", "current", "target", "met"],
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "Short human description of the objective, e.g. 'Speed: beat ANY tempo PR'. Source: weeklyObjectives[].label."
+          },
+          "current": {
+            "type": "number",
+            "description": "Progress so far this week. Source: weeklyObjectives[].current."
+          },
+          "target": {
+            "type": "number",
+            "description": "Goal value for this week. Source: weeklyObjectives[].target."
+          },
+          "met": {
+            "type": "boolean",
+            "description": "True when current >= target. Source: weeklyObjectives[].met, else derived as current >= target."
+          }
+        }
+      }
+    },
+    "weeklyObjectivesSummary": {
+      "type": "object",
+      "description": "Roll-up of weeklyObjectives for a compact embed badge (e.g. '2 of 4 goals met'). Source: derived from weeklyObjectives.",
+      "additionalProperties": false,
+      "required": ["met", "total"],
+      "properties": {
+        "met": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Count of objectives with met === true."
+        },
+        "total": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Total number of weekly objectives."
+        }
+      }
+    },
+    "prTargets": {
+      "type": "object",
+      "description": "Personal-record ladders: current best vs goal for each speed/technique metric. Source: prTargets. PUBLIC: numeric bests/goals + last-logged date. No log free-text.",
+      "additionalProperties": {
+        "$ref": "#/definitions/publicPrTarget"
+      }
+    }
+  },
+  "definitions": {
+    "publicPrTarget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["best", "goal"],
+      "properties": {
+        "best": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Current best bpm logged (0 when never logged). Source: prTargets[id].best."
+        },
+        "goal": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Target bpm for this metric. Source: prTargets[id].goal."
+        },
+        "lastLogged": {
+          "type": ["string", "null"],
+          "description": "ISO date of the most recent PR entry, or null. Source: prTargets[id].lastLogged. PUBLIC: a date only."
+        },
+        "pctToGoal": {
+          "type": ["integer", "null"],
+          "description": "Convenience: round(100 * best / goal), capped at 100; null if goal missing. Derived for the embed's progress bars."
+        }
+      }
+    }
+  },
+  "$omitted": {
+    "description": "NON-SCHEMA documentation block (consumers ignore it). Records what is intentionally EXCLUDED from the public projection and WHY, so the policy is auditable in the contract itself.",
+    "fields": [
+      "tunes[].rungDates  — raw 5-element array of calendar dates each rung cleared; reduced to rungStatus (count) + verified (boolean). WHY: precise per-rung dates expose a fine-grained activity calendar with no public value.",
+      "tunes[].verifiedDate — exact verification date; boolean-ized to 'verified'. WHY: same activity-calendar concern.",
+      "tunes[].pinned / pinnedTune — manual pin state. WHY: internal steering control, not progress.",
+      "reviewTunes / reviewSchedule — spaced-review internals (review lick ids, exam text). WHY: internal curriculum mechanics, not public progress.",
+      "monthlyObjectives — flagged [confirm:] upstream and partly free-text steering notes. WHY: not stable public progress; may carry steering prose.",
+      "appStateKey — localStorage key identifier. WHY: implementation/identifier detail, no public value.",
+      "any journal / lore / notes / per-block log free-text / feedback content — WHY: private prose, the core privacy line; none of it is even present on the mission-control object by construction, but called out explicitly so future upstream additions don't silently leak.",
+      "device identifiers / file paths — WHY: never public; not present upstream, called out to forbid future leakage."
+    ]
+  }
+}

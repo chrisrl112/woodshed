@@ -1,0 +1,21 @@
+{
+  "__comment__": "ILLUSTRATIVE EXAMPLE of the wood-9 plan-override contract — NOT a live override. The app NEVER fetches this file (only a file literally named 'plan-override.json' dated for today fires). To test live: copy to plan-override.json and set 'date' to today's YYYY-MM-DD. Validates against plan-override.schema.md. Patch form, applied to Saturday's static curriculum day.",
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-06-14T04:50:00.000Z",
+  "date": "2026-06-14",
+  "dow": 5,
+  "focus": "Jam Simulation (steered)",
+  "setMinutes": { "gym": 6 },
+  "dropModules": ["vocab"],
+  "addBlocks": [
+    {
+      "module": "tunes",
+      "title": "Recorda Me — bridge repair",
+      "min": 12,
+      "why": "Carried from yesterday: bridge still shaky. Slow the ii-V to 0.5x and own it before adding speed."
+    }
+  ],
+  "order": ["gym", "tunes", "ears", "today"],
+  "scaleToMinutes": 40,
+  "pinnedTune": "recordame"
+}

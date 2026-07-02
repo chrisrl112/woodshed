@@ -1,0 +1,52 @@
+/* ============================================================================
+ * Woodshed Lite — landing chrome styles.
+ * Inherits the Woodshed's Blue Note record-sleeve look: warm paper, ink,
+ * ONE hot orange, Archivo Black display, hard offset shadows.
+ * Marketing chrome only — the engine ships its own component styles.
+ * STATUS: SCAFFOLD — tokens + skeleton layout. Polish during the build phase.
+ * ========================================================================== */
+
+:root {
+  --paper: #f2ecdf;
+  --ink:   #1a150f;
+  --brass: #e84e10;   /* the one hot orange — used sparingly */
+  --muted: #6b6256;
+  --shadow: 6px 6px 0 var(--ink);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+/* --- hero --------------------------------------------------------------- */
+.hero { position: relative; min-height: 72vh; display: grid; place-items: center; text-align: center; padding: 8vh 6vw; overflow: hidden; }
+.hero-loop { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .25; }
+.hero-copy { position: relative; max-width: 780px; }
+.hero h1 { font-size: clamp(2.2rem, 6vw, 4rem); line-height: 1.02; margin: 0 0 .4em; font-weight: 900; letter-spacing: -.01em; }
+.sub { font-size: clamp(1rem, 2.2vw, 1.25rem); color: var(--muted); margin: 0 auto 1.6em; max-width: 56ch; }
+.cta { display: inline-block; background: var(--brass); color: var(--paper); text-decoration: none; font-weight: 800; padding: .8em 1.6em; border: 2px solid var(--ink); box-shadow: var(--shadow); transition: transform .08s; }
+.cta:active { transform: translate(3px, 3px); box-shadow: 3px 3px 0 var(--ink); }
+
+/* --- stations ---------------------------------------------------------- */
+.station { padding: 8vh 6vw; max-width: 1000px; margin: 0 auto; }
+.station--wow { scroll-margin-top: 1rem; }
+.station-kicker { font-size: .85rem; letter-spacing: .12em; text-transform: uppercase; color: var(--brass); margin: 0 0 .3em; }
+.station-line { font-size: 1.3rem; font-weight: 700; margin: 0 0 1.4em; }
+.slot { border: 2px dashed var(--muted); min-height: 220px; display: grid; place-items: center; color: var(--muted); }
+.slot::after { content: "engine mounts here"; }   /* scaffold placeholder; remove when wired */
+
+/* --- pitch ------------------------------------------------------------- */
+.pitch { background: var(--ink); color: var(--paper); text-align: center; padding: 6vh 6vw; }
+.pitch p { font-size: clamp(1.4rem, 4vw, 2.4rem); font-weight: 800; margin: 0; }
+.pitch strong { color: var(--brass); }
+
+/* --- ask / footer ------------------------------------------------------ */
+.ask { padding: 8vh 6vw; max-width: 720px; margin: 0 auto; text-align: center; }
+.ask h2 { font-size: clamp(1.4rem, 3.5vw, 2rem); margin: 0 0 .4em; }
+.footer { border-top: 2px solid var(--ink); padding: 6vh 6vw; text-align: center; color: var(--muted); }
+.socials { margin-top: 1em; display: flex; gap: 1.2em; justify-content: center; }
+.socials a { color: var(--ink); font-weight: 700; }

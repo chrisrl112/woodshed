@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Woodshed · Transcribe</title>
+<script src="vendor/abcjs-basic-min.js"></script>
+<script>if(typeof ABCJS==='undefined')document.write('<script src="https://cdn.jsdelivr.net/npm/abcjs@6.4.4/dist/abcjs-basic-min.js"><\/script>');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Oswald:wght@500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2ecdf;--paper:#faf6ec;--ink:#1a150f;--brass:#e84e10;--muted:#5d5343;--line:#d8cdb6;--ok:#1f7a3f;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Poppins',system-ui,-apple-system,Segoe UI,Helvetica,Arial,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:24px 20px 90px}
+header.h{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+h1{font-family:'Archivo Black','Poppins',sans-serif;font-weight:800;font-size:30px;letter-spacing:-.5px;margin:0}
+.eyebrow{font:600 12px/1 ui-monospace,Menlo,Consolas,monospace;letter-spacing:.18em;color:var(--brass);text-transform:uppercase}
+.rule{height:5px;background:var(--brass);margin:12px 0 16px;border-radius:2px}
+.sub{color:var(--muted);font-size:13px;line-height:1.5}
+.tag{font:600 11px ui-monospace,monospace;letter-spacing:.1em;color:var(--brass);border:2px solid var(--brass);border-radius:6px;padding:3px 8px;text-transform:uppercase}
+
+/* stepper */
+.steps{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 14px}
+.step{flex:1 1 0;min-width:120px;border:2px solid var(--ink);border-radius:8px;padding:8px 10px;background:#fbf7ee;opacity:.5;transition:.15s}
+.step.on{opacity:1;background:#fff;box-shadow:4px 4px 0 rgba(232,78,16,.18);border-color:var(--brass)}
+.step.done{opacity:1}
+.step .n{font-family:'Archivo Black','Poppins';color:var(--brass);font-size:13px}
+.step .t{font-weight:700;font-size:12px;margin-top:2px;line-height:1.2}
+
+.card{background:var(--paper);border:3px solid var(--ink);border-radius:8px;box-shadow:9px 9px 0 var(--ink);padding:16px 18px;margin:16px 0}
+.card.muted{opacity:.42;pointer-events:none;box-shadow:5px 5px 0 var(--line)}
+.card h2{font-family:'Archivo Black','Poppins';font-size:16px;margin:0 0 4px;display:flex;align-items:center;gap:8px}
+.card h2 .num{color:var(--brass)}
+textarea{width:100%;min-height:130px;font:13px/1.5 ui-monospace,Menlo,Consolas,monospace;padding:10px;border:2px solid var(--ink);border-radius:6px;background:#fff;color:#111;resize:vertical}
+button{font:600 13px/1 'Poppins',sans-serif;padding:9px 14px;border:2px solid var(--ink);border-radius:6px;background:#fff;color:var(--ink);cursor:pointer}
+button:hover{background:var(--ink);color:#fff}
+button:disabled{opacity:.4;cursor:not-allowed}
+button.brass{background:var(--brass);color:#fff;border-color:var(--ink)}
+button.brass:hover{filter:brightness(1.08)}
+button.tiny{padding:5px 8px;font-size:12px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.spread{justify-content:space-between}
+select,input.pick{font:600 13px 'Poppins';padding:8px 10px;border:2px solid var(--ink);border-radius:6px;background:#fff;color:#111}
+.hint{font-size:12px;color:var(--muted)}
+kbd{font:600 11px ui-monospace,monospace;background:#fff;border:1px solid var(--ink);border-bottom-width:2px;border-radius:4px;padding:1px 5px}
+.busy{display:inline-block;width:13px;height:13px;border:2px solid var(--brass);border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;vertical-align:-2px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.msg{font-size:12.5px;margin-top:8px}
+.msg.err{color:#b3271e} .msg.ok{color:var(--ok)}
+
+/* line strips review */
+.stripgrid{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.strip{display:flex;gap:10px;align-items:center;border:2px solid transparent;border-radius:8px;padding:6px 8px;background:#fbf7ee}
+.strip.off{opacity:.4}
+.strip .sn{font-family:'Archivo Black','Poppins';color:var(--brass);font-size:18px;min-width:26px;text-align:center}
+.strip img{flex:1;max-width:100%;height:auto;border:1px solid var(--line);border-radius:4px;background:#fff}
+.strip label{display:flex;gap:5px;align-items:center;font-size:12px;font-weight:600;white-space:nowrap}
+
+/* editor lines */
+.lines{margin-top:6px}
+.lineblk{display:flex;gap:12px;align-items:center;border:2px solid transparent;border-radius:8px;padding:6px 8px;margin:6px 0;background:#fbf7ee}
+.lineblk.cur{border-color:var(--brass);background:#fff;box-shadow:4px 4px 0 rgba(232,78,16,.18)}
+.lnum{font-family:'Archivo Black','Poppins';font-weight:800;color:var(--brass);font-size:22px;min-width:30px;text-align:center;cursor:pointer}
+.lstaff{flex:1;overflow-x:auto}
+.tools{position:sticky;top:0;z-index:5;background:var(--bg);padding:10px;border-radius:8px;border:2px dashed var(--line);margin-top:10px}
+.seldisp{font:700 14px 'Poppins';padding:4px 0}
+
+/* branded preview card */
+.chartcard{background:var(--paper);border:3px solid var(--ink);border-radius:8px;box-shadow:9px 9px 0 var(--ink);padding:18px 22px 14px}
+.cc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.cc-title{font-family:'Archivo Black',sans-serif;font-size:clamp(20px,2.1vw,32px);line-height:.95;text-transform:uppercase;letter-spacing:-.5px}
+.cc-comp{font-family:'Oswald',sans-serif;font-weight:500;color:var(--muted);font-size:15px;margin-top:7px}
+.cc-tag{font:700 12px 'JetBrains Mono',ui-monospace,monospace;color:var(--brass);border:2px solid var(--brass);border-radius:6px;padding:4px 9px;white-space:nowrap;text-transform:uppercase;letter-spacing:.04em}
+.cc-rule{height:5px;background:var(--brass);border-radius:2px;margin:11px 0 4px}
+.cc-staff svg{display:block}
+.cc-staff text[data-name="chord"]{font-family:'Oswald',sans-serif!important;font-weight:600!important;fill:var(--ink)!important}
+.cc-foot{font-family:'Archivo Black',sans-serif;font-size:14px;letter-spacing:.03em;margin-top:6px;text-transform:uppercase}
+details{margin-top:10px}summary{cursor:pointer;font-size:12px;color:var(--muted);font-weight:600}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="h"><h1>TRANSCRIBE</h1><span class="tag">The Woodshed</span></header>
+  <div class="eyebrow" style="margin-top:6px">Real Book page → your branded head, live in the Tune Vault</div>
+  <div class="rule"></div>
+
+  <div class="steps" id="stepper">
+    <div class="step" data-s="1"><div class="n">1</div><div class="t">Select tune</div></div>
+    <div class="step" data-s="2"><div class="n">2</div><div class="t">Parse to lines</div></div>
+    <div class="step" data-s="3"><div class="n">3</div><div class="t">Transcribe</div></div>
+    <div class="step" data-s="4"><div class="n">4</div><div class="t">Edit notes</div></div>
+    <div class="step" data-s="5"><div class="n">5</div><div class="t">Preview</div></div>
+    <div class="step" data-s="6"><div class="n">6</div><div class="t">Save · go live</div></div>
+  </div>
+
+  <!-- 1 · SELECT -->
+  <div class="card" id="c1">
+    <h2><span class="num">1 ·</span> Select a tune</h2>
+    <p class="sub">Pick a prioritized Real Book tune already in the Woodshed. We render its page and slice it into lines for you.</p>
+    <div class="row" style="margin-top:8px">
+      <select id="tune" style="min-width:280px"><option value="">Loading tunes…</option></select>
+      <span class="hint" id="tunemeta"></span>
+    </div>
+  </div>
+
+  <!-- 2 · PARSE TO LINES -->
+  <div class="card muted" id="c2">
+    <h2><span class="num">2 ·</span> Parse the page into lines</h2>
+    <div class="row spread">
+      <p class="sub" style="margin:0;max-width:60%">Cuts the page into per-system strips (no LLM). Then eyeball them — uncheck any line that isn't melody (pickup-only staves, bass-clef intros) so it's skipped.</p>
+      <button class="brass" id="cut">Parse into lines ▸</button>
+    </div>
+    <div class="msg" id="cutmsg"></div>
+    <div class="stripgrid" id="strips"></div>
+  </div>
+
+  <!-- 3 · TRANSCRIBE -->
+  <div class="card muted" id="c3">
+    <h2><span class="num">3 ·</span> Transcribe</h2>
+    <div class="row spread">
+      <p class="sub" style="margin:0;max-width:60%">Runs the homr reader on each kept line, on your Mac, and assembles a draft. This can take a bit — homr reads one staff at a time.</p>
+      <button class="brass" id="homr">Transcribe lines ▸</button>
+    </div>
+    <div class="msg" id="homrmsg"></div>
+  </div>
+
+  <!-- 4 · EDIT -->
+  <div class="card muted" id="c4">
+    <h2><span class="num">4 ·</span> Review &amp; correct</h2>
+    <p class="sub">Each line on its own staff. Click a notehead to select, then nudge. <b>Anchor</b> drops a whole line onto its correct first note (fixes homr's octave/clef slips). Edits flow straight to the ABC below.</p>
+    <div class="tools" id="toolbar">
+      <div class="row spread">
+        <div class="row">
+          <button class="tiny" id="prev">◀ line</button>
+          <span class="tag" id="linelabel">line 1</span>
+          <button class="tiny" id="next">line ▶</button>
+          <button class="tiny" id="beamall" title="Re-space all notes into beamed groups by beat">⌐ auto-beam</button>
+        </div>
+        <div class="row">
+          <span class="hint">Anchor first note →</span>
+          <select id="anchletter"><option>C</option><option>D</option><option>E</option><option>F</option><option>G</option><option>A</option><option>B</option></select>
+          <select id="anchacc"><option value="">♮</option><option value="^">♯</option><option value="_">♭</option></select>
+          <select id="anchoct"><option>3</option><option selected>4</option><option>5</option><option>6</option></select>
+          <button class="tiny brass" id="setanchor">Shift line</button>
+        </div>
+      </div>
+      <div class="row spread" style="margin-top:10px">
+        <div class="seldisp" id="seldisp">No note selected — click a notehead.</div>
+        <div class="row">
+          <button class="tiny" id="oct-up">8va ▲</button>
+          <button class="tiny" id="oct-dn">8vb ▼</button>
+          <button class="tiny" id="step-up">step ▲</button>
+          <button class="tiny" id="step-dn">step ▼</button>
+          <button class="tiny" id="acc-sharp">♯</button>
+          <button class="tiny" id="acc-nat">♮</button>
+          <button class="tiny" id="acc-flat">♭</button>
+          <button class="tiny" id="acc-none">✕ acc</button>
+          <button class="tiny" id="tie">⌒ tie</button>
+          <button class="tiny" id="trip">³ triplet</button>
+        </div>
+      </div>
+      <div class="hint" style="margin-top:6px">Keys: <kbd>←</kbd><kbd>→</kbd> line · click a note then <kbd>↑</kbd><kbd>↓</kbd> octave, <kbd>Shift+↑/↓</kbd> step, <kbd>t</kbd> tie, <kbd>3</kbd> triplet · ♯/♮/♭ accidentals.</div>
+    </div>
+    <div class="lines" id="lines"></div>
+    <details>
+      <summary>ABC source (edit directly)</summary>
+      <textarea id="abc" spellcheck="false" style="margin-top:8px"></textarea>
+      <div class="row" style="margin-top:6px"><button class="tiny" id="reparse">Re-render from ABC</button></div>
+    </details>
+    <div class="row" style="margin-top:12px;justify-content:flex-end">
+      <button class="brass" id="toPreview">Done editing — preview ▸</button>
+    </div>
+  </div>
+
+  <!-- 5 · PREVIEW -->
+  <div class="card muted" id="c5">
+    <h2><span class="num">5 ·</span> Branded preview</h2>
+    <div class="row spread">
+      <p class="sub" style="margin:0">Exactly how it lands in the Tune Vault, in place of the Real Book scan.</p>
+      <button class="brass" id="preview">Render branded ▸</button>
+    </div>
+    <div id="brand" style="margin-top:12px"></div>
+  </div>
+
+  <!-- 6 · SAVE -->
+  <div class="card muted" id="c6">
+    <h2><span class="num">6 ·</span> Save to the Woodshed</h2>
+    <p class="sub">Writes the head into <code>charts/user-heads.json</code> (permanent, all browsers). The band's changes come from the tune's verified concert chords. Reload the Woodshed → Tune Vault.</p>
+    <div class="row" style="margin-top:10px">
+      <label class="sub">Key label <input id="sv-key" class="pick" style="width:240px"></label>
+      <label class="sub">bpm <input id="sv-bpm" class="pick" style="width:64px"></label>
+      <label class="sub">feel <input id="sv-style" class="pick" style="width:110px"></label>
+      <button class="brass" id="save">★ Save &amp; go live</button>
+    </div>
+    <div class="msg" id="savemsg"></div>
+  </div>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const LET=['C','D','E','F','G','A','B'];
+let state={header:[], lines:[], cur:0, sel:null};
+let TUNES=[], curTune=null, cutDir=null;
+
+/* ============ stepper ============ */
+let reached=1;
+function setStep(n){ reached=Math.max(reached,n);
+  document.querySelectorAll('.step').forEach(el=>{ const s=+el.dataset.s;
+    el.classList.toggle('on', s===n); el.classList.toggle('done', s<reached); });
+  for(let i=1;i<=6;i++){ const c=$('#c'+i); if(c) c.classList.toggle('muted', i>reached); }
+}
+
+/* ============ load TUNES from the live app (zero drift) ============ */
+function extractArray(src, marker){
+  let i=src.indexOf(marker); if(i<0) return null; i=src.indexOf('[', i); if(i<0) return null;
+  let depth=0, str=null, esc=false, line=false, block=false;
+  for(let k=i;k<src.length;k++){ const c=src[k], n=src[k+1];
+    if(line){ if(c==='\n') line=false; continue; }
+    if(block){ if(c==='*'&&n==='/'){ block=false; k++; } continue; }
+    if(str){ if(esc) esc=false; else if(c==='\\') esc=true; else if(c===str) str=null; continue; }
+    if(c==='/'&&n==='/'){ line=true; k++; continue; }
+    if(c==='/'&&n==='*'){ block=true; k++; continue; }
+    if(c==='\''||c==='"'||c==='`'){ str=c; continue; }
+    if(c==='[') depth++; else if(c===']'){ depth--; if(depth===0) return src.slice(i,k+1); }
+  }
+  return null;
+}
+const SHARPNAMES=['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const FLATNAMES =['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B'];
+function writtenKeyLabel(t){ // concert keyPc/minor → readable written-for-Bb label
+  const wp=((t.keyPc||0)+2)%12; const nm=FLATNAMES[wp]; const m=t.minor?'m':'';
+  const cn=FLATNAMES[(t.keyPc||0)%12];
+  return nm+m+' (written for B♭ · concert '+cn+(t.minor?'m':'')+')';
+}
+async function loadTunes(){
+  let txt;
+  try{ txt=await fetch('index.html',{cache:'no-store'}).then(r=>r.text()); }
+  catch(e){ $('#tune').innerHTML='<option value="">Open via the Woodshed server (localhost:8420)</option>'; return; }
+  let arr=null;
+  try{ arr=(0,eval)('('+extractArray(txt,'const TUNES=')+')'); }catch(e){ arr=null; }
+  if(!Array.isArray(arr)){ $('#tune').innerHTML='<option value="">Could not read the tune list</option>'; return; }
+  TUNES=arr.filter(t=>t&&t.page>0); // only tunes cuttable from Real Book.pdf
+  const sel=$('#tune'); sel.innerHTML='<option value="">— choose a tune —</option>';
+  TUNES.forEach(t=>{ const o=document.createElement('option'); o.value=t.id;
+    o.textContent=t.title+'  ·  p.'+t.page; sel.appendChild(o); });
+}
+$('#tune').onchange=()=>{
+  curTune=TUNES.find(t=>t.id===$('#tune').value)||null;
+  $('#strips').innerHTML=''; $('#cutmsg').textContent=''; $('#homrmsg').textContent=''; cutDir=null;
+  if(!curTune){ $('#tunemeta').textContent=''; setStep(1); return; }
+  $('#tunemeta').innerHTML='<b>'+curTune.composer+'</b> · p.'+curTune.page+' · '+curTune.style+' · '+writtenKeyLabel(curTune);
+  $('#sv-key').value=writtenKeyLabel(curTune);
+  $('#sv-bpm').value=(Array.isArray(curTune.bpm)?curTune.bpm[0]:curTune.bpm)||132;
+  $('#sv-style').value=curTune.style||'swing';
+  setStep(2);
+};
+
+/* ============ 2 · cut into lines ============ */
+$('#cut').onclick=async ()=>{
+  if(!curTune) return;
+  const b=$('#cut'), m=$('#cutmsg'); b.disabled=true;
+  m.className='msg'; m.innerHTML='<span class="busy"></span> Rendering p.'+curTune.page+' and slicing…';
+  try{
+    const r=await fetch('/transcribe/cut',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({slug:curTune.id, page:curTune.page})}).then(r=>r.json());
+    if(!r.ok) throw new Error(r.error||'cut failed');
+    cutDir=r.dir;
+    const host=$('#strips'); host.innerHTML='';
+    r.strips.forEach(s=>{ const d=document.createElement('div'); d.className='strip'; d.dataset.line=s.line;
+      d.innerHTML='<div class="sn">'+s.line+'</div><img src="'+s.url+'?t='+Date.now()+'">'+
+        '<label><input type="checkbox" class="keep" checked> keep</label>';
+      d.querySelector('.keep').onchange=e=>d.classList.toggle('off',!e.target.checked);
+      host.appendChild(d); });
+    m.className='msg ok'; m.textContent='✓ '+r.strips.length+' lines. Uncheck any non-melody line, then transcribe.';
+    setStep(3);
+  }catch(e){ m.className='msg err'; m.textContent='✕ '+e.message+'  (is the Woodshed server running? cut needs poppler + the Real Book PDF.)'; }
+  b.disabled=false;
+};
+function keptLines(){ return [...document.querySelectorAll('#strips .strip')]
+  .filter(d=>d.querySelector('.keep').checked).map(d=>+d.dataset.line); }
+
+/* ============ 3 · run homr ============ */
+$('#homr').onclick=async ()=>{
+  if(!cutDir) return;
+  const lines=keptLines(); if(!lines.length){ $('#homrmsg').className='msg err'; $('#homrmsg').textContent='Keep at least one line.'; return; }
+  const b=$('#homr'), m=$('#homrmsg'); b.disabled=true;
+  m.className='msg'; m.innerHTML='<span class="busy"></span> Reading '+lines.length+' lines with homr… (one staff at a time)';
+  try{
+    const r=await fetch('/transcribe/homr',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({dir:cutDir, lines})}).then(r=>r.json());
+    if(!r.ok) throw new Error(r.error||'homr failed');
+    const good=r.results.filter(x=>x.xml).sort((a,b)=>a.line-b.line);
+    const bad=r.results.filter(x=>!x.xml);
+    if(!good.length) throw new Error('homr returned no readable staves'+(bad.length?' ('+bad[0].error+')':''));
+    const abc=assembleFromMxml(good.map(x=>x.xml));
+    $('#abc').value=abc; loadABC(abc);
+    m.className='msg ok'; m.innerHTML='✓ Assembled '+good.length+' lines.'+(bad.length?' <span class="err">'+bad.length+' line(s) unreadable — skipped.</span>':'')+' Review below.';
+    setStep(4);
+  }catch(e){ m.className='msg err'; m.textContent='✕ '+e.message; }
+  b.disabled=false;
+};
+
+/* ============ note-edit engine (proven) ============ */
+function emit(letter, oct, alter){ const A={1:'^',2:'^^','-1':'_','-2':'__',0:'='};
+  const acc=(alter===null||alter===undefined)?'':A[alter];
+  let ch=oct>=5?letter.toLowerCase()+"'".repeat(oct-5):letter.toUpperCase()+",".repeat(4-oct); return acc+ch; }
+const NOTE_RE=/(\^\^|\^|__|_|=)?([A-Ga-g])([,']*)/;
+function parseCore(s){ const m=s.match(NOTE_RE); if(!m) return null;
+  const accMap={'^':1,'^^':2,'_':-1,'__':-2,'=':0}; const alter=m[1]?accMap[m[1]]:null;
+  const letter=m[2].toUpperCase(); let oct=(m[2]===m[2].toUpperCase())?4:5;
+  for(const c of (m[3]||'')){ oct+=c===','?-1:1; } return {alter,letter,oct,idx:m.index,raw:m[0]}; }
+function diPos(letter,oct){ return oct*7+LET.indexOf(letter); }
+function fromDiPos(p,alter){ const oct=Math.floor(p/7); const letter=LET[((p%7)+7)%7]; return emit(letter,oct,alter); }
+function editSel(fn){ if(!state.sel) return; const li=state.sel.line; let txt=state.lines[li];
+  const seg=txt.slice(state.sel.start,state.sel.end); const core=parseCore(seg); if(!core) return;
+  const repl=fn(core); const newSeg=seg.slice(0,core.idx)+repl+seg.slice(core.idx+core.raw.length);
+  state.lines[li]=txt.slice(0,state.sel.start)+newSeg+txt.slice(state.sel.end);
+  state.sel.end=state.sel.start+newSeg.length; renderLines(); selectInfo(); }
+function nudgeOct(d){ editSel(c=>emit(c.letter,c.oct+d,c.alter)); }
+function nudgeStep(d){ editSel(c=>fromDiPos(diPos(c.letter,c.oct)+d,null)); }
+function setAcc(a){ editSel(c=>emit(c.letter,c.oct,a)); }
+// tie: toggle a trailing '-' on the selected note (ties it to the next same-pitch note)
+function toggleTie(){ if(!state.sel) return; const li=state.sel.line; let txt=state.lines[li]; let end=state.sel.end;
+  if(txt[end]==='-'){ state.lines[li]=txt.slice(0,end)+txt.slice(end+1); }
+  else if(txt[end-1]==='-'){ state.lines[li]=txt.slice(0,end-1)+txt.slice(end); state.sel.end=end-1; }
+  else { state.lines[li]=txt.slice(0,end)+'-'+txt.slice(end); }
+  renderLines(); selectInfo(); }
+// triplet: toggle a '(3' marker before the selected note (groups the next three notes 3-in-2)
+function toggleTriplet(){ if(!state.sel) return; const li=state.sel.line; let txt=state.lines[li]; const s=state.sel.start;
+  if(txt.slice(s-2,s)==='(3'){ state.lines[li]=txt.slice(0,s-2)+txt.slice(s); state.sel.start-=2; state.sel.end-=2; }
+  else { state.lines[li]=txt.slice(0,s)+'(3'+txt.slice(s); state.sel.start+=2; state.sel.end+=2; }
+  renderLines(); selectInfo(); }
+function shiftLine(){ const li=state.cur; let txt=state.lines[li];
+  const firstM=findNotes(txt)[0]; if(!firstM) return;
+  const fcore=parseCore(txt.slice(firstM.start,firstM.end));
+  const tLetter=$('#anchletter').value, tOct=+$('#anchoct').value;
+  const delta=diPos(tLetter,tOct)-diPos(fcore.letter,fcore.oct);
+  const notes=findNotes(txt); let out='',last=0;
+  notes.forEach(n=>{ out+=txt.slice(last,n.start); const c=parseCore(txt.slice(n.start,n.end));
+    const seg=txt.slice(n.start,n.end); const newCore=fromDiPos(diPos(c.letter,c.oct)+delta,c.alter);
+    out+=seg.slice(0,c.idx)+newCore+seg.slice(c.idx+c.raw.length); last=n.end; });
+  out+=txt.slice(last); state.lines[li]=out; state.sel=null; renderLines(); selectInfo(); }
+function findNotes(txt){ const res=[]; let i=0;
+  while(i<txt.length){ const ch=txt[i];
+    if(ch==='"'){ const j=txt.indexOf('"',i+1); i=(j<0?txt.length:j+1); continue; }
+    if(/[A-Ga-g]/.test(ch)){ let s=i,k=i-1; while(k>=0&&/[\^_=]/.test(txt[k])){ s=k; k--; }
+      let e=i+1; while(e<txt.length&&/[,'0-9\/<>]/.test(txt[e])) e++; res.push({start:s,end:e}); i=e; continue; }
+    i++; } return res; }
+function splitABC(abc){ const lines=abc.replace(/\r/g,'').split('\n'); const header=[],body=[];
+  for(const l of lines){ if(/^[A-Za-z]:/.test(l.trim())&&!/^[A-Ga-g"]/.test(l.trim())) header.push(l);
+    else if(l.trim()!=='') body.push(l); } return {header,body}; }
+function loadABC(abc){ const {header,body}=splitABC(abc); state.header=header; state.lines=body; state.cur=0; state.sel=null;
+  renderLines(); selectInfo(); }
+function renderLines(){ const host=$('#lines'); host.innerHTML=''; const head=state.header.join('\n');
+  state.lines.forEach((ln,i)=>{ const blk=document.createElement('div'); blk.className='lineblk'+(i===state.cur?' cur':'');
+    blk.innerHTML='<div class="lnum">'+(i+1)+'</div><div class="lstaff" id="st'+i+'"></div>';
+    blk.querySelector('.lnum').onclick=()=>{ state.cur=i; state.sel=null; renderLines(); selectInfo(); };
+    host.appendChild(blk); const abc=head+'\n'+ln;
+    try{ ABCJS.renderAbc('st'+i,abc,{add_classes:true,staffwidth:780,scale:1.05,paddingtop:4,paddingbottom:4,paddingleft:0,paddingright:0,
+      clickListener:(el)=>{ if(el.el_type!=='note'||el.startChar==null) return;
+        const off=head.length+1; let s=el.startChar-off,e=el.endChar-off; if(s<0) return;
+        state.cur=i; state.sel={line:i,start:s,end:e}; renderLines(); selectInfo(); }});
+    }catch(err){ document.getElementById('st'+i).innerHTML='<span class="hint">ABC error: '+err+'</span>'; }
+  });
+  $('#linelabel').textContent='line '+(state.cur+1)+' / '+state.lines.length; syncOut(); }
+function selectInfo(){ const d=$('#seldisp');
+  if(!state.sel){ d.textContent='No note selected — click a notehead.'; return; }
+  const seg=state.lines[state.sel.line].slice(state.sel.start,state.sel.end); const c=parseCore(seg);
+  if(!c){ d.textContent='—'; return; }
+  const accN={1:'♯',2:'𝄪','-1':'♭','-2':'𝄫',0:'♮'}[c.alter]??'';
+  const txt=state.lines[state.sel.line];
+  const tied=(txt[state.sel.end]==='-'||txt[state.sel.end-1]==='-');
+  const trip=(txt.slice(state.sel.start-2,state.sel.start)==='(3');
+  const flags=(tied?' ⌒tied':'')+(trip?' ³triplet':'');
+  d.innerHTML='Selected: <span style="color:var(--brass)">'+c.letter+accN+c.oct+'</span>'+
+    (flags?'<span class="hint">'+flags+'</span>':'')+' &nbsp;<span class="hint">(line '+(state.sel.line+1)+')</span>'; }
+function syncOut(){ $('#abc').value=state.header.join('\n')+'\n'+state.lines.join('\n'); }
+
+/* ============ MusicXML → draft ABC ============ */
+function parseMxml(text){ const doc=new DOMParser().parseFromString(text,'application/xml');
+  const divisions=+(doc.querySelector('divisions')?.textContent||1);
+  const time=(()=>{const b=doc.querySelector('time beats'),t=doc.querySelector('time beat-type');return (b&&t)?b.textContent+'/'+t.textContent:'4/4';})();
+  const measures=[...doc.querySelectorAll('measure')].map(m=>({
+    notes:[...m.querySelectorAll('note')].filter(n=>!n.querySelector('chord')).map(n=>{
+      const dur=+(n.querySelector('duration')?.textContent||0); const dur16=Math.max(1,Math.round(dur*4/divisions));
+      if(n.querySelector('rest')) return {rest:true,dur16};
+      return {rest:false,step:(n.querySelector('pitch step')?.textContent||'C'),
+        oct:+(n.querySelector('pitch octave')?.textContent||4),
+        alter:+(n.querySelector('pitch alter')?.textContent||0),dur16,
+        tie:!!(n.querySelector('tie[type="start"]')||n.querySelector('tied[type="start"]'))}; }) })); return {time,measures}; }
+function lenABC(d){ const u=d/2; if(Number.isInteger(u)) return u===1?'':String(u);
+  const gcd=(a,b)=>b?gcd(b,a%b):a; const g=gcd(d,2); const num=d/g,den=2/g; return (num===1?'':num)+'/'+(den===1?'':den); }
+function noteABC(n){ if(n.rest) return 'z'+lenABC(n.dur16);
+  const acc={1:'^',2:'^^','-1':'_','-2':'__',0:''}[n.alter]||'';
+  const ch=n.oct>=5?n.step.toLowerCase()+"'".repeat(n.oct-5):n.step.toUpperCase()+",".repeat(4-n.oct);
+  return acc+ch+lenABC(n.dur16)+(n.tie?'-':''); }
+function assembleFromMxml(texts){ let time='4/4'; const lines=[];
+  texts.forEach((t,i)=>{ const p=parseMxml(t); if(i===0) time=p.time;
+    const bars=p.measures.map(m=>m.notes.map(noteABC).join(' ')).filter(s=>s.trim());
+    if(bars.length) lines.push(autobeamLine(bars.join(' | ')+' |', 2)); }); // L:1/8 → quarter beam
+  return 'X:1\nM:'+time+'\nL:1/8\nK:C\n'+lines.join('\n')+'\n'; }
+
+/* ============ auto-beam: re-space notes into quarter-note beam groups ============
+   Only ever inserts/removes SPACE chars — never touches a note (verified by despace
+   invariant). Adjacent beamable notes (eighths & shorter) within a beat join (no space,
+   = beamed); a space at each beat boundary / around quarters+ / rests breaks the beam. */
+function durUnits(d){ if(!d) return 1;
+  if(d[0]==='/'){ const sl=(d.match(/^\/+/)||[''])[0].length; const rest=d.slice(sl);
+    return rest? 1/parseInt(rest) : 1/Math.pow(2,sl); }
+  const m=d.match(/^(\d*)(?:\/(\d*))?$/)||[]; const num=m[1]?parseInt(m[1]):1; const den=m[2]?parseInt(m[2]):1; return num/den; }
+function readNoteTok(seg,i){ const re=/^(\^\^|\^|__|_|=)?([A-Ga-gzZxX])([,']*)(\d*\/*\d*)(-)?([<>]*)/;
+  const m=seg.slice(i).match(re); if(!m||!m[0]) return null;
+  return {text:m[0], end:i+m[0].length, rest:/[zZxX]/.test(m[2]), dur:durUnits(m[4]||'')}; }
+function tokenizeBar(seg){ const toks=[]; let i=0, prefix='';
+  while(i<seg.length){ const c=seg[i];
+    if(c===' '){ i++; continue; }
+    if(c==='"'){ const j=seg.indexOf('"',i+1); const e=(j<0?seg.length:j+1); prefix+=seg.slice(i,e); i=e; continue; }
+    if(c==='('&&/[0-9]/.test(seg[i+1]||'')){ let e=i+2; while(/[0-9:]/.test(seg[e]||'')) e++;
+      const n=parseInt(seg.slice(i+1,e).split(':')[0])||3; let text=prefix+seg.slice(i,e); prefix=''; i=e; let got=0;
+      while(got<n && i<seg.length){ const cc=seg[i];
+        if(cc===' '){ i++; continue; }
+        if(cc==='"'){ const j=seg.indexOf('"',i+1); const ee=(j<0?seg.length:j+1); text+=seg.slice(i,ee); i=ee; continue; }
+        const t=readNoteTok(seg,i); if(t){ text+=t.text; i=t.end; got++; } else { text+=seg[i]; i++; } }
+      toks.push({text, beamable:true, dur:2}); continue; } // eighth-triplet ≈ one beat
+    const t=readNoteTok(seg,i);
+    if(t){ toks.push({text:prefix+t.text, beamable:!t.rest && t.dur<2, dur:t.dur}); prefix=''; i=t.end; continue; }
+    toks.push({text:prefix+seg[i], beamable:false, dur:0}); prefix=''; i++; }
+  if(prefix) toks.push({text:prefix, beamable:false, dur:0});
+  return toks; }
+function autobeamSeg(seg, bu){ const toks=tokenizeBar(seg); if(!toks.length) return '';
+  let out=toks[0].text, pos=toks[0].dur, prev=toks[0];
+  for(let k=1;k<toks.length;k++){ const t=toks[k];
+    const join = prev.beamable && t.beamable && (pos % bu !== 0);
+    out += (join?'':' ') + t.text; pos += t.dur; prev=t; }
+  return out; }
+function autobeamLine(line, bu){ const hadTrail=/\|\s*$/.test(line);
+  const segs=line.split('|').map(s=>s.trim()).filter(s=>s!=='');
+  let out=segs.map(s=>autobeamSeg(s,bu)).join(' | '); if(hadTrail) out+=' |'; return out; }
+function getBeamUnits(){ const L=(state.header.find(h=>/^L:/.test(h.trim()))||'').match(/1\/(\d+)/);
+  const den=L?parseInt(L[1]):8; return Math.max(1, Math.round(den/4)); }
+function autobeamAll(){ const bu=getBeamUnits(); state.lines=state.lines.map(l=>autobeamLine(l,bu));
+  state.sel=null; renderLines(); selectInfo(); }
+
+/* ============ chord labels: inject the tune's iReal changes as ABC chord symbols ============
+   The melody abc is WRITTEN for B♭, so chords are transposed concert→written (+2), matching
+   how Blue Bossa/Solar show "D-7","G-7" over a B♭ staff. Idempotent: strips any existing
+   chord symbols first, then re-applies from curTune.bars. Runs at preview + save. */
+const _FLAT=['C','Db','D','Eb','E','F','Gb','G','Ab','A','Bb','B'];
+const _RPC={C:0,'C#':1,Db:1,D:2,'D#':3,Eb:3,E:4,F:5,'F#':6,Gb:6,G:7,'G#':8,Ab:8,A:9,'A#':10,Bb:10,B:11};
+function transposeChordSym(sym, semi){ const m=/^([A-G][#b]?)(.*)$/.exec(String(sym).trim()); if(!m||_RPC[m[1]]==null) return sym;
+  let body=m[2]; const root=_FLAT[(_RPC[m[1]]+semi+12)%12];
+  const sl=body.match(/\/([A-G][#b]?)/); if(sl&&_RPC[sl[1]]!=null) body=body.replace(/\/[A-G][#b]?/,'/'+_FLAT[(_RPC[sl[1]]+semi+12)%12]);
+  return root+body; }
+function midIndex(seg,half){ let i=0,pos=0; while(i<seg.length){ const c=seg[i];
+  if(c==='"'){ const j=seg.indexOf('"',i+1); i=(j<0?seg.length:j+1); continue; }
+  if(c==='('&&/[0-9]/.test(seg[i+1]||'')){ let e=i+2; while(/[0-9:]/.test(seg[e]||''))e++; i=e; continue; }
+  const t=readNoteTok(seg,i); if(t){ if(pos>=half) return i; pos+=t.dur; i=t.end; continue; } i++; } return -1; }
+function injectBar(seg, chords, measUnits){ if(!chords||!chords.length) return seg;
+  const w=chords.map(c=>'"'+transposeChordSym(c,2)+'"');
+  if(w.length===1) return w[0]+seg;
+  const mi=midIndex(seg, measUnits/2); if(mi<0) return w[0]+w[1]+seg;
+  return w[0]+seg.slice(0,mi)+w[1]+seg.slice(mi); }
+function buildChartAbc(){ syncOut(); const abc=$('#abc').value;
+  if(!curTune||!Array.isArray(curTune.bars)||!curTune.bars.length) return abc;
+  const {header,body}=splitABC(abc);
+  const M=(header.find(h=>/^M:/.test(h.trim()))||'M:4/4').match(/(\d+)\/(\d+)/);
+  const Lm=(header.find(h=>/^L:/.test(h.trim()))||'L:1/8').match(/1\/(\d+)/);
+  const Lden=Lm?+Lm[1]:8, beats=M?+M[1]:4, bden=M?+M[2]:4; const measUnits=beats*(Lden/bden);
+  let bar=0; const out=body.map(line=>{ const trail=/\|\s*$/.test(line);
+    const segs=line.split('|').map(s=>{ const seg=s.replace(/"[^"]*"/g,'').trim(); if(seg==='') return null;
+      return injectBar(seg, curTune.bars[bar++], measUnits); }).filter(x=>x!==null);
+    let l=segs.join(' | '); if(trail) l+=' |'; return l; });
+  return header.join('\n')+'\n'+out.join('\n')+'\n'; }
+
+/* ============ 5 · branded preview ============ */
+function renderBranded(){ const abc=buildChartAbc();
+  const clean=abc.split('\n').filter(l=>!/^[TC]:/.test(l.trim())).join('\n');
+  const el=$('#brand');
+  el.innerHTML='<div class="chartcard"><div class="cc-top"><div><div class="cc-title">'+(curTune?curTune.title:'')+'</div>'+
+    (curTune?'<div class="cc-comp">'+curTune.composer+'</div>':'')+'</div><div class="cc-tag">B♭ TRUMPET</div></div>'+
+    '<div class="cc-rule"></div><div class="cc-staff"></div><div class="cc-foot">THE WOODSHED</div></div>';
+  const staff=el.querySelector('.cc-staff');
+  try{ ABCJS.renderAbc(staff,clean,{scale:1.1,staffwidth:(staff.clientWidth>80?staff.clientWidth-2:660),
+    paddingtop:4,paddingbottom:6,paddingleft:0,paddingright:0,foregroundColor:'#1a150f',selectTypes:false}); }
+  catch(e){ staff.innerHTML='<div class="hint">ABC error: '+e+'</div>'; }
+  setStep(6); }
+$('#preview').onclick=renderBranded;
+
+/* ============ 6 · save (permanent) ============ */
+function slug(s){ return s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,''); }
+async function saveToWoodshed(){
+  if(!curTune){ return; } const m=$('#savemsg'); const abc=buildChartAbc();
+  const entry={ id:slug(curTune.title)+'-head', forTune:curTune.title, title:curTune.title+' — head (B♭)',
+    source:'Transcribed in the Woodshed · Real Book p.'+curTune.page, composer:curTune.composer,
+    key:$('#sv-key').value||writtenKeyLabel(curTune), style:$('#sv-style').value||curTune.style,
+    bpm:+$('#sv-bpm').value||132, abc, bars:curTune.bars };
+  m.className='msg'; m.innerHTML='<span class="busy"></span> Saving…';
+  try{
+    const r=await fetch('/transcribe/save-chart',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(entry)}).then(r=>r.json());
+    if(!r.ok) throw new Error(r.error||'save failed');
+    m.className='msg ok'; m.innerHTML='✓ Saved <b>'+curTune.title+'</b> permanently ('+(entry.bars?entry.bars.length:0)+' bars of changes). Reload the Woodshed → Tune Vault → '+curTune.title+'.';
+  }catch(e){ // fallback: localStorage so the work is never lost
+    try{ let arr=JSON.parse(localStorage.getItem('woodshed_user_charts')||'[]');
+      const norm=s=>String(s||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+      arr=arr.filter(c=>norm(c.forTune||c.title)!==norm(curTune.title)); arr.push(entry);
+      localStorage.setItem('woodshed_user_charts',JSON.stringify(arr));
+      m.className='msg err'; m.innerHTML='Server unreachable ('+e.message+') — saved to this browser only (localStorage). Run via the Woodshed server to make it permanent.';
+    }catch(e2){ m.className='msg err'; m.textContent='✕ '+e.message; }
+  }
+}
+$('#save').onclick=saveToWoodshed;
+
+/* ============ wire editor controls ============ */
+$('#reparse').onclick=()=>loadABC($('#abc').value);
+$('#toPreview').onclick=()=>{ syncOut(); setStep(5); $('#c5').scrollIntoView({behavior:'smooth',block:'start'}); };
+$('#prev').onclick=()=>{ state.cur=Math.max(0,state.cur-1); state.sel=null; renderLines(); selectInfo(); };
+$('#next').onclick=()=>{ state.cur=Math.min(state.lines.length-1,state.cur+1); state.sel=null; renderLines(); selectInfo(); };
+$('#setanchor').onclick=shiftLine;
+$('#beamall').onclick=autobeamAll;
+$('#oct-up').onclick=()=>nudgeOct(1); $('#oct-dn').onclick=()=>nudgeOct(-1);
+$('#step-up').onclick=()=>nudgeStep(1); $('#step-dn').onclick=()=>nudgeStep(-1);
+$('#acc-sharp').onclick=()=>setAcc(1); $('#acc-nat').onclick=()=>setAcc(0); $('#acc-flat').onclick=()=>setAcc(-1); $('#acc-none').onclick=()=>setAcc(null);
+$('#tie').onclick=toggleTie; $('#trip').onclick=toggleTriplet;
+document.addEventListener('keydown',e=>{ if(['TEXTAREA','INPUT','SELECT'].includes(e.target.tagName)) return;
+  if(e.key==='ArrowLeft'){ $('#prev').click(); e.preventDefault(); }
+  else if(e.key==='ArrowRight'){ $('#next').click(); e.preventDefault(); }
+  else if(e.key==='ArrowUp'){ e.shiftKey?nudgeStep(1):nudgeOct(1); e.preventDefault(); }
+  else if(e.key==='ArrowDown'){ e.shiftKey?nudgeStep(-1):nudgeOct(-1); e.preventDefault(); }
+  else if(e.key==='t'||e.key==='T'){ toggleTie(); e.preventDefault(); }
+  else if(e.key==='3'){ toggleTriplet(); e.preventDefault(); } });
+
+/* ============ boot ============ */
+setStep(1); loadTunes();
+</script>
+</body>
+</html>

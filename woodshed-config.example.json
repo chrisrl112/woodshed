@@ -1,0 +1,14 @@
+{
+  "__comment__": "ILLUSTRATIVE EXAMPLE of the wood-30 woodshed-config contract — NOT a live config. The app NEVER fetches this file (only a file literally named 'woodshed-config.json' is read). To go live: copy to woodshed-config.json, set 'auto' to false, and pin the fields you want. Validates against WOODSHED-CONFIG-SCHEMA.md. As shipped here, auto:true => the app is fully date-driven and every 'config' field is ignored (safe no-op); rangeTop default 21 = A5 (the wood-37 fixed target).",
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-06-19T05:00:00.000Z",
+  "auto": true,
+  "config": {
+    "exercisesShown": null,
+    "cichowiczPage": null,
+    "clarkeSection": null,
+    "songOfWeek": null,
+    "warmupKey": null,
+    "rangeTop": 21
+  }
+}

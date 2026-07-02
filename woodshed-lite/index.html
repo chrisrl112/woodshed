@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<!-- ==========================================================================
+     Woodshed Lite — landing shell (marketing chrome ONLY).
+     This file holds NO engine code. The two station <slots> below are mounted
+     by src/mount.js, which drives the shared engine extracted from ../index.html
+     at build time. See ../docs/woodshed-lite-spec.md.
+
+     STATUS: SCAFFOLD. Structure + copy are real; the station slots are empty
+     placeholders until mount.js + build-lite.sh are wired.
+=========================================================================== -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Woodshed — your whole practice session, one tab</title>
+<link rel="icon" href="favicon.svg">
+<link rel="stylesheet" href="src/landing.css">
+<!-- build-lite.sh injects here: vendor libs, engine.js, charts.lite.js -->
+<script src="lite.config.js"></script>
+</head>
+<body>
+
+<!-- 1. HERO ============================================================== -->
+<header class="hero">
+  <video class="hero-loop" autoplay muted loop playsinline poster="">
+    <!-- TODO: 8–12s muted overlay loop cut from Reels/ -->
+  </video>
+  <div class="hero-copy">
+    <h1>Your whole practice session. One tab.</h1>
+    <p class="sub">
+      Warmup, lead sheets, and a real backing band — in one free, no-login
+      surface. Stop juggling a PDF, a metronome app, and a YouTube tab.
+      Press play and practice. Built by a trumpet player, for the woodshed.
+    </p>
+    <a class="cta" href="#jam" data-event="cta_click">▶ Start the session</a>
+  </div>
+</header>
+
+<!-- 2. STATION 1 — WARMUP =============================================== -->
+<section id="warmup" class="station">
+  <h2 class="station-kicker">Station 1 · Warmup</h2>
+  <p class="station-line">This is where every session starts.</p>
+  <!-- mount.js renders: re-engraved PD exercise + metronome + rep tracker -->
+  <div id="wsl-warmup-slot" class="slot" data-slot="warmup">
+    <!-- TODO(mount): warmup station -->
+  </div>
+</section>
+
+<!-- 3. STATION 2 — JAM (the wow) ======================================== -->
+<section id="jam" class="station station--wow">
+  <h2 class="station-kicker">Station 2 · Jam</h2>
+  <p class="station-line">A band that actually shows up. Pick a tune, press play.</p>
+  <!-- mount.js renders: tune picker + PLAY + playhead + tempo/feel/style/drums -->
+  <div id="wsl-jam-slot" class="slot" data-slot="jam">
+    <!-- TODO(mount): jam station (default-cued per WSL_CONFIG.jam.default) -->
+  </div>
+</section>
+
+<!-- 4. THE PITCH ======================================================== -->
+<section class="pitch">
+  <p>Six tabs, three devices &rarr; <strong>one surface.</strong></p>
+</section>
+
+<!-- 5. THE ASK — funnel ================================================= -->
+<section id="ask" class="ask">
+  <h2>Get early access — and a vote on what I build next.</h2>
+  <p class="sub">
+    I'm building this in the open. Drop your email for the next release, and
+    tell me what to build on the board below. <em>No spam.</em>
+  </p>
+  <div id="wsl-waitlist-slot" class="slot" data-slot="waitlist"><!-- TODO: embed --></div>
+  <div id="wsl-votes-slot"    class="slot" data-slot="votes"><!-- TODO: embed --></div>
+  <div id="wsl-founder-slot"  class="slot" data-slot="founder" hidden><!-- M3 stub --></div>
+</section>
+
+<!-- 6. FOOTER =========================================================== -->
+<footer class="footer">
+  <p>
+    Built by Chris — SVP by day, learning to actually play jazz by night.
+    Woodshedding in public, one tune at a time.
+  </p>
+  <nav id="wsl-socials" class="socials"><!-- mount.js fills from WSL_CONFIG.socials --></nav>
+</footer>
+
+<script src="src/mount.js"></script>
+</body>
+</html>

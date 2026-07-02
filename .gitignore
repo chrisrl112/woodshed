@@ -1,0 +1,59 @@
+# ============================================================
+# The Woodshed — repository ignore rules
+# Track source + docs. Exclude copyrighted material, heavy binary
+# masters (keep those in external storage), build outputs,
+# environments, and secrets. Runtime drum audio is kept via Git LFS
+# (see .gitattributes), NOT ignored.
+# ============================================================
+
+# --- COPYRIGHT: never commit third-party sheet music / books ---
+reference/
+
+# --- Secrets / credentials (never commit) ---
+.env
+.env.*
+.dev.vars
+*.pem
+*.key
+**/secrets*.json
+*service_role*
+wrangler.toml.local
+
+# --- Build output (regenerable via woodshed-lite/build-lite.sh) ---
+woodshed-lite/dist/
+
+# --- Media-production workspace: NOT part of the web app. Reels, drum
+#     processing, and the score engine (raw video/audio masters, venvs,
+#     experiments). Keep local, or give it its own repo/LFS later. ---
+pipelines/
+
+# --- Regenerable page renders (72 MB); the small gate scripts + manifest
+#     under public-assets/ stay tracked, just not the rendered images. ---
+public-assets/pages/
+
+# --- Heavy binary masters, wherever they live (belt-and-suspenders) ---
+*.mov
+*.aif
+*.aiff
+*.wav
+*.onnx
+
+# --- Python environments & caches ---
+**/.venv/
+**/venv/
+**/.venv-*/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+
+# --- Node ---
+node_modules/
+npm-debug.log*
+
+# --- OS / editor junk ---
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

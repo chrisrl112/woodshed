@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0",
+  "slug": "the-woodshed",
+  "name": "The Woodshed",
+  "tagline": "Deliberate practice, systematized — an AI curriculum, coach, and accountability layer for jazz trumpet.",
+  "status": "beta",
+  "maturity": 3,
+  "started": "2025-09",
+  "accent": "brass",
+  "accent_hex": "#B5894E",
+  "visibility": { "public": true },
+  "stack": [
+    "Claude API",
+    "single-file web app (index.html + charts.js)",
+    "ABCJS notation rendering",
+    "MIDI / Web-Audio backing-band engine",
+    "Supabase (heartbeat) [planned]"
+  ],
+  "ai_roles": ["curriculum-designer", "session-generator", "coach", "accountability"],
+  "loops": [
+    {
+      "cadence": "daily",
+      "name": "Session generator builds today's practice block (exercises, tunes, backing band)",
+      "automation": "full"
+    },
+    {
+      "cadence": "daily",
+      "name": "Per-block logging + Day Review — what was practiced, how it went",
+      "automation": "full",
+      "note": "in build — A1, the keystone"
+    },
+    {
+      "cadence": "daily",
+      "name": "\"Today's 6\" — the day's priority items surfaced and grouped",
+      "automation": "full"
+    },
+    {
+      "cadence": "weekly",
+      "name": "Curriculum review — adjust focus from logged practice data",
+      "automation": "human-approve"
+    },
+    {
+      "cadence": "per session",
+      "name": "Streak / hours / sessions updated -> heartbeat",
+      "automation": "full",
+      "note": "emitter planned"
+    }
+  ],
+  "demo": {
+    "type": "video",
+    "note": "Ships as a short walkthrough video for now. Flips to 'launch' once the app is publicly hosted in read-only demo mode (sample student, realistic history); public hosting + demo mode is the gating task."
+  },
+  "links": {
+    "page": "/projects/the-woodshed"
+  },
+  "metrics": [
+    { "label": "Current streak", "source": "heartbeat", "key": "streak_days" },
+    { "label": "Sessions logged", "source": "heartbeat", "key": "sessions_total" },
+    { "label": "Total hours", "source": "heartbeat", "key": "hours_total" }
+  ],
+  "patterns": [
+    "daily-loop",
+    "heartbeat-monitoring",
+    "human-approve-gate",
+    "staleness-honesty"
+  ]
+}

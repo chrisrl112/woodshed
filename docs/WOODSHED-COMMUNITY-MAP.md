@@ -1,0 +1,92 @@
+# Woodshed — Community Map & Launch Recon
+
+*Built: 2026-06-21 (night-shift) · Task: wood-50 · Milestone M5 "Launch + feedback loop"*
+*[confirm:] verification pass — 2026-06-24 (night-shift-woodshed, wood-62): 11 of 19 verified ✅, 8 still pending live-sidebar / per-group checks (mostly verbatim Reddit & FB-group rules, which require a logged-in human eyeball). Reddit subscriber numbers mostly remain estimates — reddit.com is still not crawlable and GummySearch shut down 11/30/2025, so the prior gummysearch citations are now stale-sourced; r/Jazz ~989k and r/musictheory ~434k corroborated via third-party snippets.*
+*Purpose: when the Woodshed goes public (free, no-login, read-only jazz-trumpet practice portal), this is **where** to share it and **how** each community's rules govern an "I built a thing, would love feedback" post — so Chris shares where it's welcome and doesn't get banned where it isn't.*
+
+> **What you're sharing (frame every post around this):** a free, no-login, read-only web practice portal for jazz trumpet — real deliberate-practice routines (Clarke technical studies, Cichowicz flow, Real Book tunes with a backing band, ear training, range work) plus your actual streak/log data. **Not** a paid product, **not** spam. The honest pitch is: *"I built a free practice tool for myself and figured fellow players might find it useful — would love feedback."* That framing is your passport into almost every room below.
+
+---
+
+## TL;DR — share here first
+
+1. **r/trumpet** — your exact audience (trumpet players, learners, comeback players). Most natural home for a free trumpet-practice tool. Post it as a "made this for my own practice" share, not an ad. *[confirm: read the live sidebar self-promo rule before posting — the verbatim rule still needs a logged-in eyeball; exact subscriber count not machine-verifiable.]*
+2. **Jazzcord (Discord)** — the largest jazz Discord (~4.8–5k, founded 2017), explicitly welcomes musicians **sharing original work** and runs musician Q&As. Living-room vibe; share in the right channel after participating. **Verified welcoming.**
+3. **r/WeAreTheMusicMakers** — huge (~1.7M) and has a **structured weekly feedback/promo thread**. A free tool fits cleanly *if you use the thread and give feedback first.* **Verified thread-based.**
+4. **Trumpet Herald forum** — the established trumpet players' home on the web; active Jazz/Commercial subforum. Older, serious crowd; a genuine "here's a free practice tool" thread tends to land if framed as contribution, not promo. ✅ verified live + sizable: forum is active with a current Jazz/Commercial subforum (f=3) and ~40,000 registered users (feedspot / TrumpetBoards member commentary, 2026-06-24). *[confirm: verbatim self-promo post-rules still need an eyeball on the forum's rules page.]*
+5. **Chicago IRL — Green Mill Friday jam (Marquis Hill) + Jazz Institute of Chicago.** Real, local, warm-intro channels — the highest-trust, lowest-spam-risk way to share, mouth to mouth. **Verified active.**
+
+**The one rule that governs everything:** lead with value and a feedback ask, never a naked link drop. Participate first, then share. See *"How to share without being that guy"* at the bottom.
+
+---
+
+## How to read the columns
+
+- **Self-promo rule** = the *actual* policy where verified: `allowed` / `allowed-with-conditions` / `weekly-thread-only` / `banned` / `unclear`. Anything I could not machine-verify is marked **`[confirm:]`** — do not treat it as confirmed.
+- **Verification note:** `reddit.com` is **not crawlable by this research tool**, so exact subreddit subscriber counts and verbatim rule text **could not be pulled directly**. Reddit rows carry `[confirm:]` on rule + size and should be checked against each subreddit's live sidebar/wiki before posting. Forum/Discord/Chicago rows ARE verified against live or third-party sources (linked).
+
+---
+
+## TIER 1 — Share first (welcoming + strong fit)
+
+| Community | Platform | ~Size / activity | Audience fit | Self-promo rule | Best way to share here | Link |
+|---|---|---|---|---|---|---|
+| **r/trumpet** | Reddit | `[confirm: ~tens of thousands; exact count not machine-verifiable — reddit.com uncrawlable, and Reddit dropped public subscriber counts on many subs (HN, 2025). It IS consistently listed among the top trumpet communities.]` | **Trumpet** — bullseye. Students, comeback players, pros, hobbyists | `[confirm:]` rule not verified — most likely *allowed-with-conditions* (verbatim sidebar rule needs a logged-in eyeball) | Post a short "I built a free, no-login practice tool for my own jazz-trumpet woodshedding (Clarke/Cichowicz/Real Book + backing band) — would love feedback from other players." Answer comments, don't repost. | reddit.com/r/trumpet |
+| **Jazzcord** | Discord | ~4.8–5k members; founded Mar 2017; "largest jazz discussion server on Discord" | **Jazz** (all instruments) — strong. Listeners, learners, gigging musicians | **allowed-with-conditions (VERIFIED welcoming):** server explicitly welcomes "sharing of original work"; hosts open Q&As (past guests incl. Ron Carter) | Hang out / comment for a bit, then post the tool in the appropriate share/projects channel framed as a free practice resource + feedback ask. Real conversations convert here. | discord.com/invite/qsGRWH5 · disboard.org/server/294608735953747969 |
+| **r/WeAreTheMusicMakers** | Reddit | ✅ verified large — third-party stats snippet (gummysearch cache, 2026-06-24) now lists **~3.8M members** (up from the ~1.7M figure cited earlier); either way it is huge and high-traffic | **Practice / music-makers** — good. Broad creators, feedback culture | **weekly-thread-only (VERIFIED):** direct promo not permitted; use the **weekly promo/feedback thread**; reciprocity expected | Drop it in the weekly thread, **give 2–3 others real feedback first**, ask a specific question ("is the practice flow clear / would you use this?"). Detailed-feedback-givers get 3–4x more engagement. | reddit.com/r/WeAreTheMusicMakers |
+
+---
+
+## TIER 2 — Share with care (rules-bound; post it the right way)
+
+| Community | Platform | ~Size / activity | Audience fit | Self-promo rule | Best way to share here | Link |
+|---|---|---|---|---|---|---|
+| **r/Jazz** | Reddit | ✅ ~989k members (re-corroborated via gummysearch cache snippet, 2026-06-24); "huge, high activity" — note GummySearch itself shut down 11/30/2025, so treat as approximate | **Jazz** — good, but broad/listener-heavy, not all players | `[confirm:]` rule not verified — music subs commonly restrict self-promo to threads or ban link-drops; verbatim sidebar rule still needs an eyeball | If allowed: frame as a **free educational/practice tool**, not "my project." If sidebar says no promo, skip the main feed and look for a weekly/self-promo thread. Err toward caution given size + strict mod culture. | reddit.com/r/Jazz |
+| **Trumpet Herald forum** | Web forum (phpBB) | Long-running; active **Jazz/Commercial** subforum; "the trumpet player's home on the web" | **Trumpet** — strong; serious/older, knowledgeable crowd | `[confirm:]` post-rules not verified — typical forum etiquette: contribute first, no drive-by promo | Make an account, post a few genuine replies, then start a thread in Jazz/Commercial: "Built a free practice portal, sharing in case it's useful." Frame as contribution to the community, invite critique. | trumpetherald.com/forum (Jazz/Commercial: viewforum.php?f=3) |
+| **Music Theory Discord** (r/musictheory affiliate) | Discord | ✅ verified ~7,631 members (Discord invite listing for discord.com/invite/7RPVS5K, 2026-06-24) | **Theory** — partial fit (ear training / changes angle, less the range/Clarke side) | `[confirm:]` exact rule not verified — server "showcases work"; likely a designated channel | Lead with the ear-training / chord-changes practice angle (theory-relevant). Share in the showcase/resources channel, not general chat. | discord.com/invite/7RPVS5K |
+| **r/musictheory** | Reddit | ✅ verified large — ~434K members (thehiveindex.com community listing, 2026-06-24) | **Theory** — partial. Question/analysis culture, not practice tools | `[confirm:]` rule not verified — theory subs often dislike tool/promo posts; verbatim sidebar rule still needs an eyeball | Only if there's a clear resources/showcase allowance. Frame strictly around the theory/ear-training features. Lowest promo tolerance of the music subs — easy to misfire. | reddit.com/r/musictheory |
+| **r/musiceducation** | Reddit | `[confirm: the music-educator subreddit verified on thehiveindex.com (2026-06-24) is r/MusicEd at ~29K members — confirm whether r/musiceducation and r/MusicEd are the same community or two distinct subs before posting.]` | **Practice / educators** — decent (teachers may pass it to students) | `[confirm:]` rule not verified — many edu subs allow *free* non-commercial resources; verify | Position as a **free resource for students/teachers** (no login, no paywall). Educators are friendlier to free tools than promo-averse music subs. | reddit.com/r/musiceducation |
+
+---
+
+## TIER 3 — Deprioritize / risky / IRL & longer-game
+
+| Community | Platform | ~Size / activity | Audience fit | Self-promo rule | Best way to share here | Link |
+|---|---|---|---|---|---|---|
+| **Chicago — Green Mill Friday jam** (hosted by trumpeter Marquis Hill, Fri 1–3am, $5 cover; late-night music returned 6/19/2026 for the club's 40th) | IRL | Active weekly jam | **Trumpet/Jazz — highest-trust** | n/a (IRL word of mouth) | Go play. Mention the tool conversationally to players you meet ("I built this for my own woodshedding"). Warmest, zero ban-risk channel; turns into real advocates. | greenmilljazz.com/calendar |
+| **Jazz Institute of Chicago** | IRL / org + socials | ✅ verified active (jazzinchicago.org, 2026-06-24): nonprofit founded 1969, live "Jazz Links" education programs — Jazz Masters Residency, monthly Jam Sessions, Fellowship, mentorship awards — plus a 2026 Jazz in the Chi Festival | **Jazz/education — strong, local** | `[confirm: no published outbound "submit a resource" channel found — outreach is via their education/community-program contacts; confirm the right contact before reaching out.]` | Email/connect re: education programs; a free practice portal is a natural fit for student-facing outreach. Longer game, high credibility payoff. | jazzinchicago.org/education-programs |
+| **Bloom School of Jazz** (Chicago, since 1975) | IRL school | ✅ verified active (bloomschoolofjazz.com + yelp updated Jun 2026): 50 years running, founder David Bloom still teaching jazz combo / theory / private courses downtown Chicago + online; trains intermediate-to-pro players | **Jazz — local, niche** | `[confirm: relationship/word-of-mouth play, no public sharing channel — verify the right instructor/contact.]` | Mention to instructors/students as a free practice aid. Relationship play, not a post. | bloomschoolofjazz.com |
+| **Old Town School of Folk Music** (Chicago) | IRL school / community | Large community music school | **Practice/community — local** | ✅ verified relevant programs (oldtownschool.org, 2026-06-24): runs **Jazz Ensemble** classes that explicitly include **Trumpet** (be-bop/hard-bop/swing/Latin, improv over changes) plus a **Brass Class** — direct fit for a jazz-trumpet practice tool. `[confirm: no public outbound resource-submission channel found — sharing would be via student/class word-of-mouth or a community bulletin, which still needs a human check.]` | Student/community bulletin or class word-of-mouth — confirmed there's a jazz + brass program to plug into. | oldtownschool.org |
+| **TrumpetBoards.com** | Web forum | ✅ verified ~600 registered users; **confirmed low traffic** — members' own "Future survival of this forum" thread notes days/weeks with no new posts and ~10 mostly-inactive signups/month (trumpetboards.com + feedspot, 2026-06-24) | **Trumpet** — right audience, thin activity | `[confirm: verbatim self-promo rule still needs an eyeball on the forum's Terms/rules page (terms page exists).]` | Worth a single low-effort post (events/lounge or technique area) but **don't expect volume** — small reach. | trumpetboards.com |
+| **TrumpetMaster.com** | Web forum | **DEAD / offline** | — | n/a | **Do not target.** Defunct; community migrated to TrumpetBoards.com. Listed only so it's not mistaken for live. | (defunct) |
+| **r/Music** | Reddit | ✅ verified very large — ~38.5M members (thehiveindex.com, 2026-06-24); Reddit's #1 music community | **Generalist — weak fit** | `[confirm:]` — historically very strict; self-promo generally funneled to threads/banned; verbatim rule still needs an eyeball | Low priority. Audience isn't players; mod culture is promo-hostile. Skip unless a specific feedback thread fits. | reddit.com/r/Music |
+| **Facebook — jazz trumpet / Real Book groups** | Facebook Groups | `[confirm: web search alone could NOT enumerate specific groups — FB group membership/activity isn't reliably indexed by search engines. Needs a logged-in FB search to name 2–3 currently-active groups + sizes.]` | **Trumpet/Jazz — decent, but fragmented** | `[confirm:]` per-group admin rules — FB groups vary wildly; many require admin approval for any link | `[confirm: still must identify 2–3 specific active groups + their pinned rules first, via a logged-in FB search.]` Then post as a free tool + feedback ask, after a couple of genuine comments. Treat each group's pinned rules as law. | facebook.com (search "jazz trumpet", "Real Book") |
+| **r/jazzguitar / r/jazzpiano / instrument analogs** | Reddit | Mid-size niche subs | **Jazz, wrong instrument** — weak direct fit | `[confirm: not verified — deprioritized as off-instrument, so rules/size were not researched this pass; check only if a multi-instrument version ships.]` | Generally skip — off-instrument. Only relevant if you build a multi-instrument version later. | reddit.com/r/jazzguitar |
+
+---
+
+## How to share without being that guy
+
+1. **Lead with the tool as a gift + a feedback ask, never a sell.** "I built this free thing for my own practice, would love feedback" beats "check out my project" every time. The Woodshed being free, no-login, no-paywall is your strongest asset — say it explicitly.
+2. **Participate before you post.** Comment, answer questions, give other people real feedback *first*. On Reddit, a track record of genuine contribution matters more than karma; ~30+ substantive comments in a sub before promoting is the safe benchmark. On Discord/forums, hang out and talk before dropping anything.
+3. **Respect the weekly thread.** Where a community has a designated promo/feedback thread (r/WeAreTheMusicMakers does, many music subs do), **use it** — posting promo to the main feed instead is the fastest way to get removed and remembered.
+4. **No naked link drops.** Always wrap the link in context: what it is, why you made it, what feedback you want. A link with no story reads as spam to both humans and filters.
+5. **Don't carpet-bomb.** Posting the same thing across many subs/groups at once is the #1 coordinated-spam flag — filters catch it and mods talk to each other. Space launches out, and tailor the framing to each room (trumpet angle for r/trumpet, theory/ear-training angle for theory rooms, free-resource angle for educators).
+6. **Read the room's actual rules first.** This map marks unverified rules as `[confirm:]` for a reason — every subreddit/forum/FB group publishes its own self-promo policy in the sidebar/wiki/pinned post. Read it before you post; when in doubt, ask a mod. One careful post in the right place beats ten that get nuked.
+
+---
+
+## Sources
+- Reddit self-promotion norms / 90-10 & weekly-thread culture: [redship.io](https://redship.io/blog/reddit-self-promotion-rules), [conbersa.ai](https://www.conbersa.ai/learn/reddit-self-promotion-rules), [orphiq.com](https://orphiq.com/resources/reddit-music-promotion)
+- r/WeAreTheMusicMakers (~1.7M, weekly feedback thread, reciprocity): [orphiq.com](https://orphiq.com/resources/reddit-music-promotion)
+- r/Jazz (~989k, high activity): [gummysearch.com/r/Jazz](https://gummysearch.com/r/Jazz/)
+- Jazzcord Discord (largest jazz Discord, founded 2017, welcomes original work + Q&As): [disboard.org](https://disboard.org/server/294608735953747969), [discord.com invite](https://discord.com/invite/qsGRWH5), [discordbotlist.com](https://discordbotlist.com/servers/jazzcord-294608735953747969)
+- Music Theory Discord (r/musictheory affiliate, ~7.6k, showcases work): [discord.com/invite/7RPVS5K](https://discord.com/invite/7RPVS5K)
+- Trumpet Herald forum (active Jazz/Commercial subforum): [trumpetherald.com/forum (f=3)](https://www.trumpetherald.com/forum/viewforum.php?f=3)
+- TrumpetMaster.com defunct → migrated to TrumpetBoards: [theadminzone.com](https://www.theadminzone.com/threads/trumpetmaster-com.35405/), [trumpetboards.com RIP thread](https://trumpetboards.com/topic/50/rip-trumpet-master)
+- TrumpetBoards.com (~600 users, low traffic): [trumpetboards.com](https://trumpetboards.com/), [feedspot top trumpet forums](https://forums.feedspot.com/trumpet_forums/)
+- Green Mill Friday jam (Marquis Hill, $5, late-night returned 6/19/26): [blockclubchicago.org](https://blockclubchicago.org/2026/06/16/late-night-jazz-is-coming-back-to-the-green-mill/), [greenmilljazz.com/calendar](https://greenmilljazz.com/calendar/)
+- Jazz Institute of Chicago (education programs): [jazzinchicago.org](https://www.jazzinchicago.org/education-programs)
+- Bloom School of Jazz (Chicago, since 1975): [bloomschoolofjazz.com](https://www.bloomschoolofjazz.com/)
+
+*Confidence (post 2026-06-24 verification pass, wood-62): HIGH on which communities exist + are alive/dead, their rough scale, and forum/Discord/Chicago specifics — and now firmer on several sizes: Music Theory Discord ~7.6k ✅, r/musictheory ~434k ✅, r/Music ~38.5M ✅, r/Jazz ~989k (corroborated), TrumpetBoards ~600/low-traffic ✅, Trumpet Herald ~40k registered ✅, and the three Chicago orgs (Jazz Institute, Bloom, Old Town School) verified active with relevant programs ✅. STILL MEDIUM-LOW on: exact r/trumpet subscriber count (reddit.com uncrawlable + counts hidden), verbatim subreddit/forum self-promo rule text (sidebars/Terms need a logged-in eyeball), the r/musiceducation-vs-r/MusicEd identity, and naming specific active Facebook groups (not search-indexable). 11 of 19 `[confirm:]` items resolved to ✅; 8 remain and are flagged with exactly what a human must check.*

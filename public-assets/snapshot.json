@@ -1,0 +1,121 @@
+{
+  "__comment__": "ILLUSTRATIVE EXAMPLE \u2014 NOT CHRIS'S LIVE DATA. This public snapshot was projected from mission-control.example.json (representative shape only; live numbers live in the browser localStorage 'woodshed_v1' and are not on disk). Every figure here traces to the example input; nothing private is included. Regenerate with public-assets/render_snapshot.py.",
+  "schemaVersion": "1.0",
+  "generatedAt": "2026-06-13T08:40:00.000Z",
+  "source": {
+    "input": "mission-control.example.json",
+    "exportedAt": "2026-06-13T08:40:00.000Z",
+    "illustrative": true
+  },
+  "streak": 6,
+  "lastDay": "2026-06-12",
+  "week": {
+    "index": 22,
+    "displayNumber": 23,
+    "focus": "Jam Simulation"
+  },
+  "primaryTune": "recordame",
+  "rotation": [
+    "blues",
+    "autumn",
+    "bossa",
+    "atrain",
+    "attya",
+    "four",
+    "beautiful",
+    "solar",
+    "twnbay",
+    "oleo",
+    "father",
+    "footprints",
+    "cherokee",
+    "confirmation",
+    "misty",
+    "stella",
+    "tingl",
+    "tunisia",
+    "ornithology",
+    "missjones",
+    "nowhere",
+    "valentine",
+    "recordame",
+    "bessies"
+  ],
+  "tunes": {
+    "recordame": {
+      "title": "Recorda Me",
+      "rungStatus": 3,
+      "memorized": false,
+      "verified": false,
+      "isPrimary": true
+    },
+    "valentine": {
+      "title": "My Funny Valentine",
+      "rungStatus": 5,
+      "memorized": true,
+      "verified": true
+    },
+    "nowhere": {
+      "title": "Out of Nowhere",
+      "rungStatus": 2,
+      "memorized": false,
+      "verified": false
+    }
+  },
+  "weeklyObjectives": [
+    {
+      "label": "Primary tune: Recorda Me \u2192 rung 5",
+      "current": 1,
+      "target": 2,
+      "met": false
+    },
+    {
+      "label": "Vocabulary: +8 lick-keys mastered",
+      "current": 5,
+      "target": 8,
+      "met": false
+    },
+    {
+      "label": "Speed: beat ANY tempo PR",
+      "current": 1,
+      "target": 1,
+      "met": true
+    },
+    {
+      "label": "Ears: 3 transcription logs",
+      "current": 2,
+      "target": 3,
+      "met": false
+    }
+  ],
+  "weeklyObjectivesSummary": {
+    "met": 1,
+    "total": 4
+  },
+  "prTargets": {
+    "ladder": {
+      "best": 152,
+      "goal": 176,
+      "lastLogged": "2026-06-11",
+      "pctToGoal": 86
+    },
+    "clarke2": {
+      "best": 132,
+      "goal": 144,
+      "lastLogged": "2026-06-12",
+      "pctToGoal": 92
+    },
+    "single-tongue": {
+      "best": 120,
+      "goal": 132,
+      "lastLogged": "2026-06-12",
+      "pctToGoal": 91
+    },
+    "16th-triplet": {
+      "best": 104,
+      "goal": 120,
+      "lastLogged": "2026-06-10",
+      "pctToGoal": 87
+    }
+  }
+}
