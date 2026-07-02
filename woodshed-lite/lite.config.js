@@ -71,18 +71,19 @@ window.WSL_CONFIG = {
       formId:  '191733298141070717',
     },
     votes: {
-      provider: 'canny',           // 'canny' | 'featurebase'
-      embedId:  'TODO',
-      // Seed these so the board is never blank (see spec §6):
-      seeds: [
-        'More tunes (which ones?)',
-        'Build-your-own session (warmup → tunes → cooldown)',  // the consolidation probe
-        'Loop a section (woodshed a hard 4 bars)',
-        'More warmup exercises (Clarke/Arban library)',
-        'Slow-down trainer (gradual tempo bump)',
-        'Save your practice streak / log',
-        'Mobile app version',
-      ],
+      provider: 'supabase',        // real backend — see woodshed-lite/supabase/migrations/0001_voting.sql
+      // PUBLIC-SAFE keys only. The anon key is designed to ship in the browser
+      // and is protected by RLS (tables are locked; only the two RPCs are
+      // exec-grantable to anon). NEVER put the service_role key or DB password
+      // here — those live in .env / .dev.vars, which .gitignore excludes.
+      supabaseUrl:     'TODO',     // https://<project-ref>.supabase.co   (Project Settings → API)
+      supabaseAnonKey: 'TODO',     // the "anon public" key                (Project Settings → API)
+      model: 'single-select',      // one vote per browser total; casting again MOVES the vote
+      // Option ids MUST match vote_options.id in the migration + the
+      // data-option-id attributes in shell.html. Order here is the fallback
+      // display order used only when the backend is unreachable.
+      options: ['full_warmup', 'byo_session', 'track_progress', 'other'],
+      writeInOptionId: 'other',    // this option reveals a free-text box (stored as votes.note)
     },
     founder: {
       enabled: false,              // STUB until M3 (Phase 2). Don't charge during M0–M2.

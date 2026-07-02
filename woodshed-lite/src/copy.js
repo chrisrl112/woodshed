@@ -20,6 +20,20 @@
       }
       el.innerHTML = val;
     });
+    // Attribute binding: data-copy-attr="attr:section.key[, attr2:section.key2]"
+    // e.g. placeholder text on inputs. Same content.json source, no rebuild.
+    document.querySelectorAll('[data-copy-attr]').forEach(el => {
+      el.dataset.copyAttr.split(',').forEach(pair => {
+        const [attr, path] = pair.split(':').map(s => s.trim());
+        if (!attr || !path) return;
+        const val = get(content, path);
+        if (val === undefined) {
+          console.warn('[woodshed-lite] content.json has no entry for', path);
+          return;
+        }
+        el.setAttribute(attr, val);
+      });
+    });
   }
 
   fetch('content.json', { cache: 'no-store' })

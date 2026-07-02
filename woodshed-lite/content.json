@@ -1,6 +1,5 @@
 {
   "_readme": "Edit any string below, save, then refresh the page in your browser to see the change — no build step needed. Values may contain simple HTML (like <b>, <em>, <span>). Keys match the data-copy=\"...\" attributes in src/shell.html; don't rename keys unless you also update the matching attribute there.",
-
   "nav": {
     "wordmark": "THE WOODSHED",
     "tagline": "PRACTICE · MADE · SIMPLE",
@@ -9,7 +8,6 @@
     "link_ask": "Early access",
     "pill": "PUBLIC · DEMO"
   },
-
   "hero": {
     "eyebrow": "A jazz musician's single practice surface · start shedding now...",
     "h1": "Your whole practice session. <span class=\"one\">One tab.</span>",
@@ -17,7 +15,6 @@
     "cta": "Start the session",
     "built_note": "Demo"
   },
-
   "warmup": {
     "kicker": "Station · Warmup",
     "headline": "This is where every session starts.",
@@ -35,7 +32,6 @@
     "reps_goal_label": "Today's goal",
     "log_label": "Log it in the Woodshed"
   },
-
   "jam": {
     "kicker": "Station · Jam With the Band",
     "headline": "A backing track band that actually sounds good.",
@@ -50,7 +46,6 @@
     "feel_label": "Feel",
     "feel_hint": "comping style"
   },
-
   "pitch": {
     "kicker": "The whole point",
     "tag_from": "Right now",
@@ -58,7 +53,6 @@
     "tag_to": "With The Woodshed",
     "bold": "One surface."
   },
-
   "ask": {
     "headline": "Get early access and a vote on what I build next.",
     "sub": "I'm building this in the open. Drop your email for the next release, and tell me what to build on the board. <em>No spam.</em> Just the occasional \"here's what's new.\"",
@@ -66,16 +60,17 @@
     "fine_print": "⊘ &nbsp;No spam. Unsubscribe in one click. ~1 email a month.",
     "votes_title": "What should I build next?",
     "votes_cta": "Tap to vote",
-    "vote_1_name": "More tunes",
-    "vote_1_meta": "Autumn Leaves, All the Things, rhythm changes…",
-    "vote_2_name": "Build-your-own session",
-    "vote_2_meta": "Stack your own warmup → jam routine",
-    "vote_3_name": "Loop a section",
-    "vote_3_meta": "Woodshed the bridge until it's clean",
-    "vote_4_name": "Mobile app",
-    "vote_4_meta": "The whole surface in your pocket"
+    "vote_1_name": "Full warmup",
+    "vote_1_meta": "Long tones, lip slurs, flexibility — the whole routine",
+    "vote_2_name": "Build your own session",
+    "vote_2_meta": "Stack your routine + upload the PDFs you're practicing",
+    "vote_3_name": "Track your progress over time",
+    "vote_3_meta": "Streaks, logs, watch your reps add up",
+    "vote_4_name": "Something else",
+    "vote_4_meta": "Tell me what to build — type it in",
+    "vote_other_placeholder": "What should I build? (one line)",
+    "vote_other_send": "Send"
   },
-
   "footer": {
     "bio": "<b>Built by Chris</b> — Strategist by day, jazz trumpet by night. Woodshedding in public, one tune at a time.",
     "copyright": "© 2026 The Woodshed",

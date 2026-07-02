@@ -37,6 +37,11 @@ public-assets/pages/
 *.aiff
 *.wav
 *.onnx
+# PDFs are never committed — copyrighted books live in reference/ (ignored above),
+# and even public-domain source PDFs (e.g. assets/public domain/Arban…1893.pdf) are
+# heavy and not served by the app. Keep them local. To version one deliberately,
+# force-add it AND track it via Git LFS (see .gitattributes).
+*.pdf
 
 # --- Python environments & caches ---
 **/.venv/

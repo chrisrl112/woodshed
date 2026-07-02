@@ -72,35 +72,60 @@ cp "$ROOT/assets/drums/trim/"*.mp3 "$DIST/assets/drums/trim/" 2>/dev/null || ech
 # STEP 5 — Assemble dist/index.html
 # ---------------------------------------------------------------------------
 # dist/index.html = the landing shell (src/shell.html) with <script> tags
-# injected for lite.config.js + src/mount.js at <!-- MOUNT_PLACEHOLDER -->.
+# injected for lite.config.js + src/mount.js + src/votes.js at
+# <!-- MOUNT_PLACEHOLDER -->. Order matters: config (defines WSL_CONFIG) →
+# mount → votes (reads WSL_CONFIG, wires the Supabase vote board).
 # engine.js, charts-curated.js, clarke-warmups-lite.js and drums-manifest.js
 # are loaded by their own <script src> tags already present in shell.html.
-echo "[5/6] assemble index.html    … injecting config + mount.js into the shell"
-python3 - "$DIR/src/shell.html" "$DIR/lite.config.js" "$DIR/src/mount.js" "$DIST/index.html" <<'PYEOF'
+echo "[5/6] assemble index.html    … injecting config + mount.js + votes.js into the shell"
+python3 - "$DIR/src/shell.html" "$DIR/lite.config.js" "$DIR/src/mount.js" "$DIR/src/votes.js" "$DIST/index.html" <<'PYEOF'
 import pathlib, sys
-shell, config, mount, out_p = [pathlib.Path(a) for a in sys.argv[1:]]
+shell, config, mount, votes, out_p = [pathlib.Path(a) for a in sys.argv[1:]]
 inject = (
     '<script>\n// lite.config.js\n' + config.read_text() + '\n</script>\n'
-    '<script>\n// mount.js\n' + mount.read_text() + '\n</script>'
+    '<script>\n// mount.js\n' + mount.read_text() + '\n</script>\n'
+    '<script>\n// votes.js\n' + votes.read_text() + '\n</script>'
 )
 html = shell.read_text().replace('<!-- MOUNT_PLACEHOLDER -->', inject)
 out_p.write_text(html)
 PYEOF
 
 # ---------------------------------------------------------------------------
-# STEP 6 — Copyright gate (HARD STOP on failure)
+# STEP 6 — Gates
 # ---------------------------------------------------------------------------
-echo "[6/6] copyright gate         … running ../publish.sh"
-if [ -x "$ROOT/publish.sh" ]; then
-    if ! "$ROOT/publish.sh"; then
-        echo
-        echo "BUILD BLOCKED — copyright gate failed. dist/ is NOT safe to deploy." >&2
-        exit 1
-    fi
-else
-    echo "      (../publish.sh not found/executable — gate skipped; DO NOT deploy until wired)" >&2
+# TWO gates with different scopes, and only ONE blocks the Lite deploy:
+#
+#   (a) verify_public_safe.py — THE copyright gate for what Lite actually ships
+#       (scans lite.config.js: any lead-sheet melody must be PD, year <= 1930).
+#       This is a HARD STOP. Never weaken it.
+#
+#   (b) ../publish.sh -> public-assets/ci_check.py — the MAIN-APP page-coverage
+#       gate (Real Book render coverage). It is unrelated to the Lite bundle's
+#       safety, and its pre-existing ~4-gap coverage warning must NOT block a
+#       Lite deploy. We run it for visibility but treat it as ADVISORY here.
+#       (If it's ever promoted to blocking for the main app, that's a main-app
+#        concern; Lite ships on its own copyright gate.)
+echo "[6/6] gates                  … Lite copyright gate (hard) + main-app coverage (advisory)"
+
+echo "  (a) verify_public_safe.py (HARD) …"
+if ! python3 "$DIR/verify_public_safe.py" "$DIR/lite.config.js"; then
+    echo
+    echo "BUILD BLOCKED — Lite copyright gate failed. dist/ is NOT safe to deploy." >&2
+    exit 1
 fi
 
 echo
-echo "Done. dist/ built."
-echo "When complete: deploy $DIST to Cloudflare Pages / Netlify manually."
+echo "  (b) ../publish.sh main-app coverage (ADVISORY — does not block Lite) …"
+if [ -x "$ROOT/publish.sh" ]; then
+    if "$ROOT/publish.sh"; then
+        echo "      main-app gate: PASS"
+    else
+        echo "      main-app gate: WARN (advisory only — unrelated to the Lite bundle; NOT blocking)." >&2
+    fi
+else
+    echo "      (../publish.sh not found/executable — advisory gate skipped)" >&2
+fi
+
+echo
+echo "Done. dist/ built and passed the Lite copyright gate — safe to deploy."
+echo "Deploy:  npx wrangler pages deploy $DIST --project-name woodshed-lite --commit-dirty=true"

@@ -447,7 +447,26 @@ img,svg{display:block;}
 .vote .vt .name{font-family:var(--ui); font-weight:700; font-size:15px;}
 .vote .vt .meta{font-family:var(--mono); font-size:11px; color:var(--faint); margin-top:2px;}
 .vote .vbar{width:62px; height:7px; flex:none; border:2px solid var(--ink); border-radius:999px; background:var(--surface); overflow:hidden;}
-.vote .vbar i{display:block; height:100%; background:var(--brass);}
+.vote .vbar i{display:block; height:100%; background:var(--brass); transition:width .35s ease;}
+/* the browser's current single-select pick */
+.vote.voted{background:var(--surface);}
+.vote.voted .up{background:var(--brass); color:#fffdf4;}
+.vote.voted .up .car{color:#fffdf4; content:"✓";}
+.vote.voted .vt .name::after{content:" ✓"; color:var(--brass); font-weight:700;}
+/* write-in box for "Something else" */
+.vote-writein{display:flex; gap:8px; margin:-4px 0 12px; padding:0 2px;}
+.vote-writein[hidden]{display:none;}
+.vote-writein-input{
+  flex:1; min-width:0; font-family:var(--ui); font-size:14px; padding:10px 12px;
+  border:2px solid var(--ink); border-radius:5px; background:var(--paper); color:var(--ink);
+}
+.vote-writein-input:focus{outline:none; box-shadow:var(--shadow-sm);}
+.vote-writein-send{
+  flex:none; font-family:var(--ui); font-weight:700; font-size:14px; padding:10px 16px; cursor:pointer;
+  border:2px solid var(--ink); border-radius:5px; background:var(--brass); color:#fffdf4;
+}
+.vote-writein-send:hover{transform:translate(-1px,-1px); box-shadow:4px 4px 0 var(--ink);}
+.vote-writein-send:disabled{opacity:.5; cursor:default; transform:none; box-shadow:none;}
 
 /* ============================================================ FOOTER */
 .footer{border-top:2px solid var(--ink); background:var(--surface);}
@@ -995,30 +1014,40 @@ function saveState() {}
       </div>
     </div>
 
-    <!-- vote board (seeds from lite.config.js funnel.votes.seeds; no live backend yet — see project notes) -->
+    <!-- vote board — live tallies come from Supabase (src/votes.js). The counts
+         and bar widths below are the OFFLINE FALLBACK seed: if the backend is
+         unreachable, copy.js fills the names/meta and these numbers show so the
+         board never looks broken. data-option-id ties each row to vote_options.id
+         in supabase/migrations/0001_voting.sql. Single-select: one vote per browser. -->
     <div id="wsl-votes-slot" class="slot" data-slot="votes">
       <div class="votes">
         <div class="vh"><span class="t" data-copy="ask.votes_title">What should I build next?</span><span class="c" data-copy="ask.votes_cta">Tap to vote</span></div>
-        <div class="vote lead">
-          <span class="up"><span class="car">▲</span><span class="n">214</span></span>
-          <span class="vt"><span class="name" data-copy="ask.vote_1_name">More tunes</span><span class="meta" data-copy="ask.vote_1_meta">Autumn Leaves, All the Things, rhythm changes…</span></span>
+        <div class="vote lead" data-option-id="full_warmup">
+          <span class="up"><span class="car">▲</span><span class="n">42</span></span>
+          <span class="vt"><span class="name" data-copy="ask.vote_1_name">Full warmup</span><span class="meta" data-copy="ask.vote_1_meta">Long tones, lip slurs, flexibility — the whole routine</span></span>
           <span class="vbar"><i style="width:100%"></i></span>
         </div>
-        <div class="vote">
-          <span class="up"><span class="car">▲</span><span class="n">168</span></span>
-          <span class="vt"><span class="name" data-copy="ask.vote_2_name">Build-your-own session</span><span class="meta" data-copy="ask.vote_2_meta">Stack your own warmup → jam routine</span></span>
-          <span class="vbar"><i style="width:78%"></i></span>
+        <div class="vote" data-option-id="byo_session">
+          <span class="up"><span class="car">▲</span><span class="n">31</span></span>
+          <span class="vt"><span class="name" data-copy="ask.vote_2_name">Build your own session</span><span class="meta" data-copy="ask.vote_2_meta">Stack your routine + upload the PDFs you're practicing</span></span>
+          <span class="vbar"><i style="width:74%"></i></span>
         </div>
-        <div class="vote">
-          <span class="up"><span class="car">▲</span><span class="n">141</span></span>
-          <span class="vt"><span class="name" data-copy="ask.vote_3_name">Loop a section</span><span class="meta" data-copy="ask.vote_3_meta">Woodshed the bridge until it's clean</span></span>
-          <span class="vbar"><i style="width:66%"></i></span>
+        <div class="vote" data-option-id="track_progress">
+          <span class="up"><span class="car">▲</span><span class="n">27</span></span>
+          <span class="vt"><span class="name" data-copy="ask.vote_3_name">Track your progress over time</span><span class="meta" data-copy="ask.vote_3_meta">Streaks, logs, watch your reps add up</span></span>
+          <span class="vbar"><i style="width:64%"></i></span>
         </div>
-        <div class="vote">
-          <span class="up"><span class="car">▲</span><span class="n">97</span></span>
-          <span class="vt"><span class="name" data-copy="ask.vote_4_name">Mobile app</span><span class="meta" data-copy="ask.vote_4_meta">The whole surface in your pocket</span></span>
-          <span class="vbar"><i style="width:45%"></i></span>
+        <div class="vote" data-option-id="other">
+          <span class="up"><span class="car">▲</span><span class="n">9</span></span>
+          <span class="vt"><span class="name" data-copy="ask.vote_4_name">Something else</span><span class="meta" data-copy="ask.vote_4_meta">Tell me what to build — type it in</span></span>
+          <span class="vbar"><i style="width:21%"></i></span>
         </div>
+        <!-- write-in for "Something else"; revealed by votes.js when that row is picked -->
+        <form class="vote-writein" data-writein-for="other" hidden>
+          <input class="vote-writein-input" type="text" maxlength="140" autocomplete="off"
+                 data-copy-attr="placeholder:ask.vote_other_placeholder" placeholder="What should I build? (one line)">
+          <button class="vote-writein-send" type="submit" data-copy="ask.vote_other_send">Send</button>
+        </form>
       </div>
     </div>
 
