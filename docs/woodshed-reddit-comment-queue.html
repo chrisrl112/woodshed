@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Woodshed — Reddit Comment Queue</title>
+<style>
+  :root{
+    --bg:#ffffff; --surface:#f7f6f3; --border:#e4e2db; --border-strong:#c9c6bc;
+    --text:#1c1c1a; --text-secondary:#5f5e5a; --text-muted:#8b897f;
+    --teal:#0f6e56; --teal-bg:#e1f5ee;
+    --purple:#3c3489; --purple-bg:#eeedfe;
+    --coral:#993c1d; --coral-bg:#faece7;
+    --green:#27500a; --green-bg:#eaf3de;
+    --amber:#854f0b; --amber-bg:#faeeda;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; padding:2rem 1.5rem 4rem; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;}
+  .wrap{max-width:720px; margin:0 auto;}
+  h1{font-size:20px; font-weight:600; margin:0 0 4px;}
+  .sub{font-size:13px; color:var(--text-secondary); margin:0 0 24px;}
+  .tier-heading{font-size:14px; font-weight:600; margin:28px 0 10px;}
+  .tier-heading:first-of-type{margin-top:0;}
+  .card{background:var(--surface); border:1px solid var(--border); border-radius:12px;
+    padding:16px 20px; display:flex; flex-direction:column; gap:10px; margin-bottom:12px;}
+  .row{display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap;}
+  .badges{display:flex; gap:6px; flex-wrap:wrap;}
+  .badge{font-size:12px; padding:3px 9px; border-radius:6px; font-weight:500; white-space:nowrap;}
+  .b-teal{background:var(--teal-bg); color:var(--teal);}
+  .b-purple{background:var(--purple-bg); color:var(--purple);}
+  .b-coral{background:var(--coral-bg); color:var(--coral);}
+  .b-muted{background:#efeee9; color:var(--text-secondary);}
+  .b-new{background:var(--green-bg); color:var(--green);}
+  .b-reply{background:var(--amber-bg); color:var(--amber);}
+  .title{font-size:15px; font-weight:600; color:var(--text); text-decoration:none;}
+  .title:hover{text-decoration:underline;}
+  .note{font-size:12px; color:var(--text-muted);}
+  .quote{font-size:14px; line-height:1.6; color:var(--text-secondary); border-left:2px solid var(--border-strong);
+    padding-left:12px; font-style:italic;}
+  .actions{display:flex; gap:8px;}
+  button, a.btn{display:inline-flex; align-items:center; gap:6px; height:34px; padding:0 12px;
+    border:1px solid var(--border-strong); border-radius:6px; font-size:13px; background:#fff;
+    color:var(--text); text-decoration:none; cursor:pointer; font-family:inherit;}
+  button:hover, a.btn:hover{background:#f0efe9;}
+  .top-note{font-size:13px; color:var(--text-secondary); margin-bottom:20px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Woodshed — Reddit comment queue</h1>
+  <div class="sub">2026-07-03 &middot; 20 threads, verified live &middot; space these out, 2-4/day</div>
+  <div id="list"></div>
+</div>
+
+<script>
+const ITEMS = [
+{sub:'r/musicians', title:'tired of jiggling around different practice apps', tier:'Tier 1 — on-topic threads', archetype:'hobbyist-consolidation', action:'new', url:'https://old.reddit.com/r/musicians/comments/1tuct6m/', copy:"This is the exact rabbit hole I went down. Warmup routine in one app, metronome in another, changes in iReal, a notes app for what I actually practiced, a separate thing for streaks. Ended up building my own single-screen version just for my own jazz trumpet practice, mostly out of frustration more than ambition. The 'toggle off what you don't need' point below is the right instinct — the second one of these gets bloated it's just a worse version of the six tabs."},
+{sub:'r/Jazz', title:'iReal Pro alternative', tier:'Tier 1 — on-topic threads', archetype:'jazz-purist', action:'new', url:'https://old.reddit.com/r/Jazz/comments/1svrw6k/', copy:"Selfishly, the thing I'd want most is real transposed display done well — Bb/Eb parts that aren't an afterthought. iReal's fine for concert pitch but I'm constantly doing mental math on my horn. Also curious how you're handling chord voicings — one of iReal's tells is everything sounds like it's stacking extensions with no ear behind it."},
+{sub:'r/Jazz', title:'Building a better alternative to iReal Pro', tier:'Tier 1 — on-topic threads', archetype:'jazz-purist', action:'new', url:'https://old.reddit.com/r/Jazz/comments/1soe9a4/', copy:"The 'import your existing iReal library first, build the rest later' advice in here is right — that's the only way anyone actually switches. Also +1 on mid-tune style switching, swing to latin on one chart shouldn't be this hard."},
+{sub:'r/Jazz', title:'Quartet vs. FeelBook apps', tier:'Tier 1 — on-topic threads', archetype:'jazz-purist', action:'new', url:'https://old.reddit.com/r/Jazz/comments/1q9f5li/', copy:"Interesting tradeoff either way you go — Quartet/FeelBook's real players sound better but you're stuck with their tune list since you can't retrofit a chart onto a fixed recording. iReal's the opposite: infinitely flexible, sounds like MIDI. Haven't found anything that's actually solved both sides of that yet."},
+{sub:'r/trumpet', title:'I built a tool to find jazz tunes with similar chord changes (Reharmonize)', tier:'Tier 1 — on-topic threads', archetype:'dev-peer', action:'new', url:'https://old.reddit.com/r/trumpet/comments/1swf8at/', copy:"Really like this — I've been building something adjacent (a practice portal, not a discovery tool) and 'which tunes share this changes' is exactly the kind of question I never have a good answer to mid-practice. Would use this. Any plan to let you filter by difficulty/range for a given instrument?"},
+{sub:'r/trumpet', title:'Fake Book Index App', tier:'Tier 1 — on-topic threads', archetype:'dev-peer', action:'new', url:'https://old.reddit.com/r/trumpet/comments/1sxcheh/', copy:"One-time-purchase, no-account model is exactly right for this category — feels like half the practice apps out there are trying to be a subscription business before they've earned it. Downloading this, the 'which of my six books has this tune' problem is real."},
+{sub:'r/Jazz', title:'Jazz Piano App — what annoys you about your practice setup?', tier:'Tier 1 — on-topic threads', archetype:'jazz-purist', action:'new', url:'https://old.reddit.com/r/Jazz/comments/1pshb7g/', copy:"Honestly the thing I wish existed but doesn't: something that treats a lead sheet as a real lead sheet, not just a chord grid. I don't need gamification, I need the actual tune, decent voicings, and a way to hear it without programming a fake band myself. Streaks and badges are not it for me."},
+{sub:'r/trumpet', title:'how do you keep your musical life organized (OpusMode)', tier:'Tier 1 — on-topic threads', archetype:'hobbyist-consolidation', action:'reply', replyTo:"RoeddipusHex’s skeptical comment (not the main post)", url:'https://old.reddit.com/r/trumpet/comments/1t063hn/trumpet_players_how_do_you_keep_your_musical_life/oj6tf2b/', copy:"Disagree a bit with the take above — for a working pro with a system that already works, sure, don't rebuild it. But for someone like me (day job, practicing jazz trumpet in the gaps), the scattered-tools thing is real and it's why I ended up building my own version just to get my own practice under control. Different audience, both things can be true."},
+{sub:'r/Jazz', title:'App to transcribe, store music, and more! (Jazz Pad)', tier:'Tier 1 — on-topic threads', archetype:'dev-peer', action:'new', url:'https://old.reddit.com/r/Jazz/comments/1ntjwl9/', copy:"The transcription-loop feature is the thing I'd actually use daily. I've been down the same road building a practice portal for jazz trumpet — curious how you're handling storage/sync, that's the part that always gets complicated."},
+{sub:'r/musicians', title:'Cover Band Charts', tier:'Tier 1 — on-topic threads', archetype:'dev-peer', action:'new', url:'https://old.reddit.com/r/musicians/comments/1ijvhdx/', copy:"For anything outside straight jazz standards, charts are usually more work than they're worth — send the recording and expect people to learn it by ear is the actual norm for cover bands. iReal's really built for the jazz-repertoire use case specifically."},
+{sub:'r/Jazz', title:"I'm building a jazz practice app (Jazz Library / CleverJazz)", tier:'Tier 1 — on-topic threads', archetype:'dev-peer', action:'new', url:'https://old.reddit.com/r/Jazz/comments/1k335u5/', copy:"Like the spaced-repetition angle on licks — most practice tools treat everything as equally 'due' which isn't how retention actually works. Built something in the same space for jazz trumpet specifically; always curious how others are thinking about the review-scheduling problem."},
+{sub:'r/Jazz', title:'Chart needed: Here It Is Tomorrow Again (Billie Holiday)', tier:'Tier 1 — on-topic threads', archetype:'dev-peer', action:'new', url:'https://old.reddit.com/r/Jazz/comments/1uipmqw/chart_needed_here_it_is_tomorrow_again_billie/', copy:"Not in iReal's default library and not an obvious Google hit either — worth checking a physical/PDF fake book index if you haven't (Fake Book Index app on iOS/Android searches ~90 books at once, might turn it up). If you find a chart, post it back here, I'd bet others have hit the same wall."},
+{sub:'r/musicians', title:'Is this a beneficial way to practice? Randomized gap training?', tier:'Tier 1 — on-topic threads', archetype:'dev-peer', action:'new', url:'https://old.reddit.com/r/musicians/comments/1ufiz7i/is_this_a_beneficial_way_to_practice_randomized/', copy:"Randomized gap/silent-bar training is legit — it's the same principle behind 'audiation' drills, forces you to keep internal time instead of leaning on the click. The failure mode is doing it so early you never build a stable sense of the pulse in the first place — I'd want a steady-time phase before introducing gaps, not day one."},
+{sub:'r/Jazz', title:'Drill common chord progressions', tier:'Tier 1 — on-topic threads', archetype:'dev-peer', action:'new', url:'https://old.reddit.com/r/Jazz/comments/1ts25o6/drill_common_chord_progressions/', copy:"Being the first comment here — ii-V-I drilling in every key is the one thing I still don't have a good tool for, everything either forces a fixed order or doesn't transpose cleanly. Following this."},
+{sub:'r/trumpet', title:'How exactly do you USE more air?', tier:'Tier 2 — karma-building (no pitch)', archetype:'trumpet-peer', action:'new', url:'https://old.reddit.com/r/trumpet/comments/1ukyuhc/how_exactly_do_you_use_more_air/', copy:"[Talking point — use your own words] Breath support vs. just blowing harder — the diaphragm/air-column framing, and what specifically clicked for you."},
+{sub:'r/trumpet', title:'Is it wise to practice for more than an hour?', tier:'Tier 2 — karma-building (no pitch)', archetype:'trumpet-peer', action:'new', url:'https://old.reddit.com/r/trumpet/comments/1ul4kmd/is_it_wise_to_practice_for_more_than_an_hour/', copy:"[Talking point — use your own words] Your actual constraint (day job, short windows) and how shorter, more frequent sessions have worked for you."},
+{sub:'r/trumpet', title:'Trumpet embouchure leaking when centered', tier:'Tier 2 — karma-building (no pitch)', archetype:'trumpet-peer', action:'new', url:'https://old.reddit.com/r/trumpet/comments/1ukuhsj/trumpet_embouchure_leaking_when_centered/', copy:"[Talking point — only if this matches your experience] Corner/air-leak issues are specific — don't generalize if it's not something you've dealt with directly."},
+{sub:'r/trumpet', title:'Stuck on high C - more practice or time for a new mouthpiece?', tier:'Tier 2 — karma-building (no pitch)', archetype:'trumpet-peer', action:'new', url:'https://old.reddit.com/r/trumpet/comments/1ul9xwa/stuck_on_high_c_more_practice_or_time_for_a_new/', copy:"[Talking point — use your own words] Range-building as a patience problem more than a gear problem — if that matches your own push toward Bb5."},
+{sub:'r/trumpet', title:'Caruso exercise question', tier:'Tier 2 — karma-building (no pitch)', archetype:'trumpet-peer', action:'new', url:'https://old.reddit.com/r/trumpet/comments/1ukq8pc/caruso_exercise_question/', copy:"[Talking point — use your own words] If you've worked Caruso or adjacent rest-based methods — ties directly to the warmup material Woodshed already engraves."},
+{sub:'r/trumpet', title:'What to practice as a beginner (4 months into trumpet)', tier:'Tier 2 — karma-building (no pitch)', archetype:'trumpet-peer', action:'new', url:'https://old.reddit.com/r/trumpet/comments/1ukxbi7/what_to_practice_as_a_beginner_4_months_into/', copy:"[Talking point — use your own words] As a comeback/adult-learner yourself, what you'd tell someone just starting out — warm, no product mention."}
+];
+
+const list = document.getElementById('list');
+let lastTier = null;
+
+function subClass(sub){
+  if(sub === 'r/Jazz') return 'b-purple';
+  if(sub === 'r/musicians') return 'b-coral';
+  return 'b-teal';
+}
+
+ITEMS.forEach((item) => {
+  if(item.tier !== lastTier){
+    lastTier = item.tier;
+    const h = document.createElement('div');
+    h.className = 'tier-heading';
+    h.textContent = item.tier;
+    list.appendChild(h);
+  }
+
+  const card = document.createElement('div');
+  card.className = 'card';
+
+  const top = document.createElement('div');
+  top.className = 'row';
+
+  const badges = document.createElement('div');
+  badges.className = 'badges';
+  const subBadge = document.createElement('span');
+  subBadge.className = 'badge ' + subClass(item.sub);
+  subBadge.textContent = item.sub;
+  const archBadge = document.createElement('span');
+  archBadge.className = 'badge b-muted';
+  archBadge.textContent = item.archetype;
+  badges.appendChild(subBadge);
+  badges.appendChild(archBadge);
+
+  const actionBadge = document.createElement('span');
+  actionBadge.className = 'badge ' + (item.action === 'reply' ? 'b-reply' : 'b-new');
+  actionBadge.textContent = item.action === 'reply' ? 'Reply to a comment' : 'New top-level comment';
+
+  top.appendChild(badges);
+  top.appendChild(actionBadge);
+  card.appendChild(top);
+
+  const titleLink = document.createElement('a');
+  titleLink.href = item.url;
+  titleLink.target = '_blank';
+  titleLink.rel = 'noopener';
+  titleLink.className = 'title';
+  titleLink.textContent = item.title;
+  card.appendChild(titleLink);
+
+  if(item.replyTo){
+    const note = document.createElement('div');
+    note.className = 'note';
+    note.textContent = 'Link goes directly to ' + item.replyTo + '.';
+    card.appendChild(note);
+  }
+
+  const quote = document.createElement('div');
+  quote.className = 'quote';
+  quote.textContent = item.copy;
+  card.appendChild(quote);
+
+  const actions = document.createElement('div');
+  actions.className = 'actions';
+
+  const copyBtn = document.createElement('button');
+  copyBtn.textContent = 'Copy comment';
+  copyBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText(item.copy).then(() => {
+      copyBtn.textContent = 'Copied';
+      setTimeout(() => { copyBtn.textContent = 'Copy comment'; }, 1500);
+    });
+  });
+
+  const openLink = document.createElement('a');
+  openLink.href = item.url;
+  openLink.target = '_blank';
+  openLink.rel = 'noopener';
+  openLink.className = 'btn';
+  openLink.textContent = 'Open thread ↗';
+
+  actions.appendChild(copyBtn);
+  actions.appendChild(openLink);
+  card.appendChild(actions);
+
+  list.appendChild(card);
+});
+</script>
+</body>
+</html>
