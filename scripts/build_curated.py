@@ -6,12 +6,45 @@ to the curated TUNES without pulling the full 2.5MB charts-ireal.js. Regenerate 
 """
 import json, re
 
+# flat spellings, matching iReal's own 'key' strings (Eb/Ab/Bb/Db/Gb + trailing 'm' for minor)
+PITCH = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B']
+
 html = open('index.html', encoding='utf-8').read()
 # tune entries have id + title + composer
 titles = re.findall(r"id:'([^']+)',title:'((?:[^'\\]|\\.)*)',composer:", html)
 curated = []
 for _id, t in titles:
-    curated.append(t.replace("\\'", "'"))
+    curated.append((_id, t.replace("\\'", "'")))
+
+
+def tune_fallback(tune_id):
+    """When a curated tune has no iReal match, build its chart straight from the
+    hand-authored TUNES[] literal in index.html (its own `bars` + keyPc/minor), so
+    a pyRealParser hiccup upstream can't silently vanish it from the curated set."""
+    m = re.search(r"id:'" + re.escape(tune_id) + r"',", html)
+    if not m:
+        return None
+    # keyPc + minor live on the same (first) line of the entry, right after composer
+    km = re.search(r"keyPc:(-?\d+),minor:(true|false)", html[m.start():m.start() + 400])
+    if not km:
+        return None
+    key_pc, minor = int(km.group(1)), km.group(2) == 'true'
+    key = PITCH[key_pc % 12] + ('m' if minor else '') + ' (concert)'
+    # balanced-bracket slice of the bars:[ ... ] array, then '->" makes it valid JSON
+    b = html.index('[', html.index('bars:', m.end()))
+    depth, k = 0, b
+    while k < len(html):
+        if html[k] == '[':
+            depth += 1
+        elif html[k] == ']':
+            depth -= 1
+            if depth == 0:
+                k += 1
+                break
+        k += 1
+    bars = json.loads(html[b:k].replace("'", '"'))
+    return {'key': key, 'bars': bars}
+
 
 s = open('charts/charts-ireal.js', encoding='utf-8').read()
 arr = json.loads(s[s.index('concat(')+7:s.rindex(')')])
@@ -22,14 +55,22 @@ for c in arr:
         by.setdefault(norm(c['title']), c)
 
 out, seen = [], set()
-for t in curated:
+for _id, t in curated:
     n = norm(t)
+    if n in seen:
+        continue
     c = by.get(n)
-    if c and n not in seen:
+    if c:
         out.append({'title': c['title'], 'key': c.get('key', ''), 'bars': c['bars']})
         seen.add(n)
-    elif not c:
-        print('  (no iReal match for curated tune: '+t+')')
+    else:
+        fb = tune_fallback(_id)
+        if fb:
+            out.append({'title': t, 'key': fb['key'], 'bars': fb['bars']})
+            seen.add(n)
+            print('  (fell back to TUNES[] bars for curated tune: '+t+')')
+        else:
+            print('  (no iReal match AND no TUNES[] bars for curated tune: '+t+')')
 
 js = ("/* charts-curated.js — iReal changes for the curated tunes only (subset of charts-ireal.js),\n"
       "   loaded at boot so the overlay corrects the curated TUNES' changes without the full import.\n"

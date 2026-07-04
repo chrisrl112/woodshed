@@ -56,7 +56,7 @@
       if (window.supabase && window.supabase.createClient) return resolve(window.supabase);
       var s = document.createElement('script');
       s.async = true;
-      s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+      s.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.110.0/dist/umd/supabase.min.js';
       s.onload = function () {
         (window.supabase && window.supabase.createClient) ? resolve(window.supabase)
           : reject(new Error('supabase-js loaded but createClient missing'));

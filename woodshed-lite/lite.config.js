@@ -12,17 +12,46 @@
 window.WSL_CONFIG = {
 
   /* ---- WARMUP STATION ----------------------------------------------------
-   * One re-engraved public-domain exercise. Clarke Technical Study II is PD
-   * (1912) and the most-recognized trumpet warmup. Must be YOUR engraving —
-   * never a scanned modern (Carl Fischer) edition. */
-  warmup: {
-    id: 'clarke-study-2',          // must exist in charts/ (re-engrave via score-to-woodshed)
-    label: 'Clarke — Technical Study II',
-    defaultBpm: 72,
-    bpmMin: 40,
-    bpmMax: 160,
-    reps: 5,                       // rep check-off target shown in the tracker
-  },
+   * A 3-exercise carousel (◀ ▶ arrows switch; the metronome default tempo +
+   * range re-seed per exercise). All three are public domain. Entry shape
+   * mirrors jam.tunes (config-driven, no fork):
+   *   id        - stable id (carousel state / analytics)
+   *   type      - 'abc'   → branded ABCJS engraving (Clarke, from
+   *                         clarke-warmups-lite.js — MUST be your own engraving)
+   *               'image' → a cropped PD engraving PNG in assets/warmups/
+   *   label     - panel title
+   *   badge     - panel sup badge (PD attribution)
+   *   marking   - the staff-meta study line under the title
+   *   src       - image path (type:'image' only; relative to the deploy root)
+   *   defaultBpm / bpmMin / bpmMax - metronome seed when this exercise is active
+   *   reps      - rep check-off target shown in the tracker
+   * Clarke Technical Study is PD (1912); the two Arban studies are from the
+   * 1893 Carl Fischer Arban (public domain). Clarke must stay YOUR engraving. */
+  warmups: [
+    {
+      id: 'clarke-study-2', type: 'abc',
+      label: 'Clarke · Second Study, Ex. 27–28',
+      badge: 'PUBLIC DOMAIN · RE-ENGRAVED',
+      marking: 'half=80–120 · Play legato at first, then very lightly single tongue',
+      defaultBpm: 72, bpmMin: 40, bpmMax: 160, reps: 5,
+    },
+    {
+      id: 'arban-slur-8', type: 'image',
+      label: 'Arban · Studies on the Slur, No. 8',
+      badge: 'PUBLIC DOMAIN · 1893',
+      src: 'assets/warmups/arban-slur-08.png',
+      marking: 'Slur throughout · full, even air — lip slurs climbing to the top of the staff',
+      defaultBpm: 66, bpmMin: 40, bpmMax: 120, reps: 5,
+    },
+    {
+      id: 'arban-first-3', type: 'image',
+      label: 'Arban · First Studies, No. 3',
+      badge: 'PUBLIC DOMAIN · 1893',
+      src: 'assets/warmups/arban-first-studies-03.png',
+      marking: 'Light single tongue · keep the interval leaps clean and connected',
+      defaultBpm: 80, bpmMin: 40, bpmMax: 140, reps: 5,
+    },
+  ],
 
   /* ---- JAM STATION -------------------------------------------------------
    * PD lead sheets (melody shown — must be your engraving of a <=1930 tune)
@@ -33,7 +62,7 @@ window.WSL_CONFIG = {
    * attribution, not copyrighted content) — bars/key always come from
    * charts/charts-curated.js, looked up by label at mount time. */
   jam: {
-    default: 'blue-monk',          // hero CTA lands here, pre-cued
+    default: 'autumnlv',           // hero CTA lands here, pre-cued
     defaultBpm: 120,
 
     // Per tune: `bpm` (starting tempo), `groove` (drummer: swing|bossa|brushes)
@@ -44,9 +73,9 @@ window.WSL_CONFIG = {
       // Side of the Street' was dropped: it needs a PD-safe melody engraving
       // (type: 'leadsheet') that doesn't exist anywhere in charts/ yet — see
       // verify_public_safe.py. Re-add it once that engraving exists.
-      { id: 'blue-monk', label: 'Blue Monk', type: 'changes',
-        composer: 'Thelonious Monk', year: 1954, descriptor: 'B♭ BLUES', feel: 'MEDIUM SWING',
-        bpm: 130, groove: 'swing', compFeel: 'garland' },
+      { id: 'autumnlv', label: 'Autumn Leaves', type: 'changes',
+        composer: 'Kosma / Mercer', year: 1945, descriptor: 'F MINOR', feel: 'MEDIUM SWING',
+        bpm: 160, groove: 'swing', compFeel: 'garland' },
       { id: 'blue-bossa', label: 'Blue Bossa', type: 'changes',
         composer: 'Kenny Dorham', year: 1963, descriptor: 'C MINOR', feel: 'BOSSA NOVA',
         bpm: 160, groove: 'bossa', compFeel: 'evans' },

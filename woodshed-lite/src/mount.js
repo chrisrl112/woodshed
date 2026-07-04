@@ -40,23 +40,25 @@
     return m ? { root: m[1], sup: m[2] } : { root: p, sup: '' };
   }
 
-  // A bar with N chords splits its 4 beats N-ways (matches the engine's own
-  // comping convention for dense bars — see compBar's "wood-24" split). Render
-  // each chord as its own sub-cell with its own slash count ("G // F- //"),
-  // not one merged label sitting above a single unrelated 4-slash row.
+  // Every bar — single- or multi-chord — renders the same two-row structure so
+  // the chord label can never collide with the slash marks (the old single-chord
+  // path absolutely-positioned the slashes bottom-right, which overlapped the
+  // chord text on narrow bars). Row 1: one left-justified chord cell per chord
+  // (flex:1 each — a 2-chord bar just adds a second cell, e.g. "G  F-"). Row 2:
+  // a full-width strip of slash marks per chord, each matching its share of the
+  // measure ("/ / / /" for one chord; "/ /" + "/ /" for two). Font autofits via
+  // clamp() + a .bar-multi modifier so dense bars shrink instead of overflowing.
   function renderBarHTML(bar, idx, semis) {
     const num = `<span class="num">${idx + 1}</span>`;
-    if (bar.length === 1) {
-      const { root, sup } = splitChordForCard(bar[0], semis);
-      return `<div class="bar" data-bar="${idx}">${num}<span class="chord">${root}${sup ? `<sup>${sup}</sup>` : ''}</span><span class="slash">/ / / /</span></div>`;
-    }
-    const beatsEach = Math.max(1, Math.round(4 / bar.length));
-    const slashMini = Array(beatsEach).fill('/').join(' ');
-    const cells = bar.map(sym => {
+    const n = bar.length;
+    const beatsEach = Math.max(1, Math.round(4 / n));
+    const slashStrip = Array(beatsEach).fill('/').join(' ');
+    const chordCells = bar.map(sym => {
       const { root, sup } = splitChordForCard(sym, semis);
-      return `<div class="bar-split-cell"><span class="chord">${root}${sup ? `<sup>${sup}</sup>` : ''}</span><span class="slash-mini">${slashMini}</span></div>`;
+      return `<span class="chord">${root}${sup ? `<sup>${sup}</sup>` : ''}</span>`;
     }).join('');
-    return `<div class="bar bar-split" data-bar="${idx}">${num}<div class="bar-split-row">${cells}</div></div>`;
+    const slashCells = bar.map(() => `<span class="slash-cell">${slashStrip}</span>`).join('');
+    return `<div class="bar${n > 1 ? ' bar-multi' : ''}" data-bar="${idx}">${num}<div class="bar-chords">${chordCells}</div><div class="bar-slashes">${slashCells}</div></div>`;
   }
 
   // "Bb (concert)" -> "B♭"; "Dm (concert)" -> "D MINOR". `semis` transposes the
@@ -95,21 +97,28 @@
     return sync;
   }
 
-  // ── Warmup Station: real engraving (Clarke Second Study Ex. 27–28) ────────
-  // Strip ABCJS's own T: title line — it renders in ABCJS's default title font,
-  // which clashes with the brand type system. The branded "Ex. 27 · G major"
-  // labels in shell.html (data-copy="warmup.clarke_ex27_label" etc.) replace it.
+  // ── Warmup Station: 3-exercise carousel ───────────────────────────────────
+  // Clarke (branded ABCJS engraving) + two public-domain Arban studies (cropped
+  // engraving images). ◀ ▶ swap the active slide and re-seed the metronome
+  // default/range + reps. Config: CFG.warmups[] (see lite.config.js). ABCJS's
+  // own T: title line is stripped from the Clarke ABC so the branded HTML
+  // labels in shell.html carry the naming.
+  const WARMUPS = (CFG.warmups && CFG.warmups.length) ? CFG.warmups : [];
+
   const clarkeLine1 = document.querySelector('#clarke-line-1');
   const clarkeLine2 = document.querySelector('#clarke-line-2');
-  if (clarkeLine1 && window.CLARKE_WARMUPS) {
+  let clarkeRendered = false;
+  function renderClarke() {
+    if (clarkeRendered || !clarkeLine1 || !window.CLARKE_WARMUPS) return;
     const ex27 = window.CLARKE_WARMUPS.find(w => w.id === 'clarke-2-ex27');
     const ex28 = window.CLARKE_WARMUPS.find(w => w.id === 'clarke-2-ex28');
     const stripTitle = abc => abc.replace(/^T:.*\n/m, '');
     if (ex27) renderABC(clarkeLine1, stripTitle(ex27.abc), 1.1, { responsive: 'resize' });
     if (ex28) renderABC(clarkeLine2, stripTitle(ex28.abc), 1.1, { responsive: 'resize' });
+    clarkeRendered = true;
   }
 
-  // ── Warmup Station (Clarke metronome) ──────────────────────────────────────
+  // ── Warmup metronome elements ─────────────────────────────────────────────
   const warmupBpmInput   = document.querySelector('#warmup-bpm');
   const warmupBpmDisplay = document.querySelector('#warmup-bpm-display');
   const warmupBpmFill    = document.querySelector('#warmup-bpm-fill');
@@ -121,25 +130,106 @@
   const warmupStatusDots = document.querySelectorAll('#warmup-status-dots i');
   const warmupSubdivSeg  = document.querySelector('#warmup-subdiv-seg');
 
+  // Overlay the real range input on the decorative slider; keep the returned
+  // sync() so the carousel can repaint the fill/knob after a BPM re-seed.
+  let syncWarmupSlider = () => {};
   if (warmupBpmInput) {
-    const cfg = CFG.warmup;
-    warmupBpmInput.min   = cfg.bpmMin;
-    warmupBpmInput.max   = cfg.bpmMax;
-    warmupBpmInput.value = cfg.defaultBpm;
-    warmupBpmDisplay.textContent = cfg.defaultBpm;
-    if (warmupTempoWord) warmupTempoWord.textContent = tempoMarking(cfg.defaultBpm);
-
-    bindSlider(warmupBpmInput, warmupBpmFill, warmupBpmKnob, bpm => {
+    syncWarmupSlider = bindSlider(warmupBpmInput, warmupBpmFill, warmupBpmKnob, bpm => {
       warmupBpmDisplay.textContent = bpm;
       if (warmupTempoWord) warmupTempoWord.textContent = tempoMarking(bpm);
       if (Metro.playing) Metro.setBpm(bpm);
     });
+  }
 
-    function setWarmupStatus(playing) {
-      warmupStatusDots.forEach((d, i) => d.classList.toggle('on', playing ? i === 1 : i === 0));
+  // ── Reps tracker (manual check-off — click a dot to mark reps complete up to
+  //    that point; click the current boundary again to undo). Illustrative only
+  //    — no persistence. repsTotal re-seeds per exercise (generic across all
+  //    three unless a warmups[] entry sets a different `reps`). ──────────────
+  const repsDotsEl   = document.querySelector('#warmup-reps-dots');
+  const repsCountEl   = document.querySelector('#warmup-reps-count');
+  const warmupLogBtn  = document.querySelector('#warmup-log-btn');
+  let repsTotal      = (WARMUPS[0] && WARMUPS[0].reps) || 5;
+  let repsCompleted  = 0;
+
+  function renderReps() {
+    if (!repsDotsEl) return;
+    repsDotsEl.innerHTML = '';
+    for (let i = 0; i < repsTotal; i++) {
+      const dot = document.createElement('i');
+      if (i < repsCompleted) dot.className = 'done';
+      else if (i === repsCompleted) dot.className = 'cur';
+      dot.dataset.idx = i;
+      repsDotsEl.appendChild(dot);
     }
-    setWarmupStatus(false);
+    if (repsCountEl) repsCountEl.textContent = `${repsCompleted} / ${repsTotal}`;
+    if (warmupLogBtn) warmupLogBtn.disabled = repsCompleted < repsTotal;
+  }
 
+  // ── Carousel state + render ───────────────────────────────────────────────
+  const exTitle     = document.querySelector('#warmup-ex-title');
+  const exBadge     = document.querySelector('#warmup-ex-badge');
+  const exCount     = document.querySelector('#warmup-ex-count');
+  const exMarking   = document.querySelector('#clarke-tempo-marking');
+  const exStaffMeta = document.querySelector('#warmup .staff-meta');
+  const abcSlide    = document.querySelector('#warmup-abc-slide');
+  const imgSlide    = document.querySelector('#warmup-image-slide');
+  const warmupImg   = document.querySelector('#warmup-image');
+  const exPrev      = document.querySelector('#warmup-ex-prev');
+  const exNext      = document.querySelector('#warmup-ex-next');
+  let activeWarmup  = 0;
+
+  function renderWarmup(idx) {
+    if (!WARMUPS.length) return;
+    const n = WARMUPS.length;
+    activeWarmup = ((idx % n) + n) % n;
+    const w = WARMUPS[activeWarmup];
+
+    if (exTitle)   exTitle.textContent   = w.label   || '';
+    if (exBadge)   exBadge.textContent   = w.badge   || '';
+    if (exMarking) exMarking.textContent = w.marking || '';
+    if (exCount)   exCount.textContent   = `${activeWarmup + 1} / ${n}`;
+
+    const isImg = w.type === 'image';
+    if (abcSlide) abcSlide.hidden = isImg;
+    if (imgSlide) imgSlide.hidden = !isImg;
+    // The Arban crops carry their own clef/metre; drop the HTML clef+ts glyphs
+    // (cut-time C) on image slides so they don't sit above a common-time crop.
+    if (exStaffMeta) exStaffMeta.classList.toggle('no-glyph', isImg);
+
+    if (isImg) {
+      if (warmupImg) { warmupImg.src = w.src || ''; warmupImg.alt = w.label || ''; }
+    } else {
+      renderClarke();
+    }
+
+    // Re-seed the metronome default + range for this exercise.
+    if (warmupBpmInput) {
+      if (w.bpmMin != null) warmupBpmInput.min = w.bpmMin;
+      if (w.bpmMax != null) warmupBpmInput.max = w.bpmMax;
+      const bpm = w.defaultBpm != null ? w.defaultBpm : Number(warmupBpmInput.value);
+      warmupBpmInput.value = bpm;
+      if (warmupBpmDisplay) warmupBpmDisplay.textContent = bpm;
+      if (warmupTempoWord)  warmupTempoWord.textContent = tempoMarking(bpm);
+      syncWarmupSlider();
+      if (Metro.playing) Metro.setBpm(bpm);
+    }
+
+    // Fresh rep count for the new exercise.
+    repsTotal = w.reps || repsTotal;
+    repsCompleted = 0;
+    renderReps();
+  }
+
+  if (exPrev) exPrev.addEventListener('click', () => renderWarmup(activeWarmup - 1));
+  if (exNext) exNext.addEventListener('click', () => renderWarmup(activeWarmup + 1));
+
+  // ── Metronome status + play/stop ──────────────────────────────────────────
+  function setWarmupStatus(playing) {
+    warmupStatusDots.forEach((d, i) => d.classList.toggle('on', playing ? i === 1 : i === 0));
+  }
+  setWarmupStatus(false);
+
+  if (warmupPlay && warmupBpmInput) {
     warmupPlay.onclick = () => {
       if (Metro.playing) {
         Metro.stop();
@@ -177,29 +267,6 @@
     });
   }
 
-  // ── Reps tracker (manual check-off — click a dot to mark reps complete up
-  //    to that point; click the current boundary again to undo). Illustrative
-  //    only — no persistence yet; "Log it" just confirms the moment. ────────
-  const repsDotsEl  = document.querySelector('#warmup-reps-dots');
-  const repsCountEl = document.querySelector('#warmup-reps-count');
-  const warmupLogBtn = document.querySelector('#warmup-log-btn');
-  const repsTotal   = CFG.warmup.reps;
-  let repsCompleted = 0;
-
-  function renderReps() {
-    if (!repsDotsEl) return;
-    repsDotsEl.innerHTML = '';
-    for (let i = 0; i < repsTotal; i++) {
-      const dot = document.createElement('i');
-      if (i < repsCompleted) dot.className = 'done';
-      else if (i === repsCompleted) dot.className = 'cur';
-      dot.dataset.idx = i;
-      repsDotsEl.appendChild(dot);
-    }
-    repsCountEl.textContent = `${repsCompleted} / ${repsTotal}`;
-    if (warmupLogBtn) warmupLogBtn.disabled = repsCompleted < repsTotal;
-  }
-
   if (repsDotsEl) {
     repsDotsEl.addEventListener('click', e => {
       const idx = Number(e.target.dataset.idx);
@@ -207,7 +274,6 @@
       repsCompleted = (repsCompleted === idx + 1) ? idx : idx + 1;
       renderReps();
     });
-    renderReps();
   }
 
   if (warmupLogBtn) {
@@ -222,6 +288,9 @@
       }, 1800);
     });
   }
+
+  // Initial carousel paint (also seeds the metronome + reps for exercise 1).
+  renderWarmup(0);
 
   // ── Practice-block timer (5-minute countdown) ──────────────────────────────
   // A branded session clock above the Clarke study. Starts on its own button or
