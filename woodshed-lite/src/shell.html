@@ -594,6 +594,68 @@ img,svg{display:block;}
 @media(max-width:640px){ .pitch-flow .line-strike{white-space:normal; font-size:clamp(1.4rem,6vw,2rem);} }
 
 @media(prefers-reduced-motion:reduce){ *{animation:none !important;} }
+
+/* ============================================================ MOBILE LAYOUT
+   Phones + iPad portrait. The desktop grids already collapse to one column at
+   880/920px; this pass makes that single column actually COMPACT — the giant
+   metronome number, full-viewport panels and one-long-scroll were the problem,
+   not the stacking. Targets ≤760px (covers iPhone + iPad portrait). */
+@media(max-width:760px){
+  /* reclaim the huge section padding — this alone kills most of the scroll */
+  .station{ padding:44px 18px; }
+  .jam-shell{ padding:44px 18px; }
+  .station-head{ margin-bottom:22px; }
+  .station-sub{ font-size:.95rem; margin-top:10px; }
+
+  /* ── Warmup (§2) ────────────────────────────────────────────────────────── */
+  .warmup-grid{ gap:16px; }
+  .warmup-side{ gap:16px; }
+  .panel-body{ padding:16px 16px 18px; }
+  .staff-meta{ padding:14px 6px 0; gap:10px; margin-bottom:6px; }
+  .staff-meta .clef{ font-size:36px; }
+
+  /* the "gigantic" tempo number — cut it right down and sit the label beside it */
+  .metro{ flex-direction:row; align-items:baseline; justify-content:center; gap:10px; padding:2px 0; flex-wrap:wrap; }
+  .metro .bpm{ font-size:34px; }
+  .metro .bpm-lab{ font-size:11px; letter-spacing:.14em; }
+  .metro-beats{ flex-basis:100%; justify-content:center; margin-top:8px; gap:8px; }
+  .metro-beats i{ width:11px; height:11px; }
+  .slider{ margin-top:12px; }
+  .subdiv-row{ margin-top:10px; }
+  #warmup-play{ margin-top:12px !important; }
+
+  /* practice-block timer: let it wrap tightly instead of a tall stack */
+  .ptimer{ padding:12px 14px; gap:12px; }
+  .ptimer .pt-clock{ font-size:30px; }
+
+  /* reps: shrink the log button gap */
+  #warmup-log-btn{ margin-top:12px !important; }
+
+  /* ── Jam (§5) ───────────────────────────────────────────────────────────── */
+  .jam-grid{ gap:18px; }
+  /* 3 stacked full-width tune tiles -> one swipeable horizontal row */
+  #jam-tune-list{
+    display:flex; gap:10px; overflow-x:auto; padding-bottom:6px;
+    -webkit-overflow-scrolling:touch; scroll-snap-type:x proximity;
+    scrollbar-width:none;
+  }
+  #jam-tune-list::-webkit-scrollbar{ display:none; }
+  #jam-tune-list .tune{ flex:0 0 auto; width:auto; min-width:220px; max-width:78vw; scroll-snap-align:start; padding:12px 14px; }
+  .tunes{ gap:10px; }
+  .band-row{ margin-top:14px; }
+
+  .chartcard{ padding:16px 16px 18px; }
+  .cc-head .tune-name{ font-size:clamp(1.4rem,7vw,1.85rem); }
+  .chart .bar{ min-height:64px; padding:8px 9px; }
+}
+
+/* Narrow phones: one more squeeze so a full form fits without endless scroll. */
+@media(max-width:430px){
+  .station-num .big{ font-size:2rem; }
+  .metro .bpm{ font-size:30px; }
+  #jam-tune-list .tune{ min-width:200px; }
+  .chart{ grid-template-columns:repeat(2,1fr); }   /* 4-per-row chord grid -> 2-per-row so chords stay legible */
+}
 </style>
 
 <!-- ============================================================================
