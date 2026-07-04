@@ -596,64 +596,101 @@ img,svg{display:block;}
 @media(prefers-reduced-motion:reduce){ *{animation:none !important;} }
 
 /* ============================================================ MOBILE LAYOUT
-   Phones + iPad portrait. The desktop grids already collapse to one column at
-   880/920px; this pass makes that single column actually COMPACT — the giant
-   metronome number, full-viewport panels and one-long-scroll were the problem,
-   not the stacking. Targets ≤760px (covers iPhone + iPad portrait). */
+   TRANSFORMATIONAL compaction so a whole station fits ~one phone screen (was
+   3 screens tall). The desktop grids collapse to one column at 880/920px but
+   left everything full-size. Here we: (a) collapse the in-station marketing
+   header — the hero above already carries the pitch; (b) bound the sheet-music
+   engraving to its own scroll area so 4 staff lines can't shove the controls
+   off-screen; (c) shrink the metronome, click styles and reps into compact
+   toolbars. ≤760px covers iPhone + iPad portrait. */
 @media(max-width:760px){
-  /* reclaim the huge section padding — this alone kills most of the scroll */
-  .station{ padding:44px 18px; }
-  .jam-shell{ padding:44px 18px; }
-  .station-head{ margin-bottom:22px; }
-  .station-sub{ font-size:.95rem; margin-top:10px; }
+  /* compact section chrome — reclaim the huge padding + drop the marketing head */
+  .station{ padding:22px 15px; }
+  .jam-shell{ padding:22px 15px; }
+  .station-head{ margin-bottom:12px; }
+  .station-num{ margin-bottom:4px; gap:10px; }
+  .station-num .big{ font-size:1.6rem; }
+  .station-num .lab{ font-size:10.5px; }
+  .station-line{ font-size:1.15rem; max-width:none; }
+  .station-sub{ display:none; }        /* the hero already sold it — reclaim ~1 screen */
 
-  /* ── Warmup (§2) ────────────────────────────────────────────────────────── */
-  .warmup-grid{ gap:16px; }
-  .warmup-side{ gap:16px; }
-  .panel-body{ padding:16px 16px 18px; }
-  .staff-meta{ padding:14px 6px 0; gap:10px; margin-bottom:6px; }
-  .staff-meta .clef{ font-size:36px; }
+  /* ── Warmup (§2) — the whole console on ~one screen ─────────────────────── */
+  .warmup-grid{ gap:10px; }
+  .warmup-side{ gap:10px; }
+  .panel-bar{ padding:9px 14px; }
+  .panel-bar .title{ font-size:12.5px; }
+  .panel-bar .sup{ font-size:10px; }
 
-  /* the "gigantic" tempo number — cut it right down and sit the label beside it */
-  .metro{ flex-direction:row; align-items:baseline; justify-content:center; gap:10px; padding:2px 0; flex-wrap:wrap; }
-  .metro .bpm{ font-size:34px; }
-  .metro .bpm-lab{ font-size:11px; letter-spacing:.14em; }
-  .metro-beats{ flex-basis:100%; justify-content:center; margin-top:8px; gap:8px; }
-  .metro-beats i{ width:11px; height:11px; }
-  .slider{ margin-top:12px; }
-  .subdiv-row{ margin-top:10px; }
-  #warmup-play{ margin-top:12px !important; }
+  /* practice-block timer -> slim bar */
+  .ptimer{ padding:9px 12px; gap:10px; }
+  .ptimer .pt-clock{ font-size:24px; }
+  .ptimer .pt-lab{ font-size:11px; }
+  .ptimer .pt-sub{ display:none; }
+  .ptimer .pt-btn{ padding:7px 12px; font-size:11px; }
 
-  /* practice-block timer: let it wrap tightly instead of a tall stack */
-  .ptimer{ padding:12px 14px; gap:12px; }
-  .ptimer .pt-clock{ font-size:30px; }
+  /* exercise engraving -> its OWN bounded scroll box so it can't dominate */
+  .warmup-ex-panel .panel-body{ padding:6px 10px 10px; }
+  .staff-meta{ padding:8px 4px 0; gap:8px; margin-bottom:2px; }
+  .staff-meta .clef{ font-size:28px; }
+  .staff-meta .ts{ font-size:16px; }
+  .staff-meta .study{ font-size:10px; letter-spacing:.08em; }
+  #warmup-abc-slide, #warmup-image-slide{
+    max-height:38vh; overflow-y:auto; -webkit-overflow-scrolling:touch;
+    border:2px solid var(--line); border-radius:5px; padding:6px 6px 2px;
+  }
+  .clarke-ex-lab{ font-size:10px; margin-top:2px; padding:0 4px; }
+  .divline{ margin:2px 0; }
 
-  /* reps: shrink the log button gap */
-  #warmup-log-btn{ margin-top:12px !important; }
+  /* METRONOME -> compact strip: tiny readout, thin slider, tiny click chips,
+     small icon play button — no more full-screen panel */
+  .warmup-side .panel:first-child .panel-body{ display:flex; flex-direction:column; gap:8px; padding:12px 14px; }
+  .metro{ flex-direction:row; align-items:baseline; justify-content:flex-start; gap:8px; padding:0; }
+  .metro .bpm{ font-size:24px; }
+  .metro .bpm-lab{ font-size:10px; letter-spacing:.1em; }
+  .metro-beats{ margin:0 0 0 auto; gap:6px; }
+  .metro-beats i{ width:9px; height:9px; }
+  .slider{ margin:0; }
+  .subdiv-row{ margin:0; gap:8px; }
+  .subdiv-row .subdiv-lab{ font-size:10px; }
+  .seg.seg-sm button{ padding:4px 9px; font-size:11px; }        /* tiny click-style buttons */
+  #warmup-play{ margin:0 !important; padding:9px !important; }
+  #warmup-play span:not(.tri):not([id$="icon"]){ font-size:12px; }
 
-  /* ── Jam (§5) ───────────────────────────────────────────────────────────── */
-  .jam-grid{ gap:18px; }
+  /* REPS -> slim strip (undo the desktop "grow to fill" so it isn't tall) */
+  .warmup-side .panel:last-child{ flex:none; }
+  .warmup-side .panel:last-child .panel-body{ justify-content:flex-start; padding:12px 14px; }
+  .reps{ gap:8px; }
+  .reps .dots{ gap:10px; padding:2px 0; }
+  .reps .dots i{ width:20px; height:20px; }
+  #warmup-log-btn{ margin-top:8px !important; padding:9px !important; }
+  #warmup-log-btn span:not(.tri){ font-size:12px; }
+  .warmup-foot{ margin-top:10px; }
+
+  /* ── Jam (§5) ─────────────────────────────────────────────────────────── */
+  .jam-grid{ gap:14px; }
   /* 3 stacked full-width tune tiles -> one swipeable horizontal row */
   #jam-tune-list{
     display:flex; gap:10px; overflow-x:auto; padding-bottom:6px;
-    -webkit-overflow-scrolling:touch; scroll-snap-type:x proximity;
-    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch; scroll-snap-type:x proximity; scrollbar-width:none;
   }
   #jam-tune-list::-webkit-scrollbar{ display:none; }
-  #jam-tune-list .tune{ flex:0 0 auto; width:auto; min-width:220px; max-width:78vw; scroll-snap-align:start; padding:12px 14px; }
+  #jam-tune-list .tune{ flex:0 0 auto; width:auto; min-width:210px; max-width:78vw; scroll-snap-align:start; padding:11px 13px; }
   .tunes{ gap:10px; }
-  .band-row{ margin-top:14px; }
-
-  .chartcard{ padding:16px 16px 18px; }
-  .cc-head .tune-name{ font-size:clamp(1.4rem,7vw,1.85rem); }
-  .chart .bar{ min-height:64px; padding:8px 9px; }
+  .band-row{ margin-top:12px; }
+  .chartcard{ padding:14px 14px 16px; }
+  .cc-head .tune-name{ font-size:clamp(1.35rem,7vw,1.8rem); }
+  .jam-right .seg button{ padding:5px 9px; font-size:11.5px; }   /* tiny style buttons */
+  .jam-right .seg button .who{ font-size:8px; }
+  .chart .bar{ min-height:60px; padding:7px 8px; }
 }
 
-/* Narrow phones: one more squeeze so a full form fits without endless scroll. */
+/* Narrow phones: one more squeeze. */
 @media(max-width:430px){
-  .station-num .big{ font-size:2rem; }
-  .metro .bpm{ font-size:30px; }
-  #jam-tune-list .tune{ min-width:200px; }
+  .station-num .big{ font-size:1.5rem; }
+  .station-line{ font-size:1.1rem; }
+  .metro .bpm{ font-size:22px; }
+  #warmup-abc-slide, #warmup-image-slide{ max-height:34vh; }
+  #jam-tune-list .tune{ min-width:190px; }
   .chart{ grid-template-columns:repeat(2,1fr); }   /* 4-per-row chord grid -> 2-per-row so chords stay legible */
 }
 </style>
