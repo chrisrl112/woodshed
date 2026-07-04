@@ -22,6 +22,9 @@
   // Capture-phase + once, so it never interferes with the app's own handlers.
   (function installAudioUnlock() {
     if (typeof AC === 'undefined') return;
+    // Declare a media ("playback") audio session up front so iOS doesn't mute
+    // our Web Audio in silent mode (see AC.get() in the engine for the why).
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
     const EVENTS = ['pointerdown', 'touchend', 'mousedown', 'keydown'];
     let done = false;
     function unlock() {

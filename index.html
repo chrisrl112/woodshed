@@ -1274,7 +1274,13 @@ const EXERCISE_CATALOG=(()=>{ const seen={}, list=[];
 const MEMO_STEPS=['Sing the melody with the recording','Play the melody from memory (book closed)','Play roots in time with the band','Play guide tones (3rds & 7ths) through the form','Solo 3 choruses from memory'];
 /* ==================== AUDIO CORE ==================== */
 const AC={ctx:null,
-  get(){ if(!this.ctx){ this.ctx=new (window.AudioContext||window.webkitAudioContext)();
+  get(){
+    // iOS silences Web Audio in silent mode (unlike HTML5 media / most sites).
+    // Declaring the audio session "playback" routes our sound through the media
+    // channel so the metronome/band play regardless of the silent switch —
+    // matching how every normal site behaves. Set before creating the context.
+    try{ if(navigator.audioSession && navigator.audioSession.type!=='playback') navigator.audioSession.type='playback'; }catch(e){}
+    if(!this.ctx){ this.ctx=new (window.AudioContext||window.webkitAudioContext)();
     this.comp=this.ctx.createDynamicsCompressor(); this.comp.threshold.value=-12; this.comp.ratio.value=4;
     this.master=this.ctx.createGain(); this.master.gain.value=.9;
     this.master.connect(this.comp); this.comp.connect(this.ctx.destination);}
