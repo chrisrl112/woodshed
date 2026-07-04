@@ -10,6 +10,35 @@
 
   const CFG = window.WSL_CONFIG;
 
+  // ── iOS/Safari WebAudio unlock ─────────────────────────────────────────────
+  // On iOS Safari (and to a lesser degree Android Chrome) an AudioContext stays
+  // muted until it is BOTH resumed AND has actually started a buffer inside a
+  // real user gesture. AC.get() only calls resume() — so the metronome/band
+  // could stay silent for the whole session even though every later call looks
+  // fine. Fix: on the very FIRST pointer/touch/key anywhere on the page (the
+  // hero button, a scroll-tap, whatever comes before Play), resume the context
+  // AND play one silent sample. After that the context is "running" and every
+  // later sound — even one that starts after an await (drum decode) — plays.
+  // Capture-phase + once, so it never interferes with the app's own handlers.
+  (function installAudioUnlock() {
+    if (typeof AC === 'undefined') return;
+    const EVENTS = ['pointerdown', 'touchend', 'mousedown', 'keydown'];
+    let done = false;
+    function unlock() {
+      if (done) return;
+      try {
+        const ctx = AC.get();                 // creates the context + resume(), synchronously in the gesture
+        if (ctx.state === 'suspended') ctx.resume();
+        const buf = ctx.createBuffer(1, 1, 22050);   // 1-sample silent buffer
+        const src = ctx.createBufferSource();
+        src.buffer = buf; src.connect(ctx.destination); src.start(0);
+        if (ctx.state === 'running') done = true;
+      } catch (e) { /* try again on the next gesture */ }
+      if (done) EVENTS.forEach(ev => document.removeEventListener(ev, unlock, true));
+    }
+    EVENTS.forEach(ev => document.addEventListener(ev, unlock, true));
+  })();
+
   // ── helpers ──────────────────────────────────────────────────────────────
 
   // Resolve a config tune {id, label, type, composer, year, descriptor, feel}
