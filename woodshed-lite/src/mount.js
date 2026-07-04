@@ -10,6 +10,9 @@
 
   const CFG = window.WSL_CONFIG;
 
+  // Set by initMobileConsole(); lets the carousel re-seed the mobile tempo too.
+  let mcSyncBpm = () => {};
+
   // ── iOS/Safari WebAudio unlock ─────────────────────────────────────────────
   // On iOS Safari (and to a lesser degree Android Chrome) an AudioContext stays
   // muted until it is BOTH resumed AND has actually started a buffer inside a
@@ -243,6 +246,7 @@
       if (warmupBpmDisplay) warmupBpmDisplay.textContent = bpm;
       if (warmupTempoWord)  warmupTempoWord.textContent = tempoMarking(bpm);
       syncWarmupSlider();
+      mcSyncBpm(bpm, w.bpmMin, w.bpmMax);   // keep the mobile console's tempo in sync
       if (Metro.playing) Metro.setBpm(bpm);
     }
 
@@ -602,4 +606,115 @@
   } else {
     console.warn('[woodshed-lite] no jam tunes have chart data — Jam station has nothing to play.');
   }
+
+  // ── Mobile practice console (≤760px) ───────────────────────────────────────
+  // A compact top bar that replaces the three stacked warmup panels on phones:
+  // a countdown timer (tap to start/stop), a "72 BPM" chip (tap to start/stop
+  // the metronome — same Metro engine as desktop), and a gear that reveals
+  // tempo + click + a Streaks toggle. Streaks (off by default) reveals a reps
+  // counter. Shares warmupBpmInput as the tempo source of truth so the exercise
+  // carousel re-seeds it too (see mcSyncBpm above).
+  (function initMobileConsole() {
+    const $ = id => document.getElementById(id);
+    const timerBtn = $('mc-timer-toggle');
+    if (!timerBtn) return;               // console markup absent — nothing to wire
+    const tico = $('mc-tico'), timeEl = $('mc-time');
+    const bpmBtn = $('mc-bpm-toggle'), bpmIco = $('mc-bpm-ico'), bpmVal = $('mc-bpm-val');
+    const gear = $('mc-gear'), config = $('mc-config');
+    const range = $('mc-bpm-range'), rangeVal = $('mc-bpm-range-val'), subdivSeg = $('mc-subdiv-seg');
+    const streakToggle = $('mc-streak-toggle'), streak = $('mc-streak');
+    const repsCountEl = $('mc-reps-count'), repsDotsEl = $('mc-reps-dots'), logBtn = $('mc-log');
+
+    // — practice-block countdown (independent 5-minute timer) —
+    const TOTAL = 5 * 60;
+    let remaining = TOTAL, ticking = null;
+    const fmt = s => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    const paintTimer = () => { timeEl.textContent = fmt(remaining); };
+    function stopTimer() {
+      clearInterval(ticking); ticking = null;
+      timerBtn.classList.remove('on'); tico.textContent = '▶';
+      if (remaining <= 0) { remaining = TOTAL; paintTimer(); }
+    }
+    function startTimer() {
+      if (ticking) return;
+      timerBtn.classList.add('on'); tico.textContent = '■';
+      ticking = setInterval(() => { remaining = Math.max(0, remaining - 1); paintTimer(); if (remaining === 0) stopTimer(); }, 1000);
+    }
+    timerBtn.onclick = () => (ticking ? stopTimer() : startTimer());
+
+    // — metronome (shares Metro + warmupBpmInput with desktop) —
+    const curBpm = () => Number(warmupBpmInput ? warmupBpmInput.value : range.value) || 72;
+    function paintBpm() {
+      const b = curBpm();
+      bpmVal.textContent = b;
+      if (range) range.value = b;
+      if (rangeVal) rangeVal.textContent = b;
+    }
+    function metroOn()  { Metro.setBpm(curBpm()); Metro.start(); bpmBtn.classList.add('on'); bpmIco.textContent = '■'; }
+    function metroOff() { Metro.stop(); bpmBtn.classList.remove('on'); bpmIco.textContent = '▶'; }
+    bpmBtn.onclick = () => (Metro.playing ? metroOff() : metroOn());
+
+    // — gear reveals the config drawer —
+    gear.onclick = () => {
+      config.hidden = !config.hidden;
+      gear.setAttribute('aria-expanded', String(!config.hidden));
+    };
+
+    // — tempo slider (writes through to the shared source of truth) —
+    if (range) range.addEventListener('input', () => {
+      const b = Number(range.value);
+      if (warmupBpmInput) warmupBpmInput.value = b;
+      if (warmupBpmDisplay) warmupBpmDisplay.textContent = b;
+      bpmVal.textContent = b;
+      if (rangeVal) rangeVal.textContent = b;
+      syncWarmupSlider();
+      if (Metro.playing) Metro.setBpm(b);
+    });
+
+    // — click subdivision (same Metro flags as the desktop seg) —
+    if (subdivSeg) subdivSeg.addEventListener('click', e => {
+      const btn = e.target.closest('button[data-subdiv]');
+      if (!btn) return;
+      subdivSeg.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === btn));
+      if (btn.dataset.subdiv === '24') { Metro.mode24 = true; }
+      else { Metro.mode24 = false; Metro.subdiv = Number(btn.dataset.subdiv); }
+    });
+
+    // — streaks toggle reveals the reps counter —
+    let repsTotal = 5, repsDone = 0;
+    function renderReps() {
+      repsDotsEl.innerHTML = '';
+      for (let i = 0; i < repsTotal; i++) {
+        const d = document.createElement('i');
+        if (i < repsDone) d.className = 'done';
+        else if (i === repsDone) d.className = 'cur';
+        d.dataset.idx = i;
+        repsDotsEl.appendChild(d);
+      }
+      repsCountEl.textContent = repsDone + ' / ' + repsTotal;
+      if (logBtn) logBtn.disabled = repsDone < repsTotal;
+    }
+    streakToggle.addEventListener('click', () => {
+      const turningOn = streak.hidden;
+      streak.hidden = !turningOn;
+      streakToggle.setAttribute('aria-checked', String(turningOn));
+      streakToggle.textContent = turningOn ? 'On' : 'Off';
+      if (turningOn) renderReps();
+    });
+    repsDotsEl.addEventListener('click', e => {
+      const idx = Number(e.target.dataset.idx);
+      if (Number.isNaN(idx)) return;
+      repsDone = (repsDone === idx + 1) ? idx : idx + 1;
+      renderReps();
+    });
+
+    // — sync hook the exercise carousel calls when it re-seeds the tempo —
+    mcSyncBpm = (bpm, min, max) => {
+      if (range) { if (min != null) range.min = min; if (max != null) range.max = max; }
+      if (bpm != null) { bpmVal.textContent = bpm; if (range) range.value = bpm; if (rangeVal) rangeVal.textContent = bpm; }
+    };
+
+    paintTimer();
+    paintBpm();
+  })();
 })();

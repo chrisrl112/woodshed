@@ -595,6 +595,54 @@ img,svg{display:block;}
 
 @media(prefers-reduced-motion:reduce){ *{animation:none !important;} }
 
+/* ── Mobile practice console (component; shown only ≤760px, see media block) ── */
+.mconsole{ display:none; }   /* desktop uses the full panels instead */
+.mc-bar{ display:flex; align-items:stretch; gap:10px; }
+.mc-timer, .mc-bpm{
+  display:flex; align-items:center; gap:8px; padding:11px 14px; cursor:pointer;
+  background:var(--paper); border:2px solid var(--ink); border-radius:8px;
+  box-shadow:var(--shadow-sm); font-family:var(--mono); color:var(--ink);
+  transition:transform .08s, background .1s, color .1s;
+}
+.mc-timer{ flex:1; }
+.mc-bpm{ flex:1.2; justify-content:center; }
+.mc-timer .mc-tico, .mc-bpm-ico{ font-size:13px; color:var(--brass); }
+.mc-time{ font-size:20px; font-weight:700; font-variant-numeric:tabular-nums; letter-spacing:.02em; }
+.mc-bpm b{ font-size:22px; font-weight:700; color:var(--brass); font-variant-numeric:tabular-nums; }
+.mc-bpm-u{ font-family:var(--osw); font-weight:700; font-size:10px; letter-spacing:.14em; color:var(--muted); }
+.mc-timer:active, .mc-bpm:active, .mc-gear:active{ transform:translateY(1px); }
+/* active (running) state — filled brass */
+.mc-timer.on, .mc-bpm.on{ background:var(--brass); color:#fffdf4; }
+.mc-timer.on .mc-tico, .mc-bpm.on .mc-bpm-ico, .mc-bpm.on b{ color:#fffdf4; }
+.mc-bpm.on .mc-bpm-u{ color:rgba(255,253,244,.8); }
+.mc-gear{
+  flex:none; width:46px; display:grid; place-items:center; cursor:pointer;
+  background:var(--surface); border:2px solid var(--ink); border-radius:8px;
+  box-shadow:var(--shadow-sm); font-size:20px; color:var(--ink); line-height:1;
+}
+.mc-gear[aria-expanded="true"]{ background:var(--ink); color:var(--paper); }
+/* config drawer */
+.mc-config{ margin-top:10px; padding:12px 14px; background:var(--paper); border:2px solid var(--ink); border-radius:8px; box-shadow:var(--shadow-sm); display:flex; flex-direction:column; gap:12px; }
+.mc-config[hidden]{ display:none; }
+.mc-row{ display:flex; align-items:center; gap:12px; }
+.mc-row .mc-lab{ font-family:var(--osw); font-weight:700; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); flex:none; min-width:58px; }
+.mc-row input[type=range]{ flex:1; accent-color:var(--brass); height:22px; }
+.mc-row .mc-num{ font-family:var(--mono); font-size:14px; color:var(--brass); font-weight:700; min-width:30px; text-align:right; }
+.mc-row .seg.seg-sm{ margin-left:auto; }
+.mc-switch{ margin-left:auto; font-family:var(--osw); font-weight:700; font-size:12px; letter-spacing:.08em; text-transform:uppercase; padding:6px 16px; border:2px solid var(--ink); border-radius:999px; background:var(--surface); color:var(--muted); cursor:pointer; }
+.mc-switch[aria-checked="true"]{ background:var(--brass); color:#fffdf4; }
+/* streak strip */
+.mc-streak{ margin-top:10px; padding:12px 14px; background:var(--paper); border:2px solid var(--ink); border-radius:8px; box-shadow:var(--shadow-sm); }
+.mc-streak[hidden]{ display:none; }
+.mc-streak-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+.mc-streak-head .mc-num{ font-family:var(--mono); font-size:13px; color:var(--muted); }
+.mc-dots{ display:flex; gap:12px; justify-content:center; padding:2px 0 10px; }
+.mc-dots i{ width:22px; height:22px; border-radius:50%; border:2px solid var(--ink); background:var(--bg); box-shadow:var(--shadow-sm); cursor:pointer; }
+.mc-dots i.done{ background:var(--brass); }
+.mc-dots i.cur{ background:var(--paper); box-shadow:var(--shadow-sm), inset 0 0 0 4px var(--brass); }
+.mc-log{ width:100%; padding:9px; font-family:var(--osw); font-weight:700; font-size:12px; letter-spacing:.06em; text-transform:uppercase; border:2px solid var(--ink); border-radius:5px; background:var(--surface); color:var(--ink); cursor:pointer; }
+.mc-log:disabled{ opacity:.5; cursor:default; }
+
 /* ============================================================ MOBILE LAYOUT
    TRANSFORMATIONAL compaction so a whole station fits ~one phone screen (was
    3 screens tall). The desktop grids collapse to one column at 880/920px but
@@ -614,56 +662,27 @@ img,svg{display:block;}
   .station-line{ font-size:1.15rem; max-width:none; }
   .station-sub{ display:none; }        /* the hero already sold it — reclaim ~1 screen */
 
-  /* ── Warmup (§2) — the whole console on ~one screen ─────────────────────── */
+  /* ── Warmup (§2) — the console replaces the 3 stacked panels ────────────── */
+  .mconsole{ display:block; margin-bottom:10px; }
+  .ptimer{ display:none; }       /* -> mc-timer in the console */
+  .warmup-side{ display:none; }   /* metronome + reps -> the console */
   .warmup-grid{ gap:10px; }
-  .warmup-side{ gap:10px; }
+  .warmup-main{ display:flex; flex-direction:column; }
+
+  /* exercise engraving: full-width, the hero (no scroll box) */
+  .warmup-ex-panel .panel-body{ padding:8px 10px 12px; }
   .panel-bar{ padding:9px 14px; }
   .panel-bar .title{ font-size:12.5px; }
   .panel-bar .sup{ font-size:10px; }
-
-  /* practice-block timer -> slim bar */
-  .ptimer{ padding:9px 12px; gap:10px; }
-  .ptimer .pt-clock{ font-size:24px; }
-  .ptimer .pt-lab{ font-size:11px; }
-  .ptimer .pt-sub{ display:none; }
-  .ptimer .pt-btn{ padding:7px 12px; font-size:11px; }
-
-  /* exercise engraving -> its OWN bounded scroll box so it can't dominate */
-  .warmup-ex-panel .panel-body{ padding:6px 10px 10px; }
   .staff-meta{ padding:8px 4px 0; gap:8px; margin-bottom:2px; }
   .staff-meta .clef{ font-size:28px; }
   .staff-meta .ts{ font-size:16px; }
   .staff-meta .study{ font-size:10px; letter-spacing:.08em; }
-  #warmup-abc-slide, #warmup-image-slide{
-    max-height:38vh; overflow-y:auto; -webkit-overflow-scrolling:touch;
-    border:2px solid var(--line); border-radius:5px; padding:6px 6px 2px;
-  }
+  #warmup-abc-slide, #warmup-image-slide{ padding:2px 0 2px; }
+  .clarke-line{ padding:0; }
+  .clarke-line svg{ width:100%; }
   .clarke-ex-lab{ font-size:10px; margin-top:2px; padding:0 4px; }
   .divline{ margin:2px 0; }
-
-  /* METRONOME -> compact strip: tiny readout, thin slider, tiny click chips,
-     small icon play button — no more full-screen panel */
-  .warmup-side .panel:first-child .panel-body{ display:flex; flex-direction:column; gap:8px; padding:12px 14px; }
-  .metro{ flex-direction:row; align-items:baseline; justify-content:flex-start; gap:8px; padding:0; }
-  .metro .bpm{ font-size:24px; }
-  .metro .bpm-lab{ font-size:10px; letter-spacing:.1em; }
-  .metro-beats{ margin:0 0 0 auto; gap:6px; }
-  .metro-beats i{ width:9px; height:9px; }
-  .slider{ margin:0; }
-  .subdiv-row{ margin:0; gap:8px; }
-  .subdiv-row .subdiv-lab{ font-size:10px; }
-  .seg.seg-sm button{ padding:4px 9px; font-size:11px; }        /* tiny click-style buttons */
-  #warmup-play{ margin:0 !important; padding:9px !important; }
-  #warmup-play span:not(.tri):not([id$="icon"]){ font-size:12px; }
-
-  /* REPS -> slim strip (undo the desktop "grow to fill" so it isn't tall) */
-  .warmup-side .panel:last-child{ flex:none; }
-  .warmup-side .panel:last-child .panel-body{ justify-content:flex-start; padding:12px 14px; }
-  .reps{ gap:8px; }
-  .reps .dots{ gap:10px; padding:2px 0; }
-  .reps .dots i{ width:20px; height:20px; }
-  #warmup-log-btn{ margin-top:8px !important; padding:9px !important; }
-  #warmup-log-btn span:not(.tri){ font-size:12px; }
   .warmup-foot{ margin-top:10px; }
 
   /* ── Jam (§5) ─────────────────────────────────────────────────────────── */
@@ -689,7 +708,6 @@ img,svg{display:block;}
   .station-num .big{ font-size:1.5rem; }
   .station-line{ font-size:1.1rem; }
   .metro .bpm{ font-size:22px; }
-  #warmup-abc-slide, #warmup-image-slide{ max-height:34vh; }
   #jam-tune-list .tune{ min-width:190px; }
   .chart{ grid-template-columns:repeat(2,1fr); }   /* 4-per-row chord grid -> 2-per-row so chords stay legible */
 }
@@ -857,6 +875,48 @@ function saveState() {}
 
       <!-- left column: branded practice-block timer + the exercise panel -->
       <div class="warmup-main">
+
+      <!-- MOBILE-ONLY compact practice console (≤760px). Desktop hides this and
+           shows the full .ptimer + .warmup-side panels instead; mobile hides
+           those and shows this bar. Purely functional: a countdown timer with a
+           stop toggle, a "72 BPM" tap-to-start/stop metronome, and a gear that
+           reveals tempo + click + a Streaks toggle. Streaks (off by default)
+           reveals the reps counter. mount.js wires it (initMobileConsole). -->
+      <div class="mconsole" id="mconsole">
+        <div class="mc-bar">
+          <button type="button" class="mc-timer" id="mc-timer-toggle" aria-label="Practice timer start/stop">
+            <span class="mc-tico" id="mc-tico">▶</span><span class="mc-time" id="mc-time">5:00</span>
+          </button>
+          <button type="button" class="mc-bpm" id="mc-bpm-toggle" aria-label="Metronome start/stop">
+            <span class="mc-bpm-ico" id="mc-bpm-ico">▶</span><b id="mc-bpm-val">72</b><span class="mc-bpm-u">BPM</span>
+          </button>
+          <button type="button" class="mc-gear" id="mc-gear" aria-label="Metronome settings" aria-expanded="false">&#9881;</button>
+        </div>
+        <div class="mc-config" id="mc-config" hidden>
+          <div class="mc-row">
+            <span class="mc-lab">Tempo</span>
+            <input type="range" id="mc-bpm-range" min="40" max="160" value="72" aria-label="Tempo">
+            <b class="mc-num" id="mc-bpm-range-val">72</b>
+          </div>
+          <div class="mc-row">
+            <span class="mc-lab">Click</span>
+            <div class="seg seg-sm" id="mc-subdiv-seg">
+              <button type="button" data-subdiv="1" title="Quarter notes">&#9833;</button>
+              <button type="button" class="on" data-subdiv="2" title="Eighth notes">&#9835;</button>
+              <button type="button" data-subdiv="24" title="Beats 2 &amp; 4">2&amp;4</button>
+            </div>
+          </div>
+          <div class="mc-row">
+            <span class="mc-lab">Streaks</span>
+            <button type="button" class="mc-switch" id="mc-streak-toggle" role="switch" aria-checked="false">Off</button>
+          </div>
+        </div>
+        <div class="mc-streak" id="mc-streak" hidden>
+          <div class="mc-streak-head"><span class="mc-lab">Reps · clean passes</span><b class="mc-num" id="mc-reps-count">0 / 5</b></div>
+          <div class="mc-dots" id="mc-reps-dots"></div>
+          <button type="button" class="mc-log" id="mc-log">&#9998; Log it in the Woodshed</button>
+        </div>
+      </div>
 
       <!-- 5-minute practice-block countdown (mount.js drives it) -->
       <div class="ptimer" id="practice-timer">
