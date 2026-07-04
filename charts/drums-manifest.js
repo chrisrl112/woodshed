@@ -57,7 +57,7 @@ window.DRUM_TRACKS = [
   "url": "assets/drums/trim/Brushes%20150__180s.mp3",
   "file": "Brushes 150__180s.mp3",
   "bpm": 150,
-  "style": "swing",
+  "style": "brushes",
   "feel": "Brushes",
   "leadIn": 0.0
  },
@@ -67,7 +67,7 @@ window.DRUM_TRACKS = [
   "url": "assets/drums/trim/Brushes%20180__180s.mp3",
   "file": "Brushes 180__180s.mp3",
   "bpm": 180,
-  "style": "swing",
+  "style": "brushes",
   "feel": "Brushes",
   "leadIn": 0.0
  },

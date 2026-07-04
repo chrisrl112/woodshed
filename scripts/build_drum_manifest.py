@@ -30,7 +30,7 @@ def parse_style(name):
     if 'waltz' in n:                                   return 'waltz6', 'Waltz'
     if 'ballad' in n:                                  return 'ballad', 'Ballad'
     if 'funk' in n:                                    return 'funk', 'Funk'    # straight-8th band branch (see _compat / scheduleBar)
-    if 'brush' in n:                                   return 'swing', 'Brushes'
+    if 'brush' in n:                                   return 'brushes', 'Brushes'  # own style: a swing tune must not auto-grab a brush loop (only an explicit Brushes groove / manual pick)
     return 'swing', 'Swing'
 
 def detect_leadin(path):

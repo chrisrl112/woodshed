@@ -1339,7 +1339,8 @@ const DrumLoop={
   nudges:(()=>{ try{return JSON.parse(localStorage.getItem('woodshed_drumnudge')||'{}');}catch(e){return {};} })(),
   tracks(){ return window.DRUM_TRACKS||[]; },
   byId(id){ return this.tracks().find(t=>t.id===id)||null; },
-  _compat(ts,ss){ if(ss==='swing'||ss==='ballad') return ts==='swing'||ts==='ballad';
+  _compat(ts,ss){ if(ss==='swing'||ss==='ballad') return ts==='swing'||ts==='ballad'; // NOT brushes: a swing tune must not auto-grab a brush loop
+    if(ss==='brushes') return ts==='brushes';   // brushes is its own recording family — only reached by the Brushes groove / a manual pick
     if(ss==='bossa') return ts==='bossa'||ts==='latin';
     if(ss==='latin') return ts==='latin'||ts==='bossa';
     if(ss==='funk') return ts==='funk';
