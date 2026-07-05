@@ -161,12 +161,27 @@
       const body = lines.slice(k + 1).join(' ').replace(/\s+/g, ' ').trim();
       return lines.slice(0, k + 1).join('\n') + '\n' + body + '\n';
     };
-    const prep = abc => oneSystem(stripTitle(abc));
-    // Wide staffwidth so all 5 bars lay out on one line; responsive:'resize' then
-    // scales that single system down to whatever the container width is.
-    const oneLineOpts = { responsive: 'resize', measuresPerLine: 8, staffwidth: 800 };
-    if (ex27) renderABC(clarkeLine1, prep(ex27.abc), 1.1, oneLineOpts);
-    if (ex28) renderABC(clarkeLine2, prep(ex28.abc), 1.1, oneLineOpts);
+    // Two render modes, because ABCJS needs ~90px per readable system:
+    //  • DESKTOP (wide panel): collapse to one wide system (staffwidth:800) — the
+    //    single-line look Chris chose for desktop.
+    //  • MOBILE (≤760px): a phone can't fit 5 readable bars on one line, and one
+    //    tiny scaled line wastes the vertical budget. Render the NATURAL body so
+    //    the hard break puts the 4 melodic bars on line 1 and the whole-note
+    //    resolution on line 2 — two readable systems per study (4 lines total for
+    //    Ex.27+Ex.28), sized to fill the space with compact vertical spacing.
+    const mobile = window.innerWidth <= 760;
+    const desk = abc => oneSystem(stripTitle(abc));
+    if (mobile) {
+      // scale 0.66 is the largest that keeps BOTH studies at 2 systems (Ex.28's
+      // A♭ accidentals wrap it to 3 above ~0.68) — 4 readable lines total.
+      const mOpts = { responsive: 'resize', measuresPerLine: 8, paddingtop: 2, paddingbottom: 6, staffsep: 38 };
+      if (ex27) renderABC(clarkeLine1, stripTitle(ex27.abc), 0.66, mOpts);
+      if (ex28) renderABC(clarkeLine2, stripTitle(ex28.abc), 0.66, mOpts);
+    } else {
+      const dOpts = { responsive: 'resize', measuresPerLine: 8, staffwidth: 800 };
+      if (ex27) renderABC(clarkeLine1, desk(ex27.abc), 1.1, dOpts);
+      if (ex28) renderABC(clarkeLine2, desk(ex28.abc), 1.1, dOpts);
+    }
     clarkeRendered = true;
   }
 

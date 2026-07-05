@@ -796,7 +796,9 @@ function renderABC(el,abc,scale=1.05,opts={}){
   // lay a study out as ONE wide system, then scale the SVG down to the container).
   const w=opts.staffwidth||(el.clientWidth>60?Math.min(620,el.clientWidth-26):500);
   const mpl=opts.measuresPerLine||4;
-  const cfg={scale,staffwidth:w,paddingtop:14,paddingbottom:22,paddingleft:4,paddingright:4,foregroundColor:'#1d1a14',selectTypes:false,wrap:{minSpacing:1.4,maxSpacing:2.8,preferredMeasuresPerLine:mpl}};
+  const pt=opts.paddingtop!=null?opts.paddingtop:14, pb=opts.paddingbottom!=null?opts.paddingbottom:22;
+  const cfg={scale,staffwidth:w,paddingtop:pt,paddingbottom:pb,paddingleft:4,paddingright:4,foregroundColor:'#1d1a14',selectTypes:false,wrap:{minSpacing:1.4,maxSpacing:2.8,preferredMeasuresPerLine:mpl}};
+  if(opts.staffsep!=null) cfg.staffsep=opts.staffsep;   // tighten inter-system gap on mobile
   if(opts.responsive) cfg.responsive='resize'; // viewBox-scale the SVG to the container width: fits, no right-overflow, no scroll, height grows
   try{ ABCJS.renderAbc(el,abc,cfg);}
   catch(e){ el.innerHTML='<div style="color:#1d1a14;font-family:monospace;font-size:12px;padding:8px">'+abc.replace(/</g,'&lt;')+'</div>'; }

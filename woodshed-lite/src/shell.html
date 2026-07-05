@@ -663,6 +663,12 @@ img,svg{display:block;}
   .station-sub{ display:none; }        /* the hero already sold it — reclaim ~1 screen */
 
   /* ── Warmup (§2) — the console replaces the 3 stacked panels ────────────── */
+  /* Reclaim the in-station marketing header for the music — the hero already
+     carries it and the nav says WARMUP. This frees ~70px so the exercise
+     engraving can be readable (ABCJS needs ~90px per system) and still fit one
+     screen with Next Station visible. */
+  #warmup .station-head{ display:none; }
+  #warmup.station{ padding-top:16px; }
   .mconsole{ display:block; margin-bottom:10px; }
   .ptimer{ display:none; }       /* -> mc-timer in the console */
   .warmup-side{ display:none; }   /* metronome + reps -> the console */
