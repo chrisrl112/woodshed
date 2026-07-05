@@ -55,7 +55,7 @@ cp "$ROOT/vendor/abcjs-basic-min.js" "$DIST/vendor/" 2>/dev/null || echo "      
 # Warmup carousel images referenced by lite.config.js warmups[] (type:'image').
 # Both Arban studies are from the 1893 (public-domain) Arban — PD-safe to ship.
 mkdir -p "$DIST/assets/warmups"
-cp "$ROOT/assets/warmups/arban-slur-08.png" "$ROOT/assets/warmups/arban-first-studies-03.png" "$DIST/assets/warmups/" 2>/dev/null || echo "      (warmup images missing — carousel image slides will 404)"
+cp "$ROOT/assets/warmups/arban-slur-08.png" "$ROOT/assets/warmups/arban-major-scales.png" "$DIST/assets/warmups/" 2>/dev/null || echo "      (warmup images missing — carousel image slides will 404)"
 cp "$DIR/lite.config.js" "$DIST/" 2>/dev/null || true
 cp "$DIR/src/copy.js" "$DIST/"
 # content.json is SYMLINKED, not copied: edit woodshed-lite/content.json directly
