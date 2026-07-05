@@ -721,6 +721,12 @@ img,svg{display:block;}
   #jam .station-head{ display:none; }
   #jam #wsl-jam-slot{ flex:1; min-height:0; display:flex; flex-direction:column; }
   #jam .jam-grid{ flex:1; min-height:0; display:flex; flex-direction:column; gap:8px; grid-template-columns:none; }
+  /* CRITICAL: flex/grid items default to min-width:auto and won't shrink below
+     their content — a long nowrap key badge or a wide chord bar then forces the
+     whole card past the viewport (clipped by #jam overflow:hidden). Let the
+     whole chain shrink to the screen width. */
+  #jam .jam-grid, #jam .tunes, #jam-tune-list, #jam .jam-right,
+  #jam .chartcard, #jam .cc-head, #jam .transport, #jam .chart{ min-width:0; max-width:100%; }
 
   /* tune picker: three equal tiles in one row (no scroller to get cut off) */
   #jam .tunes{ flex:none; gap:6px; }
@@ -738,9 +744,11 @@ img,svg{display:block;}
   #jam .jam-right{ flex:1; min-height:0; display:flex; flex-direction:column; gap:0; }
   #jam .jam-right > .tunes-lab{ display:none; }
   #jam .chartcard{ flex:1; min-height:0; display:flex; flex-direction:column; padding:10px 12px 10px; }
-  #jam .cc-head{ flex:none; align-items:center; }
-  #jam .cc-head .tune-name{ font-size:1.25rem; }
+  #jam .cc-head{ flex:none; align-items:center; flex-wrap:wrap; gap:6px 10px; }
+  #jam .cc-head > div{ min-width:0; flex:1; }
+  #jam .cc-head .tune-name{ font-size:1.25rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   #jam .cc-head .tune-by{ font-size:10px; margin-top:2px; }
+  #jam .cc-head .key{ flex:none; font-size:10.5px; padding:4px 8px; }
   #jam .transport{ flex:none; margin-top:8px; gap:12px; }
   .jam-gear{ display:grid; }   /* reveal the gear on mobile */
 
