@@ -184,6 +184,19 @@ img,svg{display:block;}
 .warmup-grid{display:grid; grid-template-columns:1.55fr 1fr; gap:26px; align-items:stretch;}
 @media(max-width:880px){ .warmup-grid{grid-template-columns:1fr;} }
 
+/* DESKTOP warmup layout (>760px): a narrow console sidebar (the same compact
+   timer + metronome + gear console as mobile) beside a WIDE music column, so the
+   engraving owns most of the page. The big Practice-Block / Metronome / Reps
+   panels are replaced by the console. Mobile (≤760px) keeps its own layout. */
+@media(min-width:761px){
+  #warmup .warmup-grid{ display:block; }
+  #warmup .warmup-side{ display:none; }
+  #warmup .warmup-main{ display:grid; grid-template-columns:minmax(0,1fr) 320px; gap:26px; align-items:start; }
+  #warmup .warmup-main > .mconsole{ display:block; grid-column:2; grid-row:1; margin-bottom:0; }
+  #warmup .warmup-main > .ptimer{ display:none; }
+  #warmup .warmup-main > .warmup-ex-panel{ grid-column:1; grid-row:1; }
+}
+
 .panel{
   background:var(--paper); border:2px solid var(--ink); border-radius:6px;
   box-shadow:var(--shadow-lg); overflow:hidden;

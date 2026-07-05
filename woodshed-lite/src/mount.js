@@ -755,5 +755,18 @@
 
     paintTimer();
     paintBpm();
+
+    // On DESKTOP the console is a full sidebar with vertical room — reveal the
+    // config (tempo/click) and the reps by default instead of hiding them behind
+    // the gear (the gear still collapses them). Mobile keeps the compact
+    // gear-to-expand behaviour.
+    if (window.innerWidth > 760) {
+      config.hidden = false;
+      gear.setAttribute('aria-expanded', 'true');
+      streak.hidden = false;
+      streakToggle.setAttribute('aria-checked', 'true');
+      streakToggle.textContent = 'On';
+      renderReps();
+    }
   })();
 })();
