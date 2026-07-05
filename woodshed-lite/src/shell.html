@@ -662,34 +662,45 @@ img,svg{display:block;}
   .station-line{ font-size:1.15rem; max-width:none; }
   .station-sub{ display:none; }        /* the hero already sold it — reclaim ~1 screen */
 
-  /* ── Warmup (§2) — the console replaces the 3 stacked panels ────────────── */
-  /* Reclaim the in-station marketing header for the music — the hero already
-     carries it and the nav says WARMUP. This frees ~70px so the exercise
-     engraving can be readable (ABCJS needs ~90px per system) and still fit one
-     screen with Next Station visible. */
-  #warmup .station-head{ display:none; }
-  #warmup.station{ padding-top:16px; }
-  .mconsole{ display:block; margin-bottom:10px; }
+  /* ── Warmup (§2): ONE full screen, music fills the vertical space ───────── */
+  /* Each station is exactly one viewport (100dvh). The exercise panel flex-fills
+     everything below the console so the engraving fills the screen; Next Station
+     sits pinned at the bottom. Gentle scroll-snap so tapping Next Station lands
+     the next station cleanly — you can still free-scroll. */
+  html{ scroll-snap-type:y proximity; }
+  section.station, #jam{ scroll-snap-align:start; }
+  #warmup.station{
+    min-height:100dvh; box-sizing:border-box;
+    display:flex; flex-direction:column;
+    padding:10px 14px;
+  }
+  #warmup .station-head{ display:none; }   /* hero already carries the pitch */
+  #warmup #wsl-warmup-slot{ flex:1; min-height:0; display:flex; flex-direction:column; }
+  #warmup .warmup-grid{ flex:1; min-height:0; gap:0; }
+  #warmup .warmup-main{ flex:1; min-height:0; display:flex; flex-direction:column; }
+  .mconsole{ display:block; flex:none; margin-bottom:10px; }
   .ptimer{ display:none; }       /* -> mc-timer in the console */
   .warmup-side{ display:none; }   /* metronome + reps -> the console */
-  .warmup-grid{ gap:10px; }
-  .warmup-main{ display:flex; flex-direction:column; }
 
-  /* exercise engraving: full-width, the hero (no scroll box) */
-  .warmup-ex-panel .panel-body{ padding:8px 10px 12px; }
+  /* the exercise panel and its music grow to fill the remaining height */
+  #warmup .warmup-ex-panel{ flex:1; min-height:0; display:flex; flex-direction:column; }
+  #warmup .warmup-ex-panel .panel-body{ flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden; padding:8px 10px 10px; }
   .panel-bar{ padding:9px 14px; }
   .panel-bar .title{ font-size:12.5px; }
   .panel-bar .sup{ font-size:10px; }
-  .staff-meta{ padding:8px 4px 0; gap:8px; margin-bottom:2px; }
-  .staff-meta .clef{ font-size:28px; }
-  .staff-meta .ts{ font-size:16px; }
+  .staff-meta{ flex:none; padding:6px 4px 0; gap:8px; margin-bottom:2px; }
+  .staff-meta .clef{ font-size:26px; }
+  .staff-meta .ts{ font-size:15px; }
   .staff-meta .study{ font-size:10px; letter-spacing:.08em; }
-  #warmup-abc-slide, #warmup-image-slide{ padding:2px 0 2px; }
+  /* each slide fills the leftover panel height and centres its music */
+  #warmup .ex-slide{ flex:1; min-height:0; display:flex; flex-direction:column; justify-content:center; overflow:hidden; padding:2px 0; }
+  #warmup .ex-slide-img{ flex:1; display:flex; align-items:center; justify-content:center; min-height:0; padding:0; }
+  #warmup .ex-slide-img img{ width:100%; height:100%; object-fit:contain; }   /* fill the screen */
   .clarke-line{ padding:0; }
   .clarke-line svg{ width:100%; }
   .clarke-ex-lab{ font-size:10px; margin-top:2px; padding:0 4px; }
   .divline{ margin:2px 0; }
-  .warmup-foot{ margin-top:10px; }
+  #warmup .warmup-foot{ flex:none; margin-top:8px; }
 
   /* ── Jam (§5) ─────────────────────────────────────────────────────────── */
   .jam-grid{ gap:14px; }

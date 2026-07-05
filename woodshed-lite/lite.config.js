@@ -37,7 +37,7 @@ window.WSL_CONFIG = {
     },
     {
       id: 'arban-slur-8', type: 'image',
-      label: 'Arban · Studies on the Slur, No. 8',
+      label: 'Arban · Studies on the Slur, Nos. 8–11',
       badge: 'PUBLIC DOMAIN · 1893',
       src: 'assets/warmups/arban-slur-08.png',
       marking: 'Slur throughout · full, even air — lip slurs climbing to the top of the staff',
@@ -45,7 +45,7 @@ window.WSL_CONFIG = {
     },
     {
       id: 'arban-first-3', type: 'image',
-      label: 'Arban · First Studies, No. 3',
+      label: 'Arban · First Studies, Nos. 3–6',
       badge: 'PUBLIC DOMAIN · 1893',
       src: 'assets/warmups/arban-first-studies-03.png',
       marking: 'Light single tongue · keep the interval leaps clean and connected',
