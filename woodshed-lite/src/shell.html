@@ -323,9 +323,13 @@ img,svg{display:block;}
 }
 .cc-rule{height:5px; background:var(--brass); border-radius:2px; margin:18px 0 6px;}
 
-.chart{display:grid; grid-template-columns:repeat(4,1fr); gap:0; border:2px solid var(--ink); border-radius:5px; overflow:hidden; margin-top:10px;}
+/* minmax(0,1fr) forces EVERY column to the exact same width — plain 1fr lets a
+   wide bar (multi-chord or a long chord name) expand its column since grid items
+   default to min-width:auto, giving ragged, uneven boxes. min-width:0 on the bar
+   lets its content shrink/fit within the fixed cell (multi-chord font autofits). */
+.chart{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:0; border:2px solid var(--ink); border-radius:5px; overflow:hidden; margin-top:10px;}
 .bar{
-  position:relative; min-height:78px; padding:10px 12px; border-right:2px solid var(--ink);
+  position:relative; min-height:78px; min-width:0; padding:10px 12px; border-right:2px solid var(--ink);
   border-bottom:2px solid var(--ink); display:flex; flex-direction:column; justify-content:space-between;
   background:var(--paper);
 }
@@ -771,6 +775,11 @@ img,svg{display:block;}
   #jam .chart .bar .num{ font-size:9px; }
   #jam .chart .bar-chords .chord{ font-size:clamp(.95rem,4.6vw,1.25rem); }
   #jam .chart .bar-slashes .slash-cell{ font-size:10px; }
+  /* multi-chord bars: flex the chord text down so BOTH chords fit the fixed
+     half-cell without truncation (verified: 0 clipped chords at 390px). */
+  #jam .chart .bar-multi .bar-chords{ gap:4px; }
+  #jam .chart .bar-multi .bar-chords .chord{ font-size:11.5px; }
+  #jam .chart .bar-multi .bar-slashes .slash-cell{ font-size:8px; }
 }
 
 /* Narrow phones: one more squeeze. */
