@@ -625,6 +625,19 @@
     };
   }
 
+  // Mobile: the gear reveals the band-config drawer (transpose / drummer / feel)
+  // so the chord chart owns the screen. Toggles .cfg-open on the chart card; the
+  // ≤760px CSS shows/hides the drawer. On desktop the gear is hidden and the
+  // controls are always inline.
+  const jamGear = document.querySelector('#jam-gear');
+  const jamChartcard = document.querySelector('.chartcard');
+  if (jamGear && jamChartcard) {
+    jamGear.addEventListener('click', () => {
+      const open = jamChartcard.classList.toggle('cfg-open');
+      jamGear.setAttribute('aria-expanded', String(open));
+    });
+  }
+
   // Initial load — prefer CFG.jam.default, fall back to the first resolved tune.
   if (jamTunes.length) {
     const startIdx = Math.max(0, jamTunes.findIndex(t => t.id === CFG.jam.default));
