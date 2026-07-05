@@ -662,11 +662,12 @@ img,svg{display:block;}
   .station-line{ font-size:1.15rem; max-width:none; }
   .station-sub{ display:none; }        /* the hero already sold it — reclaim ~1 screen */
 
-  /* ── Warmup (§2): ONE full screen, music fills the vertical space ───────── */
-  /* Each station is exactly one viewport (100dvh). The exercise panel flex-fills
-     everything below the console so the engraving fills the screen; Next Station
-     sits pinned at the bottom. Gentle scroll-snap so tapping Next Station lands
-     the next station cleanly — you can still free-scroll. */
+  /* ── Warmup (§2): ONE full screen, the music page IS the content ───────── */
+  /* Each station is one viewport (100dvh) so Station 2 stays hidden until Next
+     Station. The exercise renders at its NATURAL size (a full-width page of
+     music, its own aspect — no stretching into a white box); Next Station is
+     pushed to the very bottom. A near-full-page crop fills most of the height on
+     its own. Gentle scroll-snap so the buttons land each station cleanly. */
   html{ scroll-snap-type:y proximity; }
   section.station, #jam{ scroll-snap-align:start; }
   #warmup.station{
@@ -676,35 +677,32 @@ img,svg{display:block;}
   }
   #warmup .station-head{ display:none; }   /* hero already carries the pitch */
   #warmup #wsl-warmup-slot{ flex:1; min-height:0; display:flex; flex-direction:column; }
-  #warmup .warmup-grid{ flex:1; min-height:0; gap:0; }
-  #warmup .warmup-main{ flex:1; min-height:0; display:flex; flex-direction:column; }
-  .mconsole{ display:block; flex:none; margin-bottom:10px; }
+  #warmup .warmup-grid{ gap:0; }
+  #warmup .warmup-main{ display:flex; flex-direction:column; }
+  .mconsole{ display:block; margin-bottom:10px; }
   .ptimer{ display:none; }       /* -> mc-timer in the console */
   .warmup-side{ display:none; }   /* metronome + reps -> the console */
 
-  /* the exercise panel and its music grow to fill the remaining height */
-  #warmup .warmup-ex-panel{ flex:1; min-height:0; display:flex; flex-direction:column; }
-  #warmup .warmup-ex-panel .panel-body{ flex:1; min-height:0; display:flex; flex-direction:column; overflow:hidden; padding:8px 10px 10px; }
+  #warmup .warmup-ex-panel .panel-body{ padding:8px 10px 10px; }
   .panel-bar{ padding:9px 14px; }
   .panel-bar .title{ font-size:12.5px; }
   .panel-bar .sup{ font-size:10px; }
-  .staff-meta{ flex:none; padding:6px 4px 0; gap:8px; margin-bottom:2px; }
+  .staff-meta{ padding:6px 4px 0; gap:8px; margin-bottom:2px; }
   .staff-meta .clef{ font-size:26px; }
   .staff-meta .ts{ font-size:15px; }
   .staff-meta .study{ font-size:10px; letter-spacing:.08em; }
-  /* each slide fills the leftover panel height and centres its music.
-     :not([hidden]) so this ID-specificity rule doesn't override the hidden
-     slide's display:none — otherwise BOTH slides (Clarke ABC + Arban image)
-     render stacked. */
+  /* :not([hidden]) so this ID-specificity rule doesn't override the hidden
+     slide's display:none (else BOTH Clarke ABC + Arban image stack). */
   #warmup .ex-slide[hidden]{ display:none; }
-  #warmup .ex-slide:not([hidden]){ flex:1; min-height:0; display:flex; flex-direction:column; justify-content:center; overflow:hidden; padding:2px 0; }
-  #warmup .ex-slide-img{ flex:1; display:flex; align-items:center; justify-content:center; min-height:0; padding:0; }
-  #warmup .ex-slide-img img{ width:100%; height:100%; object-fit:contain; }   /* fill the screen */
+  /* the music page renders at its natural aspect and fills the panel WIDTH */
+  #warmup .ex-slide-img{ padding:0; }
+  #warmup .ex-slide-img img{ width:100%; height:auto; display:block; }
   .clarke-line{ padding:0; }
   .clarke-line svg{ width:100%; }
   .clarke-ex-lab{ font-size:10px; margin-top:2px; padding:0 4px; }
   .divline{ margin:2px 0; }
-  #warmup .warmup-foot{ flex:none; margin-top:8px; }
+  /* push Next Station to the very bottom of the screen */
+  #warmup .warmup-foot{ margin-top:auto; padding-top:10px; }
 
   /* ── Jam (§5) ─────────────────────────────────────────────────────────── */
   .jam-grid{ gap:14px; }

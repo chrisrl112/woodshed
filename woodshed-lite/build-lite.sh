@@ -100,6 +100,10 @@ inject = (
 html = shell.read_text().replace('<!-- MOUNT_PLACEHOLDER -->', inject)
 # Append ?v=BUILD to same-origin .js script srcs so cached copies don't survive a deploy.
 html = re.sub(r'(<script src=")([A-Za-z0-9_./-]+\.js)(")', r'\1\2?v=' + version + r'\3', html)
+# Same for warmup image paths in the inlined config (assets/warmups/*.png) — these
+# are separate 4h-cached files, so a re-crop under the same name won't show without
+# a fresh URL. (Matches the path inside the JS config string too.)
+html = re.sub(r'(assets/warmups/[A-Za-z0-9_./-]+\.png)', r'\1?v=' + version, html)
 out_p.write_text(html)
 PYEOF
 echo "      cache-bust version: $BUILD_VERSION"
