@@ -974,13 +974,10 @@ function saveState() {}
             <span class="ts ts-cut" title="Cut time (alla breve)">C</span>
             <span class="study" id="clarke-tempo-marking">half=80–120 · Play these exercises legato at first, then very lightly single tongue them</span>
           </div>
-          <!-- ABC slide (Clarke) -->
+          <!-- ABC slide (Clarke) — mount.js renders one line per exercise from
+               window.CLARKE_WARMUPS (Ex. 27–32) into #clarke-lines. -->
           <div id="warmup-abc-slide" class="ex-slide">
-            <div class="clarke-ex-lab" data-copy="warmup.clarke_ex27_label">Ex. 27 · G major</div>
-            <div id="clarke-line-1" class="clarke-line"></div>
-            <div class="divline"></div>
-            <div class="clarke-ex-lab" data-copy="warmup.clarke_ex28_label">Ex. 28 · A♭ major</div>
-            <div id="clarke-line-2" class="clarke-line"></div>
+            <div id="clarke-lines"></div>
           </div>
           <!-- image slide (PD Arban engravings) -->
           <div id="warmup-image-slide" class="ex-slide ex-slide-img" hidden>

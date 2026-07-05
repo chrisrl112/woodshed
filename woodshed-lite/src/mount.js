@@ -140,20 +140,16 @@
   // labels in shell.html carry the naming.
   const WARMUPS = (CFG.warmups && CFG.warmups.length) ? CFG.warmups : [];
 
-  const clarkeLine1 = document.querySelector('#clarke-line-1');
-  const clarkeLine2 = document.querySelector('#clarke-line-2');
+  const clarkeHost = document.querySelector('#clarke-lines');
   let clarkeRendered = false;
   function renderClarke() {
-    if (clarkeRendered || !clarkeLine1 || !window.CLARKE_WARMUPS) return;
-    const ex27 = window.CLARKE_WARMUPS.find(w => w.id === 'clarke-2-ex27');
-    const ex28 = window.CLARKE_WARMUPS.find(w => w.id === 'clarke-2-ex28');
+    if (clarkeRendered || !clarkeHost || !window.CLARKE_WARMUPS) return;
     const stripTitle = abc => abc.replace(/^T:.*\n/m, '');
     // The ABC has a hard newline before the final whole-note bar, which ABCJS
-    // treats as a forced system break (measuresPerLine alone won't override it).
-    // Collapse every music line AFTER the K: header into one source line so the
-    // whole study renders as a single system (headers/notes untouched — layout
-    // only), then measuresPerLine:8 keeps all 5 bars on that one line — matching
-    // the full-width, single-system look of the Arban image slides.
+    // treats as a forced system break. Collapse the music body onto one source
+    // line (layout only, notes untouched) so each exercise renders as ONE line —
+    // its 4 melodic bars + the tonic whole-note resolution — matching Chris's
+    // "each a full line ending in a whole note".
     const oneSystem = abc => {
       const lines = abc.split('\n');
       const k = lines.findIndex(l => /^K:/.test(l));
@@ -161,27 +157,25 @@
       const body = lines.slice(k + 1).join(' ').replace(/\s+/g, ' ').trim();
       return lines.slice(0, k + 1).join('\n') + '\n' + body + '\n';
     };
-    // Two render modes, because ABCJS needs ~90px per readable system:
-    //  • DESKTOP (wide panel): collapse to one wide system (staffwidth:800) — the
-    //    single-line look Chris chose for desktop.
-    //  • MOBILE (≤760px): a phone can't fit 5 readable bars on one line, and one
-    //    tiny scaled line wastes the vertical budget. Render the NATURAL body so
-    //    the hard break puts the 4 melodic bars on line 1 and the whole-note
-    //    resolution on line 2 — two readable systems per study (4 lines total for
-    //    Ex.27+Ex.28), sized to fill the space with compact vertical spacing.
-    const mobile = window.innerWidth <= 760;
-    const desk = abc => oneSystem(stripTitle(abc));
-    if (mobile) {
-      // scale 0.66 is the largest that keeps BOTH studies at 2 systems (Ex.28's
-      // A♭ accidentals wrap it to 3 above ~0.68) — 4 readable lines total.
-      const mOpts = { responsive: 'resize', measuresPerLine: 8, paddingtop: 2, paddingbottom: 6, staffsep: 38 };
-      if (ex27) renderABC(clarkeLine1, stripTitle(ex27.abc), 0.66, mOpts);
-      if (ex28) renderABC(clarkeLine2, stripTitle(ex28.abc), 0.66, mOpts);
-    } else {
-      const dOpts = { responsive: 'resize', measuresPerLine: 8, staffwidth: 800 };
-      if (ex27) renderABC(clarkeLine1, desk(ex27.abc), 1.1, dOpts);
-      if (ex28) renderABC(clarkeLine2, desk(ex28.abc), 1.1, dOpts);
-    }
+    // Render every Clarke Second Study exercise (Ex. 27–32) as one full line so
+    // the stacked lines fill the screen. staffwidth:800 forces a single system
+    // that responsive:'resize' scales to the container width.
+    const list = window.CLARKE_WARMUPS;
+    clarkeHost.innerHTML = '';
+    list.forEach((ex, i) => {
+      const lab = document.createElement('div');
+      lab.className = 'clarke-ex-lab';
+      lab.textContent = ex.id.replace(/^.*ex/i, 'Ex. ') + ' · ' + (ex.keyLabel || ex.key);
+      clarkeHost.appendChild(lab);
+      const line = document.createElement('div');
+      line.className = 'clarke-line';
+      clarkeHost.appendChild(line);
+      renderABC(line, oneSystem(stripTitle(ex.abc)), 1.1,
+        { responsive: 'resize', measuresPerLine: 8, staffwidth: 800, paddingtop: 2, paddingbottom: 4 });
+      if (i < list.length - 1) {
+        const dv = document.createElement('div'); dv.className = 'divline'; clarkeHost.appendChild(dv);
+      }
+    });
     clarkeRendered = true;
   }
 
