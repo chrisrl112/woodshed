@@ -792,7 +792,9 @@ function compileLick(lick,keyPc,opts={}){
   return {events,totalBeats,abc,base,chords:chordList};
 }
 function renderABC(el,abc,scale=1.05,opts={}){
-  const w=el.clientWidth>60?Math.min(620,el.clientWidth-26):500;
+  // opts.staffwidth forces a fixed layout width (used with responsive:'resize' to
+  // lay a study out as ONE wide system, then scale the SVG down to the container).
+  const w=opts.staffwidth||(el.clientWidth>60?Math.min(620,el.clientWidth-26):500);
   const mpl=opts.measuresPerLine||4;
   const cfg={scale,staffwidth:w,paddingtop:14,paddingbottom:22,paddingleft:4,paddingright:4,foregroundColor:'#1d1a14',selectTypes:false,wrap:{minSpacing:1.4,maxSpacing:2.8,preferredMeasuresPerLine:mpl}};
   if(opts.responsive) cfg.responsive='resize'; // viewBox-scale the SVG to the container width: fits, no right-overflow, no scroll, height grows

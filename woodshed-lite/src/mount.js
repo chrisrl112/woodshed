@@ -148,8 +148,25 @@
     const ex27 = window.CLARKE_WARMUPS.find(w => w.id === 'clarke-2-ex27');
     const ex28 = window.CLARKE_WARMUPS.find(w => w.id === 'clarke-2-ex28');
     const stripTitle = abc => abc.replace(/^T:.*\n/m, '');
-    if (ex27) renderABC(clarkeLine1, stripTitle(ex27.abc), 1.1, { responsive: 'resize' });
-    if (ex28) renderABC(clarkeLine2, stripTitle(ex28.abc), 1.1, { responsive: 'resize' });
+    // The ABC has a hard newline before the final whole-note bar, which ABCJS
+    // treats as a forced system break (measuresPerLine alone won't override it).
+    // Collapse every music line AFTER the K: header into one source line so the
+    // whole study renders as a single system (headers/notes untouched — layout
+    // only), then measuresPerLine:8 keeps all 5 bars on that one line — matching
+    // the full-width, single-system look of the Arban image slides.
+    const oneSystem = abc => {
+      const lines = abc.split('\n');
+      const k = lines.findIndex(l => /^K:/.test(l));
+      if (k < 0) return abc;
+      const body = lines.slice(k + 1).join(' ').replace(/\s+/g, ' ').trim();
+      return lines.slice(0, k + 1).join('\n') + '\n' + body + '\n';
+    };
+    const prep = abc => oneSystem(stripTitle(abc));
+    // Wide staffwidth so all 5 bars lay out on one line; responsive:'resize' then
+    // scales that single system down to whatever the container width is.
+    const oneLineOpts = { responsive: 'resize', measuresPerLine: 8, staffwidth: 1000 };
+    if (ex27) renderABC(clarkeLine1, prep(ex27.abc), 1.1, oneLineOpts);
+    if (ex28) renderABC(clarkeLine2, prep(ex28.abc), 1.1, oneLineOpts);
     clarkeRendered = true;
   }
 
