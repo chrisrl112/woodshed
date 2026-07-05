@@ -725,18 +725,20 @@ img,svg{display:block;}
      their content — a long nowrap key badge or a wide chord bar then forces the
      whole card past the viewport (clipped by #jam overflow:hidden). Let the
      whole chain shrink to the screen width. */
-  #jam .jam-grid, #jam .tunes, #jam-tune-list, #jam .jam-right,
-  #jam .chartcard, #jam .cc-head, #jam .transport, #jam .chart{ min-width:0; max-width:100%; }
+  #jam .jam-shell, #jam #wsl-jam-slot, #jam .jam-grid, #jam .tunes, #jam-tune-list,
+  #jam .jam-right, #jam .chartcard, #jam .cc-head, #jam .transport, #jam .chart{ min-width:0; max-width:100%; }
 
   /* tune picker: three equal tiles in one row (no scroller to get cut off) */
   #jam .tunes{ flex:none; gap:6px; }
   #jam .tunes .tunes-lab{ font-size:9.5px; letter-spacing:.16em; margin-bottom:0; }
   #jam .band-row{ display:none; }
-  #jam-tune-list{ display:flex; gap:6px; overflow:visible; }
-  #jam-tune-list .tune{ flex:1 1 0; min-width:0; padding:7px 8px; }
+  /* grid with minmax(0,1fr) so the 3 tiles shrink to equal thirds and their
+     names ellipsize — plain flex tiles refuse to shrink below the name width. */
+  #jam-tune-list{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; }
+  #jam-tune-list .tune{ min-width:0; padding:7px 8px; }
   #jam-tune-list .tune .idx{ display:none; }
-  #jam-tune-list .tune .tn{ min-width:0; }
-  #jam-tune-list .tune .tn .name{ font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  #jam-tune-list .tune .tn{ min-width:0; max-width:100%; }
+  #jam-tune-list .tune .tn .name{ font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0; max-width:100%; }
   #jam-tune-list .tune .tn .meta{ display:none; }
   #jam-tune-list .tune .eq{ display:none; }
 
@@ -776,7 +778,6 @@ img,svg{display:block;}
   .station-num .big{ font-size:1.5rem; }
   .station-line{ font-size:1.1rem; }
   .metro .bpm{ font-size:22px; }
-  #jam-tune-list .tune{ min-width:140px; }
 }
 </style>
 
