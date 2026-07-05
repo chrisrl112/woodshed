@@ -692,8 +692,12 @@ img,svg{display:block;}
   .staff-meta .clef{ font-size:26px; }
   .staff-meta .ts{ font-size:15px; }
   .staff-meta .study{ font-size:10px; letter-spacing:.08em; }
-  /* each slide fills the leftover panel height and centres its music */
-  #warmup .ex-slide{ flex:1; min-height:0; display:flex; flex-direction:column; justify-content:center; overflow:hidden; padding:2px 0; }
+  /* each slide fills the leftover panel height and centres its music.
+     :not([hidden]) so this ID-specificity rule doesn't override the hidden
+     slide's display:none — otherwise BOTH slides (Clarke ABC + Arban image)
+     render stacked. */
+  #warmup .ex-slide[hidden]{ display:none; }
+  #warmup .ex-slide:not([hidden]){ flex:1; min-height:0; display:flex; flex-direction:column; justify-content:center; overflow:hidden; padding:2px 0; }
   #warmup .ex-slide-img{ flex:1; display:flex; align-items:center; justify-content:center; min-height:0; padding:0; }
   #warmup .ex-slide-img img{ width:100%; height:100%; object-fit:contain; }   /* fill the screen */
   .clarke-line{ padding:0; }
