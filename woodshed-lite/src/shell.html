@@ -673,10 +673,13 @@ img,svg{display:block;}
      music, its own aspect — no stretching into a white box); Next Station is
      pushed to the very bottom. A near-full-page crop fills most of the height on
      its own. Gentle scroll-snap so the buttons land each station cleanly. */
-  html{ scroll-snap-type:y proximity; }
+  /* The nav is sticky (68px). scroll-padding-top makes snap + Next-Station
+     anchors land each station BELOW the nav instead of behind it, and stations
+     are sized to the visible area under the nav so nothing is clipped/hidden. */
+  html{ scroll-snap-type:y proximity; scroll-padding-top:68px; }
   section.station, #jam{ scroll-snap-align:start; }
   #warmup.station{
-    min-height:100dvh; box-sizing:border-box;
+    min-height:calc(100dvh - 68px); box-sizing:border-box;
     display:flex; flex-direction:column;
     padding:10px 14px;
   }
@@ -713,30 +716,31 @@ img,svg{display:block;}
   /* Same philosophy as Warmup: 100dvh station, compact controls up top, the
      transpose/drummer/feel config tucked behind the gear, and the chord chart
      flex-fills the rest. Station 3 (Early Access) stays hidden until the CTA. */
-  #jam{ min-height:100dvh; box-sizing:border-box; display:flex; flex-direction:column; }
-  #jam .jam-shell{ flex:1; min-height:0; display:flex; flex-direction:column; padding:12px 14px; max-width:none; }
+  #jam{ height:calc(100dvh - 68px); box-sizing:border-box; display:flex; flex-direction:column; overflow:hidden; }
+  #jam .jam-shell{ flex:1; min-height:0; display:flex; flex-direction:column; padding:10px 12px; max-width:none; }
   #jam .station-head{ display:none; }
   #jam #wsl-jam-slot{ flex:1; min-height:0; display:flex; flex-direction:column; }
   #jam .jam-grid{ flex:1; min-height:0; display:flex; flex-direction:column; gap:8px; grid-template-columns:none; }
 
-  /* tune picker: compact horizontal scroller, drop the labels/band chips */
+  /* tune picker: three equal tiles in one row (no scroller to get cut off) */
   #jam .tunes{ flex:none; gap:6px; }
   #jam .tunes .tunes-lab{ font-size:9.5px; letter-spacing:.16em; margin-bottom:0; }
   #jam .band-row{ display:none; }
-  #jam-tune-list{
-    display:flex; gap:8px; overflow-x:auto; padding-bottom:4px;
-    -webkit-overflow-scrolling:touch; scroll-snap-type:x proximity; scrollbar-width:none;
-  }
-  #jam-tune-list::-webkit-scrollbar{ display:none; }
-  #jam-tune-list .tune{ flex:0 0 auto; width:auto; min-width:150px; max-width:70vw; scroll-snap-align:start; padding:8px 12px; }
-  #jam-tune-list .tune .tn .meta{ display:none; }   /* just the name on the tile */
+  #jam-tune-list{ display:flex; gap:6px; overflow:visible; }
+  #jam-tune-list .tune{ flex:1 1 0; min-width:0; padding:7px 8px; }
+  #jam-tune-list .tune .idx{ display:none; }
+  #jam-tune-list .tune .tn{ min-width:0; }
+  #jam-tune-list .tune .tn .name{ font-size:13px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  #jam-tune-list .tune .tn .meta{ display:none; }
+  #jam-tune-list .tune .eq{ display:none; }
 
-  /* chart card fills; "Now playing" label dropped (tune name is in the card) */
+  /* chart card fills the rest; "Now playing" label dropped (name is in the card) */
   #jam .jam-right{ flex:1; min-height:0; display:flex; flex-direction:column; gap:0; }
   #jam .jam-right > .tunes-lab{ display:none; }
-  #jam .chartcard{ flex:1; min-height:0; display:flex; flex-direction:column; padding:12px 12px 12px; }
-  #jam .cc-head{ flex:none; }
-  #jam .cc-head .tune-name{ font-size:1.3rem; }
+  #jam .chartcard{ flex:1; min-height:0; display:flex; flex-direction:column; padding:10px 12px 10px; }
+  #jam .cc-head{ flex:none; align-items:center; }
+  #jam .cc-head .tune-name{ font-size:1.25rem; }
+  #jam .cc-head .tune-by{ font-size:10px; margin-top:2px; }
   #jam .transport{ flex:none; margin-top:8px; gap:12px; }
   .jam-gear{ display:grid; }   /* reveal the gear on mobile */
 
@@ -748,11 +752,15 @@ img,svg{display:block;}
   .jam-right .seg button{ padding:5px 9px; font-size:11.5px; }
   .jam-right .seg button .who{ font-size:8px; }
 
-  /* the chord chart flex-fills the remaining height; scrolls internally only if
-     the form is longer than the screen */
+  /* the chord chart fills the bounded height: grid rows stretch so all bars are
+     visible on one screen (scrolls only if a form is truly too long). Compact
+     bars so a 32-bar form fits. */
   #jam .cc-rule{ flex:none; margin:8px 0 6px; }
-  #jam .chart{ flex:1; min-height:0; overflow-y:auto; align-content:start; }
-  .chart .bar{ min-height:56px; padding:6px 8px; }
+  #jam .chart{ flex:1; min-height:0; overflow-y:auto; grid-auto-rows:minmax(46px,1fr); align-content:stretch; margin-top:0; }
+  #jam .chart .bar{ min-height:0; padding:4px 7px; }
+  #jam .chart .bar .num{ font-size:9px; }
+  #jam .chart .bar-chords .chord{ font-size:clamp(.95rem,4.6vw,1.25rem); }
+  #jam .chart .bar-slashes .slash-cell{ font-size:10px; }
 }
 
 /* Narrow phones: one more squeeze. */
