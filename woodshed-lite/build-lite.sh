@@ -82,17 +82,27 @@ cp "$ROOT/assets/drums/trim/"*.mp3 "$DIST/assets/drums/trim/" 2>/dev/null || ech
 # engine.js, charts-curated.js, clarke-warmups-lite.js and drums-manifest.js
 # are loaded by their own <script src> tags already present in shell.html.
 echo "[5/6] assemble index.html    … injecting config + mount.js + votes.js into the shell"
-python3 - "$DIR/src/shell.html" "$DIR/lite.config.js" "$DIR/src/mount.js" "$DIR/src/votes.js" "$DIST/index.html" <<'PYEOF'
-import pathlib, sys
-shell, config, mount, votes, out_p = [pathlib.Path(a) for a in sys.argv[1:]]
+# Cache-bust the SEPARATE script files (engine.js, charts, drums, copy). They are
+# served with a 4h TTL, so without a versioned URL a browser keeps stale copies
+# after a deploy — e.g. an engine.js fix silently doesn't apply. index.html itself
+# is max-age=0 (always revalidated), and config/mount/votes are inlined into it,
+# so a fresh index.html + versioned asset URLs = every deploy fully takes effect.
+BUILD_VERSION=$(date +%Y%m%d%H%M%S)
+python3 - "$DIR/src/shell.html" "$DIR/lite.config.js" "$DIR/src/mount.js" "$DIR/src/votes.js" "$DIST/index.html" "$BUILD_VERSION" <<'PYEOF'
+import pathlib, re, sys
+shell, config, mount, votes, out_p = [pathlib.Path(a) for a in sys.argv[1:6]]
+version = sys.argv[6]
 inject = (
     '<script>\n// lite.config.js\n' + config.read_text() + '\n</script>\n'
     '<script>\n// mount.js\n' + mount.read_text() + '\n</script>\n'
     '<script>\n// votes.js\n' + votes.read_text() + '\n</script>'
 )
 html = shell.read_text().replace('<!-- MOUNT_PLACEHOLDER -->', inject)
+# Append ?v=BUILD to same-origin .js script srcs so cached copies don't survive a deploy.
+html = re.sub(r'(<script src=")([A-Za-z0-9_./-]+\.js)(")', r'\1\2?v=' + version + r'\3', html)
 out_p.write_text(html)
 PYEOF
+echo "      cache-bust version: $BUILD_VERSION"
 
 # ---------------------------------------------------------------------------
 # STEP 6 — Gates

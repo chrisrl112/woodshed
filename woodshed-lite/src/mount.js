@@ -164,7 +164,7 @@
     const prep = abc => oneSystem(stripTitle(abc));
     // Wide staffwidth so all 5 bars lay out on one line; responsive:'resize' then
     // scales that single system down to whatever the container width is.
-    const oneLineOpts = { responsive: 'resize', measuresPerLine: 8, staffwidth: 1000 };
+    const oneLineOpts = { responsive: 'resize', measuresPerLine: 8, staffwidth: 800 };
     if (ex27) renderABC(clarkeLine1, prep(ex27.abc), 1.1, oneLineOpts);
     if (ex28) renderABC(clarkeLine2, prep(ex28.abc), 1.1, oneLineOpts);
     clarkeRendered = true;
